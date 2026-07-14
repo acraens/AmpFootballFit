@@ -50,6 +50,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    min-height: 100dvh;
   }
 
   header.app-header {
@@ -85,7 +86,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 16px;
-    padding-bottom: calc(var(--tab-height) + 56px);
+    padding-bottom: calc(var(--tab-height) + 100px);
   }
 
   .view {
@@ -1709,9 +1710,9 @@
         </div>
       </div>
 
-      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v2.6 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
+      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v2.7 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
       <p class="field-note hidden" style="text-align: center; margin-top: 4px;" id="settings-visit-counter-note">
-        Anonymous web visit counter (only active on the web version, never in this installed app):
+        Anonymous web visit counter (web only, never in the app):
         <img id="settings-visit-counter-img" alt="web visit count" style="vertical-align: middle;">
       </p>
     </section>
