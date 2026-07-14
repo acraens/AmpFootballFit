@@ -2,7 +2,9 @@
 
 A free, offline-first return-to-play conditioning app for amputee football (crutch-based, single-leg-support sport). Built for one athlete's own comeback, shared here so any amputee footballer or club can use it, adapt it, or build on it.
 
-**Try it now, no install:** [acraens.github.io/AmpFootballFit](https://acraens.github.io/AmpFootballFit/)
+**Try it now, no install:** [acraens.github.io/AmpFootballFit](https://acraens.github.io/AmpFootballFit/) (works on any phone, Android or iPhone: open the link and use your browser's "Add to Home Screen").
+
+**Android app (APK):** [Download AmpFootballFit.apk](https://raw.githubusercontent.com/acraens/AmpFootballFit/main/AmpFootballFit.apk) directly. This is not signed for the Play Store, so Android will warn about an unrecognized app; you'll need to allow "install from unknown sources" for your browser/file manager to install it. The camera-based profile photo feature only works in this native version, not the browser/PWA version above.
 
 ## What it is
 
