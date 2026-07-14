@@ -36,6 +36,8 @@ The entire app is one self-contained file: **`ampfootballfit.html`** (also publi
 
 All data (sessions, benchmarks, readiness logs, milestones, profile) stays in local storage on the device. There is no server and nothing leaves the device except through the explicit Share/export buttons.
 
+One disclosed exception: the web/PWA version loads a small anonymous visit-counter badge ([hits.sh](https://hits.sh/)) so we can gauge reach, visible (not hidden) in the Settings tab next to the badge itself. It never runs in the installed Android app.
+
 ## Contributing
 
 Issues and pull requests are welcome, especially from anyone actually playing or coaching amputee football. If you fork this for your own club or region, keeping the license notice intact is all that's asked.

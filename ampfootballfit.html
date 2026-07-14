@@ -1709,7 +1709,11 @@
         </div>
       </div>
 
-      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v2.4 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
+      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v2.5 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
+      <p class="field-note hidden" style="text-align: center; margin-top: 4px;" id="settings-visit-counter-note">
+        Anonymous web visit counter (only active on the web version, never in this installed app):
+        <img id="settings-visit-counter-img" alt="web visit count" style="vertical-align: middle;">
+      </p>
     </section>
   </main>
 
@@ -4629,6 +4633,15 @@
   applyStrings();
   setupPwaManifestAndIcons();
   initLaunchSplash();
+
+  // Anonymous page-view counter, web/PWA builds only — never in the
+  // installed Android app, which keeps its "nothing leaves the device"
+  // promise untouched. Disclosed openly in Settings, right next to the
+  // badge itself, rather than firing silently.
+  if (!isNativeApp()) {
+    el("settings-visit-counter-img").src = "https://hits.sh/acraens.github.io/AmpFootballFit.svg";
+    el("settings-visit-counter-note").classList.remove("hidden");
+  }
 
   var onboardingAlreadyComplete = false;
   try { onboardingAlreadyComplete = localStorage.getItem(STORAGE_KEYS.onboardingComplete) === "true"; } catch (e) { /* storage unavailable */ }
