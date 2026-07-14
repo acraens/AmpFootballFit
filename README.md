@@ -2,6 +2,8 @@
 
 A free, offline-first return-to-play conditioning app for amputee football (crutch-based, single-leg-support sport). Built for one athlete's own comeback, shared here so any amputee footballer or club can use it, adapt it, or build on it.
 
+**Try it now, no install:** [acraens.github.io/AmpFootballFit](https://acraens.github.io/AmpFootballFit/)
+
 ## What it is
 
 - A 12-week, 3-phase strength & conditioning program (Base, Load Progression, Sport Transfer), with exercises that adapt tier by tier based on how sessions actually go.
@@ -16,7 +18,7 @@ Not a general lower-limb-amputee fitness app, and not a substitute for guidance 
 
 ## Running it
 
-The entire app is one self-contained file: **`ampfootballfit.html`**. No build step, no server, no account.
+The entire app is one self-contained file: **`ampfootballfit.html`** (also published as `index.html` for GitHub Pages, kept in sync with it). No build step, no server, no account.
 
 - **Browser / PWA:** open `ampfootballfit.html` directly, or serve the folder with any static file server and install it as a PWA. Camera-based profile photo capture is native-app-only and hides itself gracefully in a browser.
 - **Android app:** the `android-app/` folder is a Capacitor project wrapping the same HTML file, adding native camera capture, filesystem storage, and native share. To rebuild after editing `ampfootballfit.html`:
