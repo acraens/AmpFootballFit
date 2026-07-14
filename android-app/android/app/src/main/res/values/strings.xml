@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AmpFootballFit</string>
+    <string name="title_activity_main">AmpFootballFit</string>
+    <string name="package_name">com.ampfootballfit.app</string>
+    <string name="custom_url_scheme">com.ampfootballfit.app</string>
+</resources>

@@ -1,0 +1,4728 @@
+<!DOCTYPE html>
+<!--
+  AmpFootballFit
+  Copyright (c) 2026 A. Craens (github.com/acraens)
+  All rights reserved.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>AmpFootballFit</title>
+<meta name="theme-color" content="#0f1115">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AmpFootballFit">
+<link rel="manifest" id="pwa-manifest-link">
+<link rel="icon" id="pwa-favicon">
+<link rel="apple-touch-icon" id="pwa-apple-touch-icon">
+<style>
+  :root {
+    --bg: #0f1115;
+    --surface: #1a1d24;
+    --surface-alt: #22262f;
+    --border: #2c313c;
+    --text: #eef0f3;
+    --text-dim: #9aa1ad;
+    --accent: #3ea6ff;
+    --accent-dim: #1f5c85;
+    --good: #4caf7d;
+    --warn: #e0a94c;
+    --danger: #e05c5c;
+    --tab-height: 60px;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  header.app-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .app-header-text {
+    min-width: 0;
+  }
+
+  header.app-header h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  header.app-header .subtitle {
+    margin: 2px 0 0;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+
+  main.view-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    padding-bottom: calc(var(--tab-height) + 24px);
+  }
+
+  .view {
+    display: none;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .view.active {
+    display: block;
+  }
+
+  .view h2 {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+  }
+
+  .placeholder-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+
+  nav.tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    height: var(--tab-height);
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    z-index: 20;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  nav.tab-bar button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.68rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 2px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  nav.tab-bar button .tab-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  nav.tab-bar button.active {
+    color: var(--accent);
+  }
+
+  nav.tab-bar button:active {
+    opacity: 0.7;
+  }
+
+  /* Shared component styles used by later build steps */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #04121c;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .btn.secondary {
+    background: var(--surface-alt);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn.danger {
+    background: var(--danger);
+    color: #200;
+  }
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin: 12px 0 4px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  @media (min-width: 640px) {
+    main.view-container { padding: 24px; }
+    nav.tab-bar { max-width: 720px; left: 50%; transform: translateX(-50%); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+  }
+
+  .hidden { display: none !important; }
+
+  /* Onboarding wizard */
+  .onboarding-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 8, 12, 0.92);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .onboarding-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .onboarding-progress {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 16px 0;
+  }
+
+  .onboarding-progress .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .onboarding-progress .dot.active { background: var(--accent); }
+  .onboarding-progress .dot.done { background: var(--accent-dim); }
+
+  #onboarding-form {
+    overflow-y: auto;
+    padding: 12px 20px 20px;
+    flex: 1;
+  }
+
+  .onboarding-step { display: none; }
+  .onboarding-step.active { display: block; }
+  .onboarding-step h2 { margin: 4px 0 4px; font-size: 1rem; }
+
+  .field-note {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin: 6px 0 0;
+  }
+
+  input.invalid, select.invalid, textarea.invalid {
+    border-color: var(--danger);
+  }
+
+  .onboarding-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .onboarding-nav .btn { flex: 1; }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-label { color: var(--text-dim); }
+  .summary-value { text-align: right; }
+
+  /* Program tab */
+  .phase-pills {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+  }
+
+  .phase-pill {
+    flex: 1;
+    min-width: 96px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  .phase-pill.active {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .phase-pill .lock-icon { margin-left: 4px; }
+
+  .week-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .week-nav-btn {
+    padding: 8px 14px;
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .week-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    min-width: 150px;
+    text-align: center;
+  }
+
+  .phase-progress-track {
+    height: 6px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .phase-progress-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+  }
+
+  .gate-warning {
+    border-color: var(--warn);
+  }
+
+  .gate-warning.danger-warning {
+    border-color: var(--danger);
+  }
+
+  .gate-warning p {
+    margin: 0 0 12px;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .gate-warning-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .gate-warning-actions .btn { flex: 1; }
+
+  .exercise-group {
+    margin-bottom: 18px;
+  }
+
+  .exercise-group h3 {
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .exercise-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+
+  .exercise-icon {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-alt);
+    border-radius: 8px;
+    padding: 4px;
+  }
+
+  .exercise-illustration {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+
+  .exercise-video-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 0.78rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .exercise-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  .exercise-card-actions .exercise-video-link {
+    margin-top: 0;
+  }
+
+  .log-this-btn {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+  }
+
+  /* Workout player (guided "Start Workout" mode) */
+  .workout-player-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 20px 0;
+  }
+
+  .workout-player-header #wp-progress-label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  .workout-player-header #wp-timer {
+    font-variant-numeric: tabular-nums;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .wp-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.4rem;
+    line-height: 1;
+    padding: 2px 8px;
+    cursor: pointer;
+  }
+
+  #wp-exercise-screen, #wp-finish-screen {
+    padding: 8px 20px 16px;
+    overflow-y: auto;
+  }
+
+  .wp-exercise-icon {
+    width: 96px;
+    height: 96px;
+    margin: 4px auto 14px;
+    background: var(--surface-alt);
+    border-radius: 12px;
+    padding: 8px;
+  }
+
+  .wp-exercise-icon svg, .wp-exercise-icon img { width: 100%; height: 100%; }
+
+  .wp-exercise-name {
+    font-family: Georgia, "Iowan Old Style", ui-serif, serif;
+    font-weight: 400;
+    font-size: 1.15rem;
+    text-align: center;
+    margin: 0 0 6px;
+  }
+
+  .wp-exercise-prescription {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  #wp-exercise-screen .exercise-video-link {
+    display: block;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .wp-fields {
+    display: flex;
+    gap: 8px;
+  }
+
+  .wp-fields input {
+    text-align: center;
+  }
+
+  #wp-nav.hidden { display: none; }
+
+  #wp-finish-screen h2 {
+    font-family: Georgia, "Iowan Old Style", ui-serif, serif;
+    font-weight: 400;
+    font-size: 1.3rem;
+    margin: 4px 0 6px;
+  }
+
+  /* Launch splash — brief personal welcome shown at app start */
+  .launch-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    cursor: pointer;
+    transition: opacity 0.4s ease;
+  }
+
+  .launch-splash.launch-splash-fading {
+    opacity: 0;
+  }
+
+  .launch-splash-photo-wrap {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--accent);
+    background: var(--surface-alt);
+  }
+
+  .launch-splash-photo-wrap svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .launch-splash-title {
+    font-family: Georgia, "Iowan Old Style", ui-serif, serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--text);
+    text-align: center;
+    max-width: 300px;
+    padding: 0 16px;
+  }
+
+  .exercise-card-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .exercise-card .exercise-name {
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 3px;
+  }
+
+  .exercise-card .exercise-prescription {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+
+  .exercise-card.estimate {
+    border-color: var(--warn);
+  }
+
+  .estimate-badge {
+    display: inline-block;
+    background: var(--warn);
+    color: #241a00;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .estimate-note {
+    font-size: 0.78rem;
+    color: var(--warn);
+    margin-top: 6px;
+  }
+
+  .custom-badge {
+    display: inline-block;
+    background: var(--accent-dim);
+    color: var(--text);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .load-suggestion {
+    font-size: 0.78rem;
+    color: var(--accent);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  .load-suggestion.load-suggestion-muted {
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  /* Session Tracker (Log tab) */
+  .section-subheading {
+    font-size: 0.95rem;
+    margin: 20px 0 10px;
+  }
+
+  .log-category {
+    margin: 10px 0 4px;
+  }
+
+  .log-category h4 {
+    margin: 10px 0 6px;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .log-exercise-row {
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+  }
+
+  .log-exercise-row .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: var(--text);
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .log-ex-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 2px;
+    font-size: 1.1rem;
+  }
+
+  .log-ex-prescription {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin: 4px 0 0 58px;
+  }
+
+  .log-exercise-row.log-ex-highlight {
+    animation: log-ex-highlight-pulse 1.6s ease-out 1;
+  }
+
+  @keyframes log-ex-highlight-pulse {
+    0% { background: var(--accent-dim); }
+    100% { background: var(--surface-alt); }
+  }
+
+  .log-exercise-row input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .log-exercise-fields {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .log-exercise-fields input {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .session-card {
+    margin-bottom: 10px;
+  }
+
+  .session-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .session-date {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .session-phase {
+    font-size: 0.72rem;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border-radius: 999px;
+    padding: 2px 9px;
+    font-weight: 600;
+  }
+
+  .session-delete-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+
+  .session-meta {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  .session-exercises {
+    font-size: 0.82rem;
+    margin-bottom: 4px;
+  }
+
+  .session-notes {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .suggestion-card {
+    border-color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .suggestion-card p {
+    margin: 0 0 12px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  /* Sport Skills module */
+  .skills-intro p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  .skills-category {
+    margin-bottom: 22px;
+  }
+
+  .skills-category h3 {
+    font-size: 0.95rem;
+    margin: 0 0 10px;
+  }
+
+  .drill-card {
+    margin-bottom: 10px;
+  }
+
+  .drill-card-header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .drill-name-input {
+    flex: 1;
+    font-weight: 600;
+  }
+
+  .drill-delete-btn {
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+  }
+
+  .drill-video-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .drill-video-row input {
+    flex: 1;
+  }
+
+  .drill-video-open {
+    color: var(--accent);
+    font-size: 0.82rem;
+    white-space: nowrap;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .drill-completion-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .drill-completion-row input {
+    flex: 1;
+  }
+
+  .drill-completion-row button {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .drill-completion-meta {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  .add-drill-btn {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  /* Progress Dashboard */
+  .chart-block {
+    margin-bottom: 16px;
+  }
+
+  .chart-block:last-child {
+    margin-bottom: 0;
+  }
+
+  .chart-label {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .line-chart {
+    display: block;
+    background: var(--surface-alt);
+    border-radius: 8px;
+  }
+
+  .chart-empty {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  #progress-heatmap {
+    overflow-x: auto;
+  }
+
+  #progress-heatmap svg {
+    display: block;
+  }
+
+  .milestone-row {
+    border-bottom: 1px solid var(--border);
+    padding: 8px 0;
+  }
+
+  .milestone-row:last-child {
+    border-bottom: none;
+  }
+
+  .milestone-date {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    display: block;
+  }
+
+  .milestone-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .milestone-note {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .readiness-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .readiness-card-header h3 {
+    margin: 0;
+  }
+
+  .readiness-score {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+
+  .benchmark-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    padding: 4px 0;
+    color: var(--text-dim);
+  }
+
+  .benchmark-summary-row strong {
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+
+  .benchmark-delta {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 4px;
+    color: var(--text-dim);
+  }
+
+  .benchmark-delta.benchmark-improved { color: var(--good); }
+  .benchmark-delta.benchmark-regressed { color: var(--warn); }
+
+  .benchmark-instructions-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 8px 0 12px;
+  }
+
+  .benchmark-instructions {
+    flex: 1;
+    background: var(--surface-alt);
+    padding: 10px 12px;
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+
+  /* Dashboard milestone triggers */
+  .milestone-quick-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .milestone-quick-btn {
+    white-space: normal;
+    text-align: left;
+    line-height: 1.3;
+  }
+
+  .milestone-quick-btn.milestone-quick-btn-logged {
+    background: var(--good);
+    color: #04160d;
+    border-color: var(--good);
+  }
+
+  .milestone-card.milestone-card-highlight {
+    animation: milestone-card-highlight-pulse 1.6s ease-out 1;
+  }
+
+  @keyframes milestone-card-highlight-pulse {
+    0% { background: var(--accent-dim); }
+    100% { background: var(--surface); }
+  }
+
+  @media (min-width: 480px) {
+    .milestone-quick-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .milestone-card {
+    margin-bottom: 10px;
+  }
+
+  .milestone-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .milestone-delete-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* Profile photo (Task 2) */
+  .profile-photo-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .profile-photo-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .profile-photo-placeholder-icon {
+    width: 40%;
+    height: 40%;
+    fill: var(--text-dim);
+  }
+
+  .profile-photo-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .profile-photo-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .dashboard-header-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .profile-photo-circle-small {
+    width: 44px;
+    height: 44px;
+  }
+
+  .profile-photo-circle-tiny {
+    width: 34px;
+    height: 34px;
+  }
+
+  .dashboard-header-text {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="launch-splash-overlay" class="launch-splash">
+  <div class="launch-splash-photo-wrap">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="50" cy="58" r="26" fill="var(--text)" stroke="var(--border)" stroke-width="1.5"/>
+      <polygon points="50,44 58,50 55,59 45,59 42,50" fill="none" stroke="var(--border)" stroke-width="1.3"/>
+      <path d="M50,44 L50,34" stroke="var(--border)" stroke-width="1.3" fill="none"/>
+      <path d="M58,50 L67,45" stroke="var(--border)" stroke-width="1.3" fill="none"/>
+      <path d="M42,50 L33,45" stroke="var(--border)" stroke-width="1.3" fill="none"/>
+      <path d="M55,59 L60,68" stroke="var(--border)" stroke-width="1.3" fill="none"/>
+      <path d="M45,59 L40,68" stroke="var(--border)" stroke-width="1.3" fill="none"/>
+      <g transform="rotate(28 50 50)">
+        <rect x="47" y="20" width="6" height="65" rx="3" fill="var(--accent)"/>
+        <path d="M38,18 a12,9 0 1,0 24,0" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round"/>
+        <rect x="38" y="42" width="24" height="6" rx="3" fill="var(--accent)"/>
+        <ellipse cx="50" cy="87" rx="6" ry="4" fill="var(--accent-dim)"/>
+      </g>
+    </svg>
+  </div>
+  <div class="launch-splash-title">Welcome to AmpFootballFit with A.Craens</div>
+</div>
+
+<div id="onboarding-overlay" class="onboarding-overlay hidden">
+  <div class="onboarding-card">
+    <div class="onboarding-progress" id="onboarding-progress">
+      <span class="dot active" data-step="1"></span>
+      <span class="dot" data-step="2"></span>
+      <span class="dot" data-step="3"></span>
+      <span class="dot" data-step="4"></span>
+      <span class="dot" data-step="5"></span>
+      <span class="dot" data-step="6"></span>
+      <span class="dot" data-step="7"></span>
+      <span class="dot" data-step="8"></span>
+      <span class="dot" data-step="9"></span>
+      <span class="dot" data-step="10"></span>
+    </div>
+
+    <form id="onboarding-form" novalidate>
+      <div class="onboarding-step active" data-step="1">
+        <h2>About your amputation</h2>
+
+        <label for="ob-amp-level">Amputation level</label>
+        <select id="ob-amp-level">
+          <option value="">-- Select --</option>
+          <option value="transtibial">Transtibial (below knee)</option>
+          <option value="transfemoral">Transfemoral (above knee)</option>
+          <option value="bilateral">Bilateral</option>
+        </select>
+
+        <label for="ob-amp-side">Side</label>
+        <select id="ob-amp-side">
+          <option value="">-- Select --</option>
+          <option value="left">Left</option>
+          <option value="right">Right</option>
+          <option value="both">Both</option>
+        </select>
+
+        <label for="ob-years-since">Years since amputation</label>
+        <input type="number" id="ob-years-since" min="0" max="80" step="0.5" placeholder="e.g. 3">
+
+        <label for="ob-prosthetic-use">Do you train with your prosthetic?</label>
+        <select id="ob-prosthetic-use">
+          <option value="">-- Select --</option>
+          <option value="always">Yes, for most exercises</option>
+          <option value="never">No, I train without it</option>
+          <option value="varies">Varies by exercise</option>
+        </select>
+        <p class="field-note">Exercises here are written assuming typical prosthetic use unless noted. If that doesn't match how you train, adapt reps/setup with your physio or coach: we'll flag it as a reminder where relevant.</p>
+      </div>
+
+      <div class="onboarding-step" data-step="2">
+        <h2>Activity background</h2>
+
+        <label for="ob-activity-mode">Current activity level</label>
+        <select id="ob-activity-mode">
+          <option value="">-- Select --</option>
+          <option value="K0">K0</option>
+          <option value="K1">K1</option>
+          <option value="K2">K2</option>
+          <option value="K3">K3</option>
+          <option value="K4">K4</option>
+          <option value="unsure">Not sure (describe in plain language)</option>
+        </select>
+
+        <div id="ob-activity-plain-wrap" class="hidden">
+          <label for="ob-activity-plain">Describe your activity level</label>
+          <select id="ob-activity-plain">
+            <option value="">-- Select --</option>
+            <option value="low">Low (limited day-to-day mobility)</option>
+            <option value="moderate">Moderate (regular daily activity)</option>
+            <option value="high">High (very active, near full mobility)</option>
+          </select>
+        </div>
+
+        <label for="ob-crutch-exp">Crutch experience</label>
+        <select id="ob-crutch-exp">
+          <option value="">-- Select --</option>
+          <option value="none">None</option>
+          <option value="recreational">Recreational</option>
+          <option value="competitive">Previously competitive</option>
+        </select>
+
+        <label for="ob-last-competitive">Time since last competitive amp football play</label>
+        <select id="ob-last-competitive">
+          <option value="">-- Select --</option>
+          <option value="current">Currently playing / no break</option>
+          <option value="lt6m">Less than 6 months</option>
+          <option value="6to12m">6–12 months</option>
+          <option value="1to2y">1–2 years</option>
+          <option value="2plus">2+ years</option>
+          <option value="never">Never played competitively</option>
+        </select>
+      </div>
+
+      <div class="onboarding-step" data-step="3">
+        <h2>Fitness &amp; health</h2>
+
+        <label for="ob-fitness-baseline">Current fitness baseline</label>
+        <select id="ob-fitness-baseline">
+          <option value="">-- Select --</option>
+          <option value="sedentary">Sedentary</option>
+          <option value="lightly_active">Lightly active</option>
+          <option value="regular">Regularly training</option>
+        </select>
+
+        <label for="ob-pain-points">Pain points or injury history (optional)</label>
+        <textarea id="ob-pain-points" placeholder="Free text (noted so sessions can be adapted)"></textarea>
+        <p class="field-note">Flagged for your own awareness only, not a diagnosis. Discuss anything significant with a physio or doctor.</p>
+      </div>
+
+      <div class="onboarding-step" data-step="4">
+        <h2>Goals &amp; availability</h2>
+
+        <label for="ob-target">Target</label>
+        <select id="ob-target">
+          <option value="">-- Select --</option>
+          <option value="general_fitness">General fitness</option>
+          <option value="return_club">Return to club training</option>
+          <option value="return_competition">Return to competition</option>
+        </select>
+
+        <label for="ob-days-per-week">Available training days per week</label>
+        <input type="number" id="ob-days-per-week" min="1" max="7" step="1" placeholder="e.g. 2">
+
+        <label for="ob-session-length">Typical session length (minutes)</label>
+        <input type="number" id="ob-session-length" min="10" max="180" step="5" placeholder="e.g. 45">
+      </div>
+
+      <div class="onboarding-step" data-step="5">
+        <h2>Review</h2>
+        <div id="onboarding-summary" class="card"></div>
+        <p class="field-note">You can change these later from Settings.</p>
+      </div>
+
+      <div class="onboarding-step" data-step="6">
+        <h2>Add a profile photo</h2>
+        <p class="field-note">Optional, you can always add or change this later from Settings.</p>
+        <div class="profile-photo-circle" id="ob-photo-preview" style="margin: 16px auto;">
+          <svg viewBox="0 0 24 24" class="profile-photo-placeholder-icon"><path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.5c-3.9 0-9.8 2-9.8 5.9v1.4h19.6v-1.4c0-3.9-5.9-5.9-9.8-5.9z"/></svg>
+        </div>
+        <button type="button" class="btn secondary hidden" id="ob-photo-add-btn" style="width: 100%;">Add a photo</button>
+        <p class="field-note" id="ob-photo-note">Photo capture is only available in the installed Android app, not the browser version.</p>
+      </div>
+
+      <div class="onboarding-step" data-step="7">
+        <h2>Your 12-week program</h2>
+        <p>Three phases: Base, Load Progression, Sport Transfer. Each is four weeks. A phase unlocks once you've logged enough sessions in the one before it, so there's no rushing ahead on paper.</p>
+      </div>
+
+      <div class="onboarding-step" data-step="8">
+        <h2>Exercises adapt as you go</h2>
+        <p>Log how a session felt, and individual exercises will suggest an easier or harder version: not the whole week, just the ones that need it. You decide whether to take the suggestion.</p>
+      </div>
+
+      <div class="onboarding-step" data-step="9">
+        <h2>Everything you log, tracked</h2>
+        <p>Sessions, sets, reps, load, effort: all saved on this device only. Check Progress for charts and trends, and mark milestones (first full-pace crutch sprint, first club session) as you hit them.</p>
+      </div>
+
+      <div class="onboarding-step" data-step="10">
+        <h2>What this app is, and isn't</h2>
+        <p>The conditioning program is built on established strength &amp; conditioning principles. Sport-specific skills (ball control, crutch agility) are left for you to fill in from a real coach or club session. This app won't invent technique instruction it isn't qualified to give.</p>
+      </div>
+    </form>
+
+    <div class="onboarding-nav">
+      <button type="button" class="btn secondary" id="ob-back">Back</button>
+      <button type="button" class="btn" id="ob-next">Next</button>
+    </div>
+  </div>
+</div>
+
+<div id="workout-player-overlay" class="onboarding-overlay hidden">
+  <div class="onboarding-card">
+    <div class="workout-player-header">
+      <span id="wp-progress-label">Exercise 1 of 1</span>
+      <span id="wp-timer">00:00</span>
+      <button type="button" class="wp-close-btn" id="wp-close-btn" aria-label="Close workout">&times;</button>
+    </div>
+
+    <div id="wp-exercise-screen"></div>
+    <div id="wp-finish-screen" class="hidden"></div>
+
+    <div class="card gate-warning danger-warning hidden" id="wp-discard-warning">
+      <p>Discard this in-progress workout? Anything you've logged so far will be lost.</p>
+      <div class="gate-warning-actions">
+        <button type="button" class="btn secondary" id="wp-discard-cancel">Keep going</button>
+        <button type="button" class="btn danger" id="wp-discard-confirm">Discard</button>
+      </div>
+    </div>
+
+    <div class="onboarding-nav" id="wp-nav">
+      <button type="button" class="btn secondary" id="wp-back-btn">Back</button>
+      <button type="button" class="btn secondary" id="wp-skip-btn">Skip</button>
+      <button type="button" class="btn" id="wp-next-btn">Done · Next</button>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <header class="app-header">
+    <div class="profile-photo-circle profile-photo-circle-tiny" id="app-header-photo">
+      <svg viewBox="0 0 24 24" class="profile-photo-placeholder-icon"><path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.5c-3.9 0-9.8 2-9.8 5.9v1.4h19.6v-1.4c0-3.9-5.9-5.9-9.8-5.9z"/></svg>
+    </div>
+    <div class="app-header-text">
+      <h1 id="app-title">AmpFootballFit</h1>
+      <p class="subtitle" id="app-subtitle">Return-to-play conditioning for amputee football</p>
+    </div>
+  </header>
+
+  <main class="view-container">
+    <section class="view" id="view-dashboard" data-i18n-title="tab.dashboard">
+      <h2 data-i18n="tab.dashboard">Dashboard</h2>
+
+      <div class="dashboard-header-row" id="dashboard-header-row">
+        <div class="profile-photo-circle profile-photo-circle-small" id="dashboard-photo-preview">
+          <svg viewBox="0 0 24 24" class="profile-photo-placeholder-icon"><path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.5c-3.9 0-9.8 2-9.8 5.9v1.4h19.6v-1.4c0-3.9-5.9-5.9-9.8-5.9z"/></svg>
+        </div>
+        <p class="dashboard-header-text">Welcome back</p>
+      </div>
+
+      <div class="card">
+        <div class="readiness-card-header">
+          <div class="exercise-icon" id="readiness-header-icon" aria-hidden="true"></div>
+          <h3>Today's readiness check-in</h3>
+        </div>
+        <div id="readiness-form-wrap">
+          <div id="readiness-selects"></div>
+          <label for="readiness-note">Note (optional)</label>
+          <textarea id="readiness-note" placeholder="Optional context, e.g. new socket, sore hip"></textarea>
+          <button type="button" class="btn" id="readiness-save-btn" style="width: 100%; margin-top: 10px;">Save check-in</button>
+        </div>
+        <div id="readiness-summary-wrap" class="hidden"></div>
+      </div>
+
+      <div class="card">
+        <h3>Log a milestone</h3>
+        <div class="milestone-quick-grid" id="milestone-quick-grid">
+          <button type="button" class="btn secondary milestone-quick-btn" data-label="First full-intensity single-leg hop">First full-intensity single-leg hop</button>
+          <button type="button" class="btn secondary milestone-quick-btn" data-label="First crutch sprint at full pace">First crutch sprint at full pace</button>
+          <button type="button" class="btn secondary milestone-quick-btn" data-label="First full training session with club">First full training session with club</button>
+          <button type="button" class="btn secondary milestone-quick-btn" data-label="First competitive minutes played">First competitive minutes played</button>
+        </div>
+
+        <label for="milestone-custom-label">Custom milestone</label>
+        <input type="text" id="milestone-custom-label" placeholder="e.g. First pain-free week">
+        <label for="milestone-note">Note (optional)</label>
+        <textarea id="milestone-note" placeholder="Optional context"></textarea>
+        <button type="button" class="btn" id="milestone-log-custom-btn" style="width: 100%; margin-top: 10px;">Log milestone</button>
+      </div>
+
+      <h3 class="section-subheading">Recent milestones</h3>
+      <div id="dashboard-milestone-list"></div>
+    </section>
+
+    <section class="view" id="view-program" data-i18n-title="tab.program">
+      <h2 data-i18n="tab.program">Program</h2>
+
+      <div class="phase-pills" id="program-phase-pills"></div>
+
+      <div class="week-stepper">
+        <button type="button" class="btn secondary week-nav-btn" id="program-week-prev" aria-label="Previous week">&#8249;</button>
+        <div class="week-label" id="program-week-label">Week 1 of 12</div>
+        <button type="button" class="btn secondary week-nav-btn" id="program-week-next" aria-label="Next week">&#8250;</button>
+      </div>
+
+      <div class="phase-progress-track">
+        <div class="phase-progress-bar" id="program-progress-bar"></div>
+      </div>
+
+      <div class="card gate-warning hidden" id="program-gate-warning">
+        <p id="program-gate-warning-text"></p>
+        <div class="gate-warning-actions">
+          <button type="button" class="btn secondary" id="program-gate-cancel">Stay in current phase</button>
+          <button type="button" class="btn" id="program-gate-confirm">Continue anyway</button>
+        </div>
+      </div>
+
+      <div class="card gate-warning hidden" id="program-readiness-warning">
+        <p id="program-readiness-warning-text"></p>
+      </div>
+
+      <div class="card gate-warning hidden" id="program-prosthetic-note">
+        <p id="program-prosthetic-note-text"></p>
+      </div>
+
+      <button type="button" class="btn" id="program-start-workout-btn" style="width: 100%; margin-bottom: 16px;">&#9654; Start Workout</button>
+
+      <div id="program-exercise-groups"></div>
+
+      <div class="card" id="custom-exercise-card">
+        <h3>Add a custom exercise</h3>
+        <p class="field-note">Something your physio or coach prescribed that isn't in the built-in program? Add it here: it'll show up alongside the others for that phase.</p>
+
+        <label for="custom-ex-phase">Phase</label>
+        <select id="custom-ex-phase">
+          <option value="1">Phase 1: Base</option>
+          <option value="2">Phase 2: Load Progression</option>
+          <option value="3">Phase 3: Sport Transfer</option>
+        </select>
+
+        <label for="custom-ex-category">Category</label>
+        <select id="custom-ex-category"></select>
+
+        <label for="custom-ex-name">Exercise name</label>
+        <input type="text" id="custom-ex-name" placeholder="e.g. Single-leg wall sit">
+
+        <label for="custom-ex-prescription">Prescription</label>
+        <textarea id="custom-ex-prescription" placeholder="e.g. 3 sets x 20-30s hold"></textarea>
+
+        <label for="custom-ex-pose">Illustration</label>
+        <select id="custom-ex-pose"></select>
+
+        <button type="button" class="btn" id="custom-ex-add-btn" style="width: 100%; margin-top: 10px;">+ Add exercise</button>
+
+        <div id="custom-exercise-list"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-skills" data-i18n-title="tab.skills">
+      <h2 data-i18n="tab.skills">Skills</h2>
+
+      <div class="card skills-intro">
+        <p>This is a framework for you to fill in from a physio, video footage, or club sessions. AmpFootballFit does not provide sport-technique instruction. Add a video link and note the source for anything you fill in.</p>
+      </div>
+
+      <div id="skills-categories"></div>
+    </section>
+
+    <section class="view" id="view-log" data-i18n-title="tab.log">
+      <h2 data-i18n="tab.log">Log</h2>
+
+      <div class="card">
+        <label for="log-date">Date</label>
+        <input type="date" id="log-date">
+
+        <label for="log-phase">Phase</label>
+        <select id="log-phase">
+          <option value="1">Phase 1: Base</option>
+          <option value="2">Phase 2: Load Progression</option>
+          <option value="3">Phase 3: Sport Transfer</option>
+        </select>
+
+        <label for="log-duration">Session duration (minutes)</label>
+        <input type="number" id="log-duration" min="0" max="300" step="5" placeholder="e.g. 45">
+
+        <label for="log-rpe">RPE (1–10)</label>
+        <input type="number" id="log-rpe" min="1" max="10" step="1" placeholder="e.g. 6">
+
+        <label>Exercises completed</label>
+        <div id="log-exercise-checklist"></div>
+
+        <label for="log-notes">Notes</label>
+        <textarea id="log-notes" placeholder="Optional notes about this session"></textarea>
+
+        <button type="button" class="btn" id="log-save-btn" style="margin-top: 14px; width: 100%;">Save session</button>
+      </div>
+
+      <div id="log-suggestions"></div>
+
+      <h3 class="section-subheading">Recent sessions</h3>
+      <div id="log-session-list"></div>
+    </section>
+
+    <section class="view" id="view-progress" data-i18n-title="tab.progress">
+      <h2 data-i18n="tab.progress">Progress</h2>
+
+      <div class="card">
+        <h3>Session adherence</h3>
+        <div id="progress-heatmap"></div>
+      </div>
+
+      <div class="card">
+        <h3>Benchmarks &amp; retests</h3>
+        <p class="field-note">Periodic objective tests, separate from your daily sessions. Retest every few weeks to see real progress.</p>
+
+        <label for="benchmark-test-select">Test</label>
+        <select id="benchmark-test-select"></select>
+        <div class="benchmark-instructions-row">
+          <div class="exercise-icon" id="benchmark-icon" aria-hidden="true"></div>
+          <div class="card benchmark-instructions" id="benchmark-instructions"></div>
+        </div>
+
+        <div id="benchmark-summary"></div>
+        <div id="benchmark-chart"></div>
+
+        <label for="benchmark-value-input" id="benchmark-value-label">Value</label>
+        <input type="number" id="benchmark-value-input" step="1">
+        <label for="benchmark-note-input">Note (optional)</label>
+        <input type="text" id="benchmark-note-input" placeholder="e.g. used 30cm box, felt strong">
+        <button type="button" class="btn" id="benchmark-log-btn" style="width: 100%; margin-top: 10px;">Log new test result</button>
+
+        <h3 class="section-subheading">History</h3>
+        <div id="benchmark-history-list"></div>
+      </div>
+
+      <div class="card">
+        <h3>Readiness trend</h3>
+        <div id="progress-readiness-chart"></div>
+      </div>
+
+      <div class="card">
+        <h3>Strength progression</h3>
+        <label for="progress-exercise-select">Exercise</label>
+        <div class="benchmark-instructions-row">
+          <div class="exercise-icon" id="progress-exercise-icon" aria-hidden="true"></div>
+          <select id="progress-exercise-select" style="flex: 1;"></select>
+        </div>
+        <div id="progress-strength-chart"></div>
+      </div>
+
+      <div class="card">
+        <h3>Cardio progression</h3>
+        <div id="progress-cardio-chart"></div>
+      </div>
+
+      <div class="card">
+        <h3>Milestone timeline</h3>
+        <div id="progress-milestone-timeline"></div>
+      </div>
+
+      <button type="button" class="btn" id="progress-share-btn" style="width: 100%; margin-bottom: 10px;">Share progress</button>
+      <p class="field-note" style="text-align: center; margin-top: -4px;">Sends a plain-text summary (phase, recent sessions, benchmarks, milestones) through your phone's share sheet, e.g. to a coach or physio.</p>
+      <button type="button" class="btn secondary" id="progress-export-csv" style="width: 100%;">Export sessions to CSV</button>
+    </section>
+
+    <section class="view" id="view-settings" data-i18n-title="tab.settings">
+      <h2 data-i18n="tab.settings">Settings</h2>
+
+      <div class="card" id="settings-photo-card">
+        <h3>Profile photo</h3>
+        <div class="profile-photo-row">
+          <div class="profile-photo-circle" id="settings-photo-preview">
+            <svg viewBox="0 0 24 24" class="profile-photo-placeholder-icon"><path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.5c-3.9 0-9.8 2-9.8 5.9v1.4h19.6v-1.4c0-3.9-5.9-5.9-9.8-5.9z"/></svg>
+          </div>
+          <div class="profile-photo-actions">
+            <button type="button" class="btn secondary" id="settings-photo-add-btn">Add photo</button>
+            <button type="button" class="btn secondary hidden" id="settings-photo-remove-btn">Remove</button>
+          </div>
+        </div>
+        <p class="field-note" id="settings-photo-note">Optional, skip anytime. Photo capture is only available in the installed Android app, not the browser version.</p>
+      </div>
+
+      <div class="card">
+        <h3>Profile details</h3>
+        <p class="field-note">Update these anytime your situation changes, e.g. activity level moving from K4 to K3, a new amputation date, or a change in prosthetic use.</p>
+
+        <label for="settings-amp-level">Amputation level</label>
+        <select id="settings-amp-level">
+          <option value="">-- Select --</option>
+          <option value="transtibial">Transtibial (below knee)</option>
+          <option value="transfemoral">Transfemoral (above knee)</option>
+          <option value="bilateral">Bilateral</option>
+        </select>
+
+        <label for="settings-amp-side">Side</label>
+        <select id="settings-amp-side">
+          <option value="">-- Select --</option>
+          <option value="left">Left</option>
+          <option value="right">Right</option>
+          <option value="both">Both</option>
+        </select>
+
+        <label for="settings-years-since">Years since amputation</label>
+        <input type="number" id="settings-years-since" min="0" max="80" step="0.5" placeholder="e.g. 3">
+
+        <label for="settings-prosthetic-use">Do you train with your prosthetic?</label>
+        <select id="settings-prosthetic-use">
+          <option value="">-- Select --</option>
+          <option value="always">Yes, for most exercises</option>
+          <option value="never">No, I train without it</option>
+          <option value="varies">Varies by exercise</option>
+        </select>
+
+        <label for="settings-activity-mode">Current activity level</label>
+        <select id="settings-activity-mode">
+          <option value="">-- Select --</option>
+          <option value="K0">K0</option>
+          <option value="K1">K1</option>
+          <option value="K2">K2</option>
+          <option value="K3">K3</option>
+          <option value="K4">K4</option>
+          <option value="unsure">Not sure (describe in plain language)</option>
+        </select>
+
+        <div id="settings-activity-plain-wrap" class="hidden">
+          <label for="settings-activity-plain">Describe your activity level</label>
+          <select id="settings-activity-plain">
+            <option value="">-- Select --</option>
+            <option value="low">Low (limited day-to-day mobility)</option>
+            <option value="moderate">Moderate (regular daily activity)</option>
+            <option value="high">High (very active, near full mobility)</option>
+          </select>
+        </div>
+
+        <label for="settings-crutch-exp">Crutch experience</label>
+        <select id="settings-crutch-exp">
+          <option value="">-- Select --</option>
+          <option value="none">None</option>
+          <option value="recreational">Recreational</option>
+          <option value="competitive">Previously competitive</option>
+        </select>
+
+        <label for="settings-last-competitive">Time since last competitive amp football play</label>
+        <select id="settings-last-competitive">
+          <option value="">-- Select --</option>
+          <option value="current">Currently playing / no break</option>
+          <option value="lt6m">Less than 6 months</option>
+          <option value="6to12m">6–12 months</option>
+          <option value="1to2y">1–2 years</option>
+          <option value="2plus">2+ years</option>
+          <option value="never">Never played competitively</option>
+        </select>
+
+        <label for="settings-fitness-baseline">Current fitness baseline</label>
+        <select id="settings-fitness-baseline">
+          <option value="">-- Select --</option>
+          <option value="sedentary">Sedentary</option>
+          <option value="lightly_active">Lightly active</option>
+          <option value="regular">Regularly training</option>
+        </select>
+
+        <label for="settings-pain-points">Pain points or injury history (optional)</label>
+        <textarea id="settings-pain-points" placeholder="Free text (noted so sessions can be adapted)"></textarea>
+
+        <label for="settings-target">Target</label>
+        <select id="settings-target">
+          <option value="">-- Select --</option>
+          <option value="general_fitness">General fitness</option>
+          <option value="return_club">Return to club training</option>
+          <option value="return_competition">Return to competition</option>
+        </select>
+
+        <label for="settings-days-per-week">Available training days per week</label>
+        <input type="number" id="settings-days-per-week" min="1" max="7" step="1" placeholder="e.g. 2">
+
+        <label for="settings-session-length">Typical session length (minutes)</label>
+        <input type="number" id="settings-session-length" min="10" max="180" step="5" placeholder="e.g. 45">
+
+        <button type="button" class="btn" id="settings-profile-save-btn" style="width: 100%; margin-top: 12px;">Save profile changes</button>
+        <p class="field-note hidden" id="settings-profile-saved-note">Saved.</p>
+      </div>
+
+      <div class="card">
+        <h3>Language</h3>
+        <label for="settings-language">App language</label>
+        <select id="settings-language">
+          <option value="en">English</option>
+          <option value="nl">Nederlands (Dutch): translations coming soon</option>
+          <option value="fr">Français (French): translations coming soon</option>
+        </select>
+        <p class="field-note">Dutch and French are structurally supported; full translations are a later pass. Untranslated text falls back to English.</p>
+      </div>
+
+      <div class="card">
+        <h3>Units</h3>
+        <label for="settings-units">Load units</label>
+        <select id="settings-units">
+          <option value="kg">Kilograms (kg)</option>
+          <option value="lb">Pounds (lb)</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <h3>Data</h3>
+        <button type="button" class="btn secondary" id="settings-export-json-btn" style="width: 100%; margin-bottom: 10px;">Export all data (JSON backup)</button>
+        <button type="button" class="btn danger" id="settings-reset-btn" style="width: 100%;">Reset all data</button>
+
+        <div class="card gate-warning danger-warning hidden" id="settings-reset-warning" style="margin-top: 12px;">
+          <p>This will permanently delete your profile, program progress, sessions, skills drills, and milestones from this device. This cannot be undone.</p>
+          <div class="gate-warning-actions">
+            <button type="button" class="btn secondary" id="settings-reset-cancel">Cancel</button>
+            <button type="button" class="btn danger" id="settings-reset-confirm">Yes, delete everything</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v2.4 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
+    </section>
+  </main>
+
+  <nav class="tab-bar" id="tab-bar">
+    <button type="button" class="tab-btn active" data-view="dashboard">
+      <span class="tab-icon">&#127968;</span>
+      <span data-i18n="tab.dashboard">Dashboard</span>
+    </button>
+    <button type="button" class="tab-btn" data-view="program">
+      <span class="tab-icon">&#128170;</span>
+      <span data-i18n="tab.program">Program</span>
+    </button>
+    <button type="button" class="tab-btn" data-view="log">
+      <span class="tab-icon">&#128221;</span>
+      <span data-i18n="tab.log">Log</span>
+    </button>
+    <button type="button" class="tab-btn" data-view="progress">
+      <span class="tab-icon">&#128200;</span>
+      <span data-i18n="tab.progress">Progress</span>
+    </button>
+    <button type="button" class="tab-btn" data-view="skills">
+      <span class="tab-icon">&#9917;</span>
+      <span data-i18n="tab.skills">Skills</span>
+    </button>
+    <button type="button" class="tab-btn" data-view="settings">
+      <span class="tab-icon">&#9881;</span>
+      <span data-i18n="tab.settings">Settings</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------------------------------------------------------------------
+  // Namespacing (per brief section 9/10) — all storage keys use this prefix
+  // ---------------------------------------------------------------------
+  var STORAGE_PREFIX = "ampfootballfit_";
+
+  var STORAGE_KEYS = {
+    profile: STORAGE_PREFIX + "profile",
+    programState: STORAGE_PREFIX + "program_state",
+    sessions: STORAGE_PREFIX + "sessions",
+    skillsDrills: STORAGE_PREFIX + "skills_drills",
+    milestones: STORAGE_PREFIX + "milestones",
+    settings: STORAGE_PREFIX + "settings",
+    profilePhotoPath: STORAGE_PREFIX + "profile_photo_path",
+    onboardingComplete: STORAGE_PREFIX + "onboarding_complete",
+    readinessLogs: STORAGE_PREFIX + "readiness_logs",
+    benchmarks: STORAGE_PREFIX + "benchmarks",
+    customExercises: STORAGE_PREFIX + "custom_exercises"
+  };
+
+  // ---------------------------------------------------------------------
+  // String table — English now, structure ready for nl/fr (brief section 9)
+  // ---------------------------------------------------------------------
+  var STRINGS = {
+    en: {
+      "app.title": "AmpFootballFit",
+      "app.subtitle": "Return-to-play conditioning for amputee football",
+      "tab.dashboard": "Dashboard",
+      "tab.program": "Program",
+      "tab.skills": "Skills",
+      "tab.log": "Log",
+      "tab.progress": "Progress",
+      "tab.settings": "Settings",
+      "placeholder.dashboard": "Dashboard content coming in a later build step.",
+      "placeholder.program": "Program content coming in a later build step.",
+      "placeholder.skills": "Sport Skills framework coming in a later build step.",
+      "placeholder.log": "Session Tracker coming in a later build step.",
+      "placeholder.progress": "Progress Dashboard coming in a later build step.",
+      "placeholder.settings": "Settings coming in a later build step."
+    },
+    nl: {},
+    fr: {}
+  };
+
+  function currentLang() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.settings);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.language) return parsed.language;
+      }
+    } catch (e) { /* ignore malformed settings, fall back to default */ }
+    return "en";
+  }
+
+  function t(key) {
+    var lang = currentLang();
+    var table = STRINGS[lang] || {};
+    return table[key] || STRINGS.en[key] || key;
+  }
+
+  function applyStrings() {
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      el.textContent = t(el.getAttribute("data-i18n"));
+    });
+    document.getElementById("app-title").textContent = t("app.title");
+    document.getElementById("app-subtitle").textContent = t("app.subtitle");
+  }
+
+  // ---------------------------------------------------------------------
+  // Tab navigation
+  // ---------------------------------------------------------------------
+  function showView(name) {
+    document.querySelectorAll(".view").forEach(function (el) {
+      el.classList.toggle("active", el.id === "view-" + name);
+    });
+    document.querySelectorAll(".tab-btn").forEach(function (btn) {
+      btn.classList.toggle("active", btn.getAttribute("data-view") === name);
+    });
+    try {
+      localStorage.setItem(STORAGE_PREFIX + "last_view", name);
+    } catch (e) { /* storage unavailable, non-critical */ }
+    if (name === "program" && typeof renderProgramView === "function") renderProgramView();
+    if (name === "log" && typeof renderSessionList === "function") renderSessionList();
+    if (name === "skills" && typeof renderSkillsView === "function") renderSkillsView();
+    if (name === "progress" && typeof renderProgressView === "function") renderProgressView();
+    if (name === "dashboard" && typeof renderDashboardMilestoneList === "function") renderDashboardMilestoneList();
+    if (name === "dashboard" && typeof renderProfilePhotoUi === "function") renderProfilePhotoUi();
+    if (name === "dashboard" && typeof renderReadinessCard === "function") renderReadinessCard();
+    if (name === "settings" && typeof initSettingsTab === "function") initSettingsTab();
+  }
+
+  document.getElementById("tab-bar").addEventListener("click", function (e) {
+    var btn = e.target.closest(".tab-btn");
+    if (!btn) return;
+    showView(btn.getAttribute("data-view"));
+  });
+
+  // ---------------------------------------------------------------------
+  // Profile storage (Section 3 / Section 10)
+  // ---------------------------------------------------------------------
+  function getProfile() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.profile);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveProfile(profile) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Profile picture (Task 2) — Capacitor Camera + Filesystem only; this
+  // is a native-app-only feature (no bundler/import needed — Capacitor's
+  // native runtime auto-injects window.Capacitor.Plugins.* into the
+  // WebView). Plain browser/PWA/iOS builds simply don't get this feature.
+  // Only the file path is ever stored in localStorage, never base64.
+  // ---------------------------------------------------------------------
+  var PROFILE_PHOTO_FILENAME = "profile_photo.jpg";
+
+  function isNativeApp() {
+    return typeof Capacitor !== "undefined" && !!(Capacitor.isNativePlatform && Capacitor.isNativePlatform());
+  }
+
+  function hasProfilePhoto() {
+    try {
+      return !!localStorage.getItem(STORAGE_KEYS.profilePhotoPath);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function readCameraPhotoAsBase64(photo) {
+    if (Capacitor.getPlatform() === "web") {
+      return fetch(photo.webPath).then(function (response) {
+        return response.blob();
+      }).then(function (blob) {
+        return new Promise(function (resolve, reject) {
+          var reader = new FileReader();
+          reader.onerror = reject;
+          reader.onload = function () { resolve(String(reader.result).split(",")[1]); };
+          reader.readAsDataURL(blob);
+        });
+      });
+    }
+    return Capacitor.Plugins.Filesystem.readFile({ path: photo.path }).then(function (result) {
+      return result.data;
+    });
+  }
+
+  function captureProfilePhoto() {
+    if (!isNativeApp()) return Promise.reject(new Error("Photo capture is only available in the installed app."));
+    return Capacitor.Plugins.Camera.getPhoto({ source: "PROMPT", resultType: "uri", quality: 70 })
+      .then(function (photo) { return readCameraPhotoAsBase64(photo); })
+      .then(function (base64) {
+        return Capacitor.Plugins.Filesystem.writeFile({ path: PROFILE_PHOTO_FILENAME, data: base64, directory: "DATA" });
+      })
+      .then(function () {
+        try { localStorage.setItem(STORAGE_KEYS.profilePhotoPath, PROFILE_PHOTO_FILENAME); } catch (e) { /* storage unavailable */ }
+        return getProfilePhotoDisplayUri();
+      });
+  }
+
+  function getProfilePhotoDisplayUri() {
+    var path = null;
+    try { path = localStorage.getItem(STORAGE_KEYS.profilePhotoPath); } catch (e) { /* storage unavailable */ }
+    if (!path || !isNativeApp()) return Promise.resolve(null);
+    return Capacitor.Plugins.Filesystem.getUri({ path: path, directory: "DATA" })
+      .then(function (result) {
+        // Cache-bust: the filename never changes on replace, so without a
+        // unique suffix the WebView keeps serving its cached copy of the
+        // old photo instead of re-reading the overwritten file from disk.
+        return Capacitor.convertFileSrc(result.uri) + "?v=" + Date.now();
+      })
+      .catch(function () { return null; });
+  }
+
+  function removeProfilePhoto() {
+    var path = null;
+    try { path = localStorage.getItem(STORAGE_KEYS.profilePhotoPath); } catch (e) { /* storage unavailable */ }
+    try { localStorage.removeItem(STORAGE_KEYS.profilePhotoPath); } catch (e) { /* storage unavailable */ }
+    if (!path || !isNativeApp()) return Promise.resolve();
+    return Capacitor.Plugins.Filesystem.deleteFile({ path: path, directory: "DATA" }).catch(function () { /* already gone */ });
+  }
+
+  // ---------------------------------------------------------------------
+  // Onboarding wizard
+  // ---------------------------------------------------------------------
+  var ONBOARDING_TOTAL_STEPS = 10;
+  var onboardingStep = 1;
+
+  var ONBOARDING_LABELS = {
+    amputationLevel: { transtibial: "Transtibial", transfemoral: "Transfemoral", bilateral: "Bilateral" },
+    amputationSide: { left: "Left", right: "Right", both: "Both" },
+    prostheticUse: { always: "Yes, for most exercises", never: "No, trains without it", varies: "Varies by exercise" },
+    crutchExperience: { none: "None", recreational: "Recreational", competitive: "Previously competitive" },
+    timeSinceLastCompetitivePlay: {
+      current: "Currently playing / no break",
+      lt6m: "Less than 6 months",
+      "6to12m": "6–12 months",
+      "1to2y": "1–2 years",
+      "2plus": "2+ years",
+      never: "Never played competitively"
+    },
+    fitnessBaseline: { sedentary: "Sedentary", lightly_active: "Lightly active", regular: "Regularly training" },
+    target: { general_fitness: "General fitness", return_club: "Return to club training", return_competition: "Return to competition" },
+    activityPlain: { low: "Low", moderate: "Moderate", high: "High" }
+  };
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function el(id) { return document.getElementById(id); }
+
+  var ONBOARDING_REVIEW_STEP = 5;
+  var ONBOARDING_PHOTO_STEP = 6;
+
+  function showOnboardingStep(n) {
+    onboardingStep = n;
+    document.querySelectorAll(".onboarding-step").forEach(function (step) {
+      step.classList.toggle("active", Number(step.getAttribute("data-step")) === n);
+    });
+    document.querySelectorAll("#onboarding-progress .dot").forEach(function (dot) {
+      var dotStep = Number(dot.getAttribute("data-step"));
+      dot.classList.toggle("active", dotStep === n);
+      dot.classList.toggle("done", dotStep < n);
+    });
+    el("ob-back").style.visibility = n === 1 ? "hidden" : "visible";
+    if (n === ONBOARDING_TOTAL_STEPS) {
+      el("ob-next").textContent = "Get started";
+    } else if (n === ONBOARDING_PHOTO_STEP) {
+      el("ob-next").textContent = hasProfilePhoto() ? "Continue" : "Skip for now";
+    } else {
+      el("ob-next").textContent = "Next";
+    }
+    if (n === ONBOARDING_REVIEW_STEP) renderOnboardingSummary();
+    if (n === ONBOARDING_PHOTO_STEP && typeof renderProfilePhotoUi === "function") renderProfilePhotoUi();
+  }
+
+  var ONBOARDING_REQUIRED_BY_STEP = {
+    1: ["ob-amp-level", "ob-amp-side", "ob-prosthetic-use"],
+    2: ["ob-activity-mode", "ob-crutch-exp", "ob-last-competitive"],
+    3: ["ob-fitness-baseline"],
+    4: ["ob-target", "ob-days-per-week", "ob-session-length"],
+    5: []
+  };
+
+  function validateOnboardingStep(n) {
+    var ids = ONBOARDING_REQUIRED_BY_STEP[n] || [];
+    var valid = true;
+    ids.forEach(function (id) {
+      var field = el(id);
+      if (!field.value) {
+        valid = false;
+        field.classList.add("invalid");
+      } else {
+        field.classList.remove("invalid");
+      }
+    });
+    if (n === 2 && el("ob-activity-mode").value === "unsure") {
+      var plain = el("ob-activity-plain");
+      if (!plain.value) {
+        valid = false;
+        plain.classList.add("invalid");
+      } else {
+        plain.classList.remove("invalid");
+      }
+    }
+    return valid;
+  }
+
+  function collectOnboardingData() {
+    var mode = el("ob-activity-mode").value;
+    var activityLevel = mode === "unsure"
+      ? { mode: "plain", value: el("ob-activity-plain").value }
+      : { mode: "klevel", value: mode };
+    return {
+      amputationLevel: el("ob-amp-level").value,
+      amputationSide: el("ob-amp-side").value,
+      yearsSinceAmputation: el("ob-years-since").value !== "" ? parseFloat(el("ob-years-since").value) : null,
+      prostheticUse: el("ob-prosthetic-use").value,
+      activityLevel: activityLevel,
+      crutchExperience: el("ob-crutch-exp").value,
+      timeSinceLastCompetitivePlay: el("ob-last-competitive").value,
+      fitnessBaseline: el("ob-fitness-baseline").value,
+      painPoints: el("ob-pain-points").value.trim(),
+      target: el("ob-target").value,
+      trainingDaysPerWeek: el("ob-days-per-week").value !== "" ? parseInt(el("ob-days-per-week").value, 10) : null,
+      sessionLengthMinutes: el("ob-session-length").value !== "" ? parseInt(el("ob-session-length").value, 10) : null
+    };
+  }
+
+  function renderOnboardingSummary() {
+    var d = collectOnboardingData();
+    var activityLabel = d.activityLevel.mode === "klevel"
+      ? d.activityLevel.value
+      : (ONBOARDING_LABELS.activityPlain[d.activityLevel.value] || "Not set");
+    var rows = [
+      ["Amputation", (ONBOARDING_LABELS.amputationLevel[d.amputationLevel] || "Not set") + " · " + (ONBOARDING_LABELS.amputationSide[d.amputationSide] || "Not set")],
+      ["Years since amputation", d.yearsSinceAmputation != null ? d.yearsSinceAmputation : "Not set"],
+      ["Trains with prosthetic", ONBOARDING_LABELS.prostheticUse[d.prostheticUse] || "Not set"],
+      ["Activity level", activityLabel],
+      ["Crutch experience", ONBOARDING_LABELS.crutchExperience[d.crutchExperience] || "Not set"],
+      ["Last competitive play", ONBOARDING_LABELS.timeSinceLastCompetitivePlay[d.timeSinceLastCompetitivePlay] || "Not set"],
+      ["Fitness baseline", ONBOARDING_LABELS.fitnessBaseline[d.fitnessBaseline] || "Not set"],
+      ["Pain points / injury notes", d.painPoints || "Not set"],
+      ["Target", ONBOARDING_LABELS.target[d.target] || "Not set"],
+      ["Training days/week", d.trainingDaysPerWeek != null ? d.trainingDaysPerWeek : "Not set"],
+      ["Session length", d.sessionLengthMinutes != null ? d.sessionLengthMinutes + " min" : "Not set"]
+    ];
+    el("onboarding-summary").innerHTML = rows.map(function (r) {
+      return '<div class="summary-row"><span class="summary-label">' + escapeHtml(r[0]) + '</span><span class="summary-value">' + escapeHtml(String(r[1])) + "</span></div>";
+    }).join("");
+  }
+
+  function finishOnboarding() {
+    var data = collectOnboardingData();
+    var now = new Date().toISOString();
+    data.createdAt = now;
+    data.updatedAt = now;
+    saveProfile(data);
+    try { localStorage.setItem(STORAGE_KEYS.onboardingComplete, "true"); } catch (e) { /* storage unavailable */ }
+    ensureProgramState();
+    initLogTab();
+    ensureSkillsData();
+    renderDashboardMilestoneList();
+    initSettingsTab();
+    el("onboarding-overlay").classList.add("hidden");
+    el("app").classList.remove("hidden");
+    showView("dashboard");
+  }
+
+  function startOnboarding() {
+    onboardingStep = 1;
+    showOnboardingStep(1);
+    el("app").classList.add("hidden");
+    el("onboarding-overlay").classList.remove("hidden");
+  }
+
+  el("ob-activity-mode").addEventListener("change", function () {
+    el("ob-activity-plain-wrap").classList.toggle("hidden", this.value !== "unsure");
+  });
+
+  el("ob-next").addEventListener("click", function () {
+    if (!validateOnboardingStep(onboardingStep)) return;
+    if (onboardingStep === ONBOARDING_TOTAL_STEPS) {
+      finishOnboarding();
+    } else {
+      showOnboardingStep(onboardingStep + 1);
+    }
+  });
+
+  el("ob-back").addEventListener("click", function () {
+    if (onboardingStep > 1) showOnboardingStep(onboardingStep - 1);
+  });
+
+  // ---------------------------------------------------------------------
+  // Physical Conditioning program data (Section 4) + phase-gating (Section 4/10)
+  // ---------------------------------------------------------------------
+  var PROGRAM_META = {
+    totalWeeks: 12,
+    phaseLengthWeeks: 4,
+    minSessionsPerWeek: 2,
+    maxSessionsPerWeekScalable: 4
+  };
+
+  function getMinSessionsPerPhase() {
+    return PROGRAM_META.phaseLengthWeeks * PROGRAM_META.minSessionsPerWeek;
+  }
+
+  var CARDIO_ESTIMATE_NOTE = "Estimated: adjust based on actual match observation. Real amputee football match-demand data (sprint counts, distances, work:rest ratios) has not been reliably sourced; treat this as a conservative starting structure, not verified match statistics.";
+
+  var PROGRAM_DATA = {
+    phases: [
+      {
+        number: 1,
+        key: "base",
+        name: "Base",
+        weekRange: [1, 4],
+        focus: "Foundation",
+        categories: {
+          singleLegStrength: [
+            { id: "sls-squat-t1", name: "Assisted box squat", prescription: "2–3 sets x 10–15 reps, sit to a raised surface, full hand support on rail/counter", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 1, targetSetsMin: 2, targetRepsMin: 10 },
+            { id: "p1-sls-squat", name: "Bodyweight squat (assisted)", prescription: "2–3 sets x 10–15 reps, use support as needed for balance", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 2, targetSetsMin: 2, targetRepsMin: 10 },
+            { id: "sls-squat-t3", name: "Loaded single-leg-biased squat", prescription: "3 sets x 8–12 reps, add external load (dumbbell/vest) as tolerated, minimal hand support", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+            { id: "p1-sls-stepup", name: "Step-ups", prescription: "2–3 sets x 8–12 reps (sound leg loaded)", icon: "🪜", pose: "stepUp" },
+            { id: "sls-bridge-t1", name: "Glute bridge (feet elevated close, short lever)", prescription: "2–3 sets x 12–15 reps", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 1, targetSetsMin: 2, targetRepsMin: 12 },
+            { id: "p1-sls-bridge", name: "Glute bridges", prescription: "2–3 sets x 12–15 reps", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 2, targetSetsMin: 2, targetRepsMin: 12 },
+            { id: "sls-bridge-t3", name: "Single-leg glute bridge", prescription: "3 sets x 8–12 reps, sound leg only, opposite leg lifted", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+            { id: "sls-calf-t1", name: "Calf raise (supported, partial range)", prescription: "2–3 sets x 15–20 reps, hands on rail, comfortable range only", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 1, targetSetsMin: 2, targetRepsMin: 15 },
+            { id: "p1-sls-calf", name: "Calf raises (sound leg)", prescription: "2–3 sets x 15–20 reps", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 2, targetSetsMin: 2, targetRepsMin: 15 },
+            { id: "sls-calf-t3", name: "Single-leg calf raise (loaded)", prescription: "3 sets x 10–15 reps, add load as tolerated, full range", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 3, targetSetsMin: 3, targetRepsMin: 10 }
+          ],
+          upperBody: [
+            { id: "p1-ub-pushup", name: "Seated/incline push-ups", prescription: "2–3 sets x 12–20 reps, light-to-moderate effort (endurance focus)", icon: "💪", pose: "pushUp" },
+            { id: "ub-row-t1", name: "Band row (light resistance, short range)", prescription: "2–3 sets x 12–20 reps, light band, control through full range", icon: "🚣", pose: "row", progressionGroup: "row", tier: 1, targetSetsMin: 2, targetRepsMin: 12 },
+            { id: "p1-ub-row", name: "Resistance band rows", prescription: "2–3 sets x 12–20 reps", icon: "🚣", pose: "row", progressionGroup: "row", tier: 2, targetSetsMin: 2, targetRepsMin: 12 },
+            { id: "ub-row-t3", name: "Row (heavy band or cable/free-weight equivalent)", prescription: "3–4 sets x 8–12 reps, increased resistance", icon: "🚣", pose: "row", progressionGroup: "row", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+            { id: "p1-ub-press", name: "Shoulder press", prescription: "2–3 sets x 12–20 reps, light load", icon: "🙌", pose: "press" }
+          ],
+          core: [
+            { id: "p1-core-plank", name: "Plank", prescription: "2–3 sets x 20–40s hold", icon: "🧘", pose: "plank" },
+            { id: "core-deadbug-t1", name: "Dead bug (bent-knee, small range)", prescription: "2–3 sets x 8–12 reps/side, keep lower back flat, small limb movement", icon: "🐛", pose: "deadBug", progressionGroup: "deadBug", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
+            { id: "p1-core-deadbug", name: "Dead bugs", prescription: "2–3 sets x 8–12 reps/side", icon: "🐛", pose: "deadBug", progressionGroup: "deadBug", tier: 2, targetSetsMin: 2, targetRepsMin: 8 },
+            { id: "core-deadbug-t3", name: "Dead bug (extended limb, added resistance/tempo)", prescription: "3 sets x 10–15 reps/side, full extension, slower tempo or light ankle weight", icon: "🐛", pose: "deadBug", progressionGroup: "deadBug", tier: 3, targetSetsMin: 3, targetRepsMin: 10 },
+            { id: "core-sideplank-t1", name: "Side plank (knee-supported)", prescription: "2–3 sets x 15–20s/side, bottom knee bent for support", icon: "🤸", pose: "sidePlank", progressionGroup: "sidePlank", tier: 1, targetSetsMin: 2, targetRepsMin: 15 },
+            { id: "p1-core-sideplank", name: "Side plank", prescription: "2–3 sets x 15–30s/side", icon: "🤸", pose: "sidePlank", progressionGroup: "sidePlank", tier: 2, targetSetsMin: 2, targetRepsMin: 15 },
+            { id: "core-sideplank-t3", name: "Side plank (full, with top-leg lift or reach-through)", prescription: "3 sets x 25–40s/side, add top-leg lift or rotate-and-reach", icon: "🤸", pose: "sidePlank", progressionGroup: "sidePlank", tier: 3, targetSetsMin: 3, targetRepsMin: 25 },
+            { id: "core-antirot-t1", name: "Anti-rotation hold (light band, close to body)", prescription: "2–3 sets x 15–20s/side, minimal band tension", icon: "🔄", pose: "antiRotation", progressionGroup: "antiRotation", tier: 1, targetSetsMin: 2, targetRepsMin: 15 },
+            { id: "p1-core-antirot", name: "Anti-rotation hold", prescription: "2–3 sets x 20–30s/side", icon: "🔄", pose: "antiRotation", progressionGroup: "antiRotation", tier: 2, targetSetsMin: 2, targetRepsMin: 20 },
+            { id: "core-antirot-t3", name: "Anti-rotation press-out (extended arms, increased tension)", prescription: "3 sets x 20–30s/side, arms extended further from body, heavier band", icon: "🔄", pose: "antiRotation", progressionGroup: "antiRotation", tier: 3, targetSetsMin: 3, targetRepsMin: 20 }
+          ],
+          cardio: [
+            { id: "p1-cardio-steady", name: "Low-intensity steady-state", prescription: "15–25 min continuous at an easy, conversational effort (RPE 3–4/10, you should be able to speak in full sentences throughout). Use whatever you have access to: rowing machine, arm/upper-body ergometer, stationary bike, brisk crutch-walk, swimming, or wheelchair/handcycle. Any continuous activity you can sustain at that effort works.", icon: "🏃", pose: "cardioMachine" }
+          ],
+          mobility: [
+            { id: "p1-mob-hipflexor", name: "Hip flexor mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🧘‍♂️", pose: "mobilityLunge" },
+            { id: "p1-mob-hamstring", name: "Hamstring mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🦵", pose: "mobilityHamstring" },
+            { id: "p1-mob-shoulder", name: "Shoulder/thoracic mobility", prescription: "Daily, 2–3 x 30s/side or 8–10 reps", icon: "🙆‍♂️", pose: "mobilityShoulder" }
+          ]
+        }
+      },
+      {
+        number: 2,
+        key: "load_progression",
+        name: "Load Progression",
+        weekRange: [5, 8],
+        focus: "Load Progression",
+        categories: {
+          singleLegStrength: [
+            { id: "p2-sls-stepup", name: "Loaded step-ups", prescription: "3–4 sets x 6–10 reps, add external load as tolerated", icon: "🪜", pose: "stepUp" },
+            { id: "sls-rdl-t1", name: "Assisted hip hinge (two-hand support)", prescription: "2–3 sets x 8–10 reps, both hands on support, focus on hinge pattern", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
+            { id: "p2-sls-rdl", name: "Single-leg RDL (support as needed)", prescription: "3 sets x 6–10 reps", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 2, targetSetsMin: 3, targetRepsMin: 6 },
+            { id: "sls-rdl-t3", name: "Single-leg RDL (loaded, unsupported)", prescription: "3 sets x 6–8 reps, light load, no hand support", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 3, targetSetsMin: 3, targetRepsMin: 6 },
+            { id: "sls-lunge-t1", name: "Lateral step + return (supported)", prescription: "2–3 sets x 8–10 reps, hand support, small range", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
+            { id: "p2-sls-lunge", name: "Lateral lunges (sound leg)", prescription: "3 sets x 8–10 reps", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 2, targetSetsMin: 3, targetRepsMin: 8 },
+            { id: "sls-lunge-t3", name: "Lateral lunge (loaded)", prescription: "3 sets x 8–10 reps, add load, increase range", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+            { id: "sls-boxjump-t1", name: "Step-down practice (controlled landing only)", prescription: "2–3 sets x 6–8 reps, low step, no jump (landing mechanics only)", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 1, targetSetsMin: 2, targetRepsMin: 6 },
+            { id: "p2-sls-boxjump", name: "Box jumps (low height, controlled landing)", prescription: "3 sets x 4–6 reps, focus on soft landing mechanics", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 2, targetSetsMin: 3, targetRepsMin: 4 },
+            { id: "sls-boxjump-t3", name: "Box jump (increased height, single-leg landing focus)", prescription: "3 sets x 4–6 reps, progress height only after landing mechanics confirmed solid", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 3, targetSetsMin: 3, targetRepsMin: 4 }
+          ],
+          upperBody: [
+            { id: "p2-ub-press", name: "Presses/rows/pulls (increased load)", prescription: "3–4 sets x 8–12 reps", icon: "🏋️‍♀️", pose: "press" },
+            { id: "p2-ub-plyo", name: "Explosive push variation (e.g. plyo push-ups, if cleared)", prescription: "3 sets x 4–6 reps", icon: "💥", pose: "pushUp" }
+          ],
+          core: [
+            { id: "core-carry-t1", name: "Short carry, light load", prescription: "2–3 sets x 10–15m, light load, focus on posture and crutch control", icon: "🧳", pose: "loadedCarry", progressionGroup: "loadedCarry", tier: 1, targetSetsMin: 2, targetRepsMin: 10 },
+            { id: "p2-core-carry", name: "Loaded carries (crutch farmer's-walk equivalent, if safe)", prescription: "3 sets x 20–30m or 20–30s", icon: "🧳", pose: "loadedCarry", progressionGroup: "loadedCarry", tier: 2, targetSetsMin: 3, targetRepsMin: 20 },
+            { id: "core-carry-t3", name: "Loaded carry (increased load or distance)", prescription: "3 sets x 30–40m, heavier load", icon: "🧳", pose: "loadedCarry", progressionGroup: "loadedCarry", tier: 3, targetSetsMin: 3, targetRepsMin: 30 },
+            { id: "core-rot-t1", name: "Rotational core (seated, light band, small range)", prescription: "2–3 sets x 8–10 reps/side, seated for stability, small range", icon: "🌀", pose: "rotationalCore", progressionGroup: "rotationalCore", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
+            { id: "p2-core-rotational", name: "Rotational core work", prescription: "3 sets x 8–12 reps/side", icon: "🌀", pose: "rotationalCore", progressionGroup: "rotationalCore", tier: 2, targetSetsMin: 3, targetRepsMin: 8 },
+            { id: "core-rot-t3", name: "Rotational core (standing, increased resistance/range)", prescription: "3 sets x 10–12 reps/side, standing, heavier band or cable", icon: "🌀", pose: "rotationalCore", progressionGroup: "rotationalCore", tier: 3, targetSetsMin: 3, targetRepsMin: 10 }
+          ],
+          cardio: [
+            { id: "p2-cardio-interval", name: "Interval work", prescription: "30s work / 30s rest or 20s work / 40s rest, 6–10 rounds, building toward match-intensity bursts. \"Work\" = whichever hard-effort mode you train with (crutch sprints, bike, rowing/arm ergometer, or shuttle runs) at a hard effort (RPE 7–8/10).", icon: "⏱️", pose: "cardioMachine" }
+          ],
+          mobility: [
+            { id: "p2-mob-dynamic", name: "Dynamic warm-up sequence", prescription: "5–8 min before each session", icon: "🔥", pose: "mobilityShoulder" },
+            { id: "p2-mob-hipflexor", name: "Hip flexor mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🧘‍♂️", pose: "mobilityLunge" },
+            { id: "p2-mob-hamstring", name: "Hamstring mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🦵", pose: "mobilityHamstring" },
+            { id: "p2-mob-shoulder", name: "Shoulder/thoracic mobility", prescription: "Daily, 2–3 x 30s/side or 8–10 reps", icon: "🙆‍♂️", pose: "mobilityShoulder" }
+          ]
+        }
+      },
+      {
+        number: 3,
+        key: "sport_transfer",
+        name: "Sport Transfer",
+        weekRange: [9, 12],
+        focus: "Sport Transfer",
+        categories: {
+          singleLegStrength: [
+            { id: "sls-hop-t1", name: "Small hop-in-place (soft landing)", prescription: "2–3 sets x 4–6 reps, minimal height, focus on stick-the-landing", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 1, targetSetsMin: 2, targetRepsMin: 4 },
+            { id: "p3-sls-hop", name: "Single-leg hops/bounds", prescription: "3–4 sets x 4–6 reps, progress distance/height gradually", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 2, targetSetsMin: 3, targetRepsMin: 4 },
+            { id: "sls-hop-t3", name: "Single-leg bounds (distance/height progression)", prescription: "3–4 sets x 4–6 reps, progressive distance or height", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 3, targetSetsMin: 3, targetRepsMin: 4 },
+            { id: "sls-decel-t1", name: "Static landing hold practice", prescription: "2–3 sets x 4–6 reps, step down and hold landing position 2–3s", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 1, targetSetsMin: 2, targetRepsMin: 4 },
+            { id: "p3-sls-decel", name: "Deceleration/landing mechanics", prescription: "3–4 sets x 4–6 reps, focus on control not max output", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 2, targetSetsMin: 3, targetRepsMin: 4 },
+            { id: "sls-decel-t3", name: "Deceleration from approach/light sprint", prescription: "3–4 sets x 4–6 reps, add short approach run before landing", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 3, targetSetsMin: 3, targetRepsMin: 4 }
+          ],
+          upperBody: [
+            { id: "p3-ub-max", name: "Maximal strength block", prescription: "3–5 sets x 3–6 reps, higher load", icon: "🏋️‍♂️", pose: "press" },
+            { id: "p3-ub-endurance", name: "Muscular endurance maintenance", prescription: "2–3 sets x 15–20 reps", icon: "🔁", pose: "pushUp" }
+          ],
+          core: [
+            { id: "p3-core-fatigue", name: "Dynamic stability under fatigue", prescription: "e.g. plank variations performed immediately after interval cardio, 2–3 sets x 20–30s", icon: "🥵", pose: "plank" }
+          ],
+          cardio: [
+            {
+              id: "p3-cardio-rsa",
+              name: "Repeated-sprint-style intervals",
+              prescription: "Suggested starting structure: 6–10s max-effort burst (on crutches, or your usual match-day mobility method), 30–60s recovery, 6–8 reps. Adjust based on observed match demand.",
+              icon: "⚡",
+              pose: "sprintCrutches",
+              isEstimate: true,
+              estimateNote: CARDIO_ESTIMATE_NOTE
+            }
+          ],
+          mobility: [
+            { id: "p3-mob-dynamic", name: "Dynamic warm-up sequence", prescription: "5–8 min before each session", icon: "🔥", pose: "mobilityShoulder" },
+            { id: "p3-mob-hipflexor", name: "Hip flexor mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🧘‍♂️", pose: "mobilityLunge" },
+            { id: "p3-mob-hamstring", name: "Hamstring mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🦵", pose: "mobilityHamstring" },
+            { id: "p3-mob-shoulder", name: "Shoulder/thoracic mobility", prescription: "Daily, 2–3 x 30s/side or 8–10 reps", icon: "🙆‍♂️", pose: "mobilityShoulder" }
+          ]
+        }
+      }
+    ]
+  };
+
+  function getPhaseByNumber(n) {
+    return PROGRAM_DATA.phases.find(function (p) { return p.number === n; }) || null;
+  }
+
+  function getPhaseForWeek(weekNumber) {
+    var phase = PROGRAM_DATA.phases.find(function (p) {
+      return weekNumber >= p.weekRange[0] && weekNumber <= p.weekRange[1];
+    });
+    return phase ? phase.number : null;
+  }
+
+  // ---------------------------------------------------------------------
+  // Exercise illustrations — simple inline SVG stick-figure pictograms.
+  // Schematic, not photographic: this app ships offline with no external
+  // image assets, so poses are hand-drawn line figures depicting body
+  // position, not real photos.
+  // ---------------------------------------------------------------------
+  var POSE_LIBRARY = {
+    squat: {
+      head: [50, 24, 8], torso: [[50, 32], [50, 56]],
+      armL: [[48, 35], [34, 42], [26, 48]], armR: [[52, 35], [66, 42], [74, 48]],
+      legL: [[46, 56], [36, 72], [38, 90]], legR: [[54, 56], [64, 72], [62, 90]],
+      ground: [15, 90, 85, 90]
+    },
+    stepUp: {
+      head: [46, 18, 8], torso: [[46, 26], [48, 50]],
+      armL: [[45, 29], [35, 38], [27, 45]], armR: [[51, 29], [60, 36], [66, 42]],
+      legL: [[48, 50], [40, 62], [38, 70]], legR: [[48, 50], [58, 66], [64, 90]],
+      extras: ['<rect x="20" y="70" width="32" height="20" fill="none" stroke="var(--border)" stroke-width="3"/>'],
+      ground: [55, 90, 90, 90]
+    },
+    gluteBridge: {
+      head: [16, 68, 8], torso: [[24, 68], [52, 62]],
+      armL: [[24, 68], [24, 82]],
+      legL: [[52, 62], [68, 80], [84, 80]],
+      ground: [8, 82, 92, 82]
+    },
+    calfRaise: {
+      head: [50, 16, 8], torso: [[50, 24], [50, 52]],
+      armL: [[48, 27], [38, 38], [33, 46]], armR: [[52, 27], [62, 38], [67, 46]],
+      legL: [[47, 52], [45, 70], [46, 88]], legR: [[53, 52], [60, 64], [57, 56]],
+      ground: [30, 88, 64, 88]
+    },
+    pushUp: {
+      head: [80, 50, 7], torso: [[72, 53], [36, 64]],
+      armL: [[64, 56], [60, 76]],
+      legL: [[36, 64], [18, 68]],
+      extras: ['<line x1="10" y1="80" x2="72" y2="66" stroke="var(--border)" stroke-width="3"/>'],
+      ground: [5, 84, 95, 84]
+    },
+    row: {
+      head: [50, 18, 8], torso: [[50, 26], [50, 54]],
+      armL: [[48, 30], [36, 32], [26, 29]], armR: [[52, 30], [64, 32], [74, 29]],
+      legL: [[47, 54], [45, 72], [45, 90]], legR: [[53, 54], [55, 72], [55, 90]],
+      extras: ['<line x1="26" y1="29" x2="15" y2="18" stroke="var(--accent-dim)" stroke-width="3"/>', '<line x1="74" y1="29" x2="85" y2="18" stroke="var(--accent-dim)" stroke-width="3"/>'],
+      ground: [30, 90, 70, 90]
+    },
+    press: {
+      head: [50, 22, 8], torso: [[50, 30], [50, 56]],
+      armL: [[48, 33], [38, 20], [32, 10]], armR: [[52, 33], [62, 20], [68, 10]],
+      legL: [[47, 56], [45, 73], [45, 90]], legR: [[53, 56], [55, 73], [55, 90]],
+      ground: [30, 90, 70, 90]
+    },
+    plank: {
+      head: [82, 48, 7], torso: [[74, 51], [34, 62]],
+      armL: [[66, 54], [64, 76]],
+      legL: [[34, 62], [16, 66]],
+      ground: [5, 82, 95, 82]
+    },
+    deadBug: {
+      head: [18, 66, 8], torso: [[26, 66], [54, 66]],
+      armL: [[30, 66], [30, 48]], armR: [[38, 66], [46, 78]],
+      legL: [[54, 66], [62, 50], [68, 40]], legR: [[54, 66], [64, 74], [76, 78]],
+      ground: [8, 78, 92, 78]
+    },
+    sidePlank: {
+      head: [80, 42, 7], torso: [[72, 45], [38, 58]],
+      armL: [[58, 50], [58, 72]],
+      legL: [[38, 58], [20, 62]],
+      ground: [10, 76, 95, 76]
+    },
+    antiRotation: {
+      head: [50, 20, 8], torso: [[50, 28], [50, 55]],
+      armL: [[48, 32], [38, 33], [30, 33]], armR: [[52, 32], [62, 33], [70, 33]],
+      legL: [[47, 55], [45, 73], [45, 90]], legR: [[53, 55], [55, 73], [55, 90]],
+      extras: ['<line x1="30" y1="33" x2="70" y2="33" stroke="var(--accent-dim)" stroke-width="3"/>'],
+      ground: [30, 90, 70, 90]
+    },
+    cardioMachine: {
+      head: [66, 34, 8], torso: [[60, 38], [42, 48]],
+      armL: [[54, 40], [38, 36], [24, 30]],
+      legL: [[42, 48], [30, 52], [20, 66]], legR: [[42, 48], [50, 60], [58, 70]],
+      extras: ['<rect x="12" y="66" width="60" height="6" rx="3" fill="none" stroke="var(--border)" stroke-width="3"/>'],
+      ground: [10, 80, 90, 80]
+    },
+    mobilityLunge: {
+      head: [58, 26, 8], torso: [[56, 34], [48, 54]],
+      armL: [[52, 38], [42, 40], [34, 40]], armR: [[54, 38], [62, 32], [66, 24]],
+      legL: [[48, 54], [38, 70], [36, 88]], legR: [[48, 54], [62, 58], [70, 88]],
+      ground: [20, 88, 85, 88]
+    },
+    mobilityHamstring: {
+      head: [40, 26, 8], torso: [[42, 34], [46, 54]],
+      armL: [[44, 38], [54, 50], [62, 58]],
+      legL: [[46, 54], [44, 72], [42, 88]], legR: [[46, 54], [60, 60], [74, 58]],
+      ground: [20, 88, 85, 88]
+    },
+    mobilityShoulder: {
+      head: [50, 20, 8], torso: [[50, 28], [50, 55]],
+      armL: [[48, 32], [58, 30], [68, 22]], armR: [[52, 32], [42, 42], [36, 52]],
+      legL: [[47, 55], [45, 73], [45, 90]], legR: [[53, 55], [55, 73], [55, 90]],
+      ground: [30, 90, 70, 90]
+    },
+    singleLegRDL: {
+      head: [42, 26, 8], torso: [[44, 34], [52, 54]],
+      armL: [[48, 38], [36, 44], [26, 48]], armR: [[54, 38], [62, 44], [70, 48]],
+      legL: [[52, 54], [48, 72], [46, 90]], legR: [[52, 54], [68, 58], [84, 60]],
+      ground: [15, 90, 60, 90]
+    },
+    lateralLunge: {
+      head: [38, 22, 8], torso: [[42, 30], [48, 54]],
+      armL: [[44, 34], [34, 38], [26, 42]], armR: [[52, 34], [62, 38], [70, 42]],
+      legL: [[48, 54], [34, 68], [28, 88]], legR: [[48, 54], [66, 64], [76, 88]],
+      ground: [15, 88, 85, 88]
+    },
+    boxJump: {
+      head: [46, 16, 8], torso: [[46, 24], [48, 44]],
+      armL: [[44, 27], [32, 24], [24, 18]], armR: [[50, 27], [60, 22], [66, 16]],
+      legL: [[46, 44], [38, 54], [36, 64]], legR: [[50, 44], [58, 54], [62, 64]],
+      extras: ['<rect x="20" y="64" width="40" height="24" fill="none" stroke="var(--border)" stroke-width="3"/>'],
+      ground: [5, 88, 95, 88]
+    },
+    loadedCarry: {
+      head: [50, 18, 8], torso: [[50, 26], [50, 54]],
+      armL: [[47, 30], [42, 42], [40, 52]], armR: [[53, 30], [58, 42], [60, 52]],
+      legL: [[47, 54], [42, 72], [46, 90]], legR: [[53, 54], [60, 70], [58, 90]],
+      extras: ['<rect x="32" y="46" width="8" height="10" fill="none" stroke="var(--accent-dim)" stroke-width="3"/>', '<rect x="60" y="46" width="8" height="10" fill="none" stroke="var(--accent-dim)" stroke-width="3"/>'],
+      ground: [20, 90, 80, 90]
+    },
+    rotationalCore: {
+      head: [50, 20, 8], torso: [[50, 28], [50, 55]],
+      armL: [[48, 32], [62, 28], [74, 22]], armR: [[52, 32], [38, 36], [28, 40]],
+      legL: [[47, 55], [45, 73], [45, 90]], legR: [[53, 55], [55, 73], [55, 90]],
+      ground: [30, 90, 70, 90]
+    },
+    singleLegHop: {
+      head: [50, 16, 8], torso: [[50, 24], [52, 46]],
+      armL: [[47, 27], [36, 22], [28, 16]], armR: [[53, 27], [62, 32], [68, 40]],
+      legL: [[52, 46], [46, 62], [48, 74]], legR: [[52, 46], [64, 50], [70, 42]],
+      ground: [30, 84, 70, 84]
+    },
+    decelLanding: {
+      head: [50, 26, 8], torso: [[50, 34], [50, 54]],
+      armL: [[47, 37], [36, 40], [28, 44]], armR: [[53, 37], [64, 40], [72, 44]],
+      legL: [[45, 54], [36, 68], [34, 88]], legR: [[55, 54], [64, 68], [66, 88]],
+      ground: [15, 88, 85, 88]
+    },
+    sprintCrutches: {
+      head: [40, 20, 8], torso: [[42, 28], [48, 52]],
+      armL: [[44, 32], [32, 42], [22, 54]], armR: [[50, 32], [62, 26], [72, 20]],
+      legL: [[48, 52], [40, 64], [44, 88]], legR: [[48, 52], [62, 58], [74, 50]],
+      extras: ['<line x1="22" y1="54" x2="14" y2="88" stroke="var(--accent-dim)" stroke-width="3"/>'],
+      ground: [10, 88, 85, 88]
+    }
+  };
+
+  function renderPoseSvg(poseId) {
+    if (!POSE_LIBRARY[poseId]) return "";
+    return '<img src="exercise-images/' + poseId + '.png" class="exercise-illustration" alt="" aria-hidden="true"/>';
+  }
+
+  function youtubeSearchUrl(exerciseName) {
+    return "https://www.youtube.com/results?search_query=" + encodeURIComponent(exerciseName + " exercise tutorial");
+  }
+
+  function getSessions() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.sessions);
+      var parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveSessions(sessions) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.sessions, JSON.stringify(sessions));
+    } catch (e) { /* storage unavailable */ }
+    return sessions;
+  }
+
+  function countSessionsForPhase(phaseNumber) {
+    return getSessions().filter(function (s) { return s.phase === phaseNumber; }).length;
+  }
+
+  function defaultProgramState() {
+    return {
+      currentPhase: 1,
+      currentWeek: 1,
+      unlockedPhases: [1],
+      phaseGateAcknowledgments: {},
+      preferredTierByGroup: {},
+      updatedAt: new Date().toISOString()
+    };
+  }
+
+  function getProgramState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.programState);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveProgramState(state) {
+    state.updatedAt = new Date().toISOString();
+    try {
+      localStorage.setItem(STORAGE_KEYS.programState, JSON.stringify(state));
+    } catch (e) { /* storage unavailable */ }
+    return state;
+  }
+
+  function ensureProgramState() {
+    var state = getProgramState();
+    if (!state) {
+      state = saveProgramState(defaultProgramState());
+    }
+    if (!state.preferredTierByGroup) {
+      state.preferredTierByGroup = {};
+      state = saveProgramState(state);
+    }
+    return state;
+  }
+
+  function getPreferredTier(progressionGroup) {
+    var state = ensureProgramState();
+    return state.preferredTierByGroup[progressionGroup] || 2;
+  }
+
+  function setPreferredTier(progressionGroup, tier) {
+    var state = ensureProgramState();
+    state.preferredTierByGroup[progressionGroup] = tier;
+    return saveProgramState(state);
+  }
+
+  // For rendering "today's plan" (Program cards, Log checklist): tiered
+  // exercises collapse to whichever tier is currently preferred for their
+  // family, so the user sees one slot per movement, not three redundant
+  // versions. Non-tiered exercises (mobility, cardio, step-ups, etc.) are
+  // always shown as-is.
+  function filterToPreferredTier(exercises) {
+    return exercises.filter(function (ex) {
+      if (!ex.progressionGroup) return true;
+      return ex.tier === getPreferredTier(ex.progressionGroup);
+    });
+  }
+
+  // Soft gate per Section 4: warn, don't hard-block. Returns whether the
+  // minimum session count from the prior phase has been met, but the caller
+  // decides whether to allow unlocking regardless.
+  function getPhaseGateStatus(targetPhaseNumber) {
+    var state = ensureProgramState();
+    var required = getMinSessionsPerPhase();
+    if (targetPhaseNumber <= 1) {
+      return {
+        targetPhaseNumber: targetPhaseNumber,
+        previousPhaseNumber: null,
+        requiredSessions: 0,
+        completedSessions: 0,
+        meetsMinimum: true,
+        alreadyUnlocked: state.unlockedPhases.indexOf(targetPhaseNumber) !== -1
+      };
+    }
+    var previousPhaseNumber = targetPhaseNumber - 1;
+    var completed = countSessionsForPhase(previousPhaseNumber);
+    return {
+      targetPhaseNumber: targetPhaseNumber,
+      previousPhaseNumber: previousPhaseNumber,
+      requiredSessions: required,
+      completedSessions: completed,
+      meetsMinimum: completed >= required,
+      alreadyUnlocked: state.unlockedPhases.indexOf(targetPhaseNumber) !== -1
+    };
+  }
+
+  // Soft-unlocks a phase regardless of gate status (per brief: warn, don't
+  // hard-block) and records whether the minimum was actually met at the time.
+  function unlockPhase(targetPhaseNumber) {
+    var state = ensureProgramState();
+    var gate = getPhaseGateStatus(targetPhaseNumber);
+    if (state.unlockedPhases.indexOf(targetPhaseNumber) === -1) {
+      state.unlockedPhases.push(targetPhaseNumber);
+    }
+    state.currentPhase = targetPhaseNumber;
+    var phase = getPhaseByNumber(targetPhaseNumber);
+    state.currentWeek = phase ? phase.weekRange[0] : state.currentWeek;
+    state.phaseGateAcknowledgments[String(targetPhaseNumber)] = {
+      acknowledgedAt: new Date().toISOString(),
+      meetsMinimumAtUnlock: gate.meetsMinimum,
+      completedSessions: gate.completedSessions,
+      requiredSessions: gate.requiredSessions
+    };
+    return saveProgramState(state);
+  }
+
+  // ---------------------------------------------------------------------
+  // Program tab UI (Section 4 display + soft phase-gate confirmation)
+  // ---------------------------------------------------------------------
+  var CATEGORY_ORDER = ["singleLegStrength", "upperBody", "core", "cardio", "mobility"];
+  var CATEGORY_LABELS = {
+    singleLegStrength: "Single-Leg Strength",
+    upperBody: "Upper Body",
+    core: "Core",
+    cardio: "Cardio",
+    mobility: "Mobility"
+  };
+
+  // ---------------------------------------------------------------------
+  // Custom exercises — lets an athlete add something their physio/coach
+  // prescribed that isn't in the built-in program, e.g. a specific rehab
+  // drill. Stored separately from PROGRAM_DATA and merged into it at
+  // render time (flagged isCustom) so every existing view — Program, Log,
+  // the exercise picker, the workout player — picks them up for free.
+  // ---------------------------------------------------------------------
+  var POSE_PICKER_OPTIONS = [
+    { value: "squat", label: "Squat" },
+    { value: "stepUp", label: "Step-up" },
+    { value: "gluteBridge", label: "Glute bridge" },
+    { value: "calfRaise", label: "Calf raise" },
+    { value: "singleLegRDL", label: "Single-leg RDL / balance" },
+    { value: "lateralLunge", label: "Lateral lunge" },
+    { value: "boxJump", label: "Box jump" },
+    { value: "singleLegHop", label: "Single-leg hop" },
+    { value: "decelLanding", label: "Deceleration / landing" },
+    { value: "row", label: "Row" },
+    { value: "pushUp", label: "Push-up" },
+    { value: "press", label: "Press" },
+    { value: "deadBug", label: "Dead bug" },
+    { value: "sidePlank", label: "Side plank" },
+    { value: "antiRotation", label: "Anti-rotation hold" },
+    { value: "loadedCarry", label: "Loaded carry" },
+    { value: "rotationalCore", label: "Rotational core" },
+    { value: "plank", label: "Plank" },
+    { value: "cardioMachine", label: "Cardio machine" },
+    { value: "sprintCrutches", label: "Sprint on crutches" },
+    { value: "mobilityHamstring", label: "Mobility: hamstring" },
+    { value: "mobilityShoulder", label: "Mobility: shoulder" },
+    { value: "mobilityLunge", label: "Mobility: lunge" }
+  ];
+
+  function getCustomExercises() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.customExercises);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveCustomExercises(list) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.customExercises, JSON.stringify(list));
+    } catch (e) { /* storage unavailable */ }
+    return list;
+  }
+
+  function generateCustomExerciseId() {
+    return "custom_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function addCustomExercise(phaseNumber, category, name, prescription, pose) {
+    var list = getCustomExercises();
+    list.push({
+      id: generateCustomExerciseId(),
+      phaseNumber: phaseNumber,
+      category: category,
+      name: name,
+      prescription: prescription,
+      pose: pose,
+      createdAt: new Date().toISOString()
+    });
+    saveCustomExercises(list);
+    mergeCustomExercisesIntoProgramData();
+  }
+
+  function removeCustomExercise(id) {
+    saveCustomExercises(getCustomExercises().filter(function (ce) { return ce.id !== id; }));
+    mergeCustomExercisesIntoProgramData();
+  }
+
+  function mergeCustomExercisesIntoProgramData() {
+    PROGRAM_DATA.phases.forEach(function (phase) {
+      CATEGORY_ORDER.forEach(function (catKey) {
+        if (!phase.categories[catKey]) return;
+        phase.categories[catKey] = phase.categories[catKey].filter(function (ex) { return !ex.isCustom; });
+      });
+    });
+    getCustomExercises().forEach(function (ce) {
+      var phase = getPhaseByNumber(ce.phaseNumber);
+      if (!phase) return;
+      if (!phase.categories[ce.category]) phase.categories[ce.category] = [];
+      phase.categories[ce.category].push({
+        id: ce.id,
+        name: ce.name,
+        prescription: ce.prescription,
+        pose: ce.pose || null,
+        isCustom: true
+      });
+    });
+  }
+
+  var programPendingTransition = null;
+
+  function renderPhasePills(state) {
+    el("program-phase-pills").innerHTML = PROGRAM_DATA.phases.map(function (phase) {
+      var isActive = phase.number === state.currentPhase;
+      var isUnlocked = state.unlockedPhases.indexOf(phase.number) !== -1;
+      return '<button type="button" class="phase-pill' + (isActive ? " active" : "") + '" data-phase="' + phase.number + '">' +
+        escapeHtml("Phase " + phase.number + ": " + phase.name) +
+        (isUnlocked ? "" : '<span class="lock-icon">&#128274;</span>') +
+        "</button>";
+    }).join("");
+  }
+
+  function renderExerciseGroups(phase) {
+    el("program-exercise-groups").innerHTML = CATEGORY_ORDER.map(function (catKey) {
+      var exercises = filterToPreferredTier(phase.categories[catKey] || []);
+      var cards = exercises.map(function (ex) {
+        var estimateBits = ex.isEstimate
+          ? '<span class="estimate-badge">Estimate</span><div class="estimate-note">' + escapeHtml(ex.estimateNote || "") + "</div>"
+          : "";
+        var customBadge = ex.isCustom ? '<span class="custom-badge">Custom</span>' : "";
+        var loadSuggestion = computeSuggestedLoad(ex.id);
+        var loadSuggestionHtml = "";
+        if (loadSuggestion) {
+          loadSuggestionHtml = loadSuggestion.holding
+            ? '<div class="load-suggestion">Last: ' + loadSuggestion.lastLoad + " " + loadSuggestion.unit + " at high effort. Repeat " + loadSuggestion.lastLoad + " " + loadSuggestion.unit + " and focus on form</div>"
+            : '<div class="load-suggestion">Last: ' + loadSuggestion.lastLoad + " " + loadSuggestion.unit + " → try " + loadSuggestion.suggestedLoad + " " + loadSuggestion.unit + " this week</div>";
+        } else if (isLikelyLoadable(ex)) {
+          loadSuggestionHtml = '<div class="load-suggestion load-suggestion-muted">Log a load next time you do this one: you\'ll get a suggested progression here.</div>';
+        }
+        return '<div class="exercise-card' + (ex.isEstimate ? " estimate" : "") + '">' +
+          '<div class="exercise-icon" aria-hidden="true">' + renderPoseSvg(ex.pose) + "</div>" +
+          '<div class="exercise-card-body">' +
+            '<div class="exercise-name">' + escapeHtml(ex.name) + customBadge + estimateBits + "</div>" +
+            '<div class="exercise-prescription">' + escapeHtml(ex.prescription) + "</div>" +
+            loadSuggestionHtml +
+            '<div class="exercise-card-actions">' +
+              '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
+              '<button type="button" class="btn secondary log-this-btn" data-ex-id="' + ex.id + '" data-phase="' + phase.number + '">+ Log this</button>' +
+            "</div>" +
+          "</div>" +
+        "</div>";
+      }).join("");
+      return '<div class="exercise-group"><h3>' + escapeHtml(CATEGORY_LABELS[catKey]) + "</h3>" + cards + "</div>";
+    }).join("");
+  }
+
+  function populateCustomExerciseForm() {
+    var catSel = el("custom-ex-category");
+    if (!catSel.options.length) {
+      catSel.innerHTML = CATEGORY_ORDER.map(function (catKey) {
+        return '<option value="' + catKey + '">' + escapeHtml(CATEGORY_LABELS[catKey]) + "</option>";
+      }).join("");
+    }
+    var poseSel = el("custom-ex-pose");
+    if (!poseSel.options.length) {
+      poseSel.innerHTML = POSE_PICKER_OPTIONS.map(function (p) {
+        return '<option value="' + p.value + '">' + escapeHtml(p.label) + "</option>";
+      }).join("");
+    }
+  }
+
+  function renderCustomExerciseList() {
+    var list = getCustomExercises();
+    var container = el("custom-exercise-list");
+    if (!list.length) {
+      container.innerHTML = "";
+      return;
+    }
+    var phaseNames = { 1: "Phase 1", 2: "Phase 2", 3: "Phase 3" };
+    container.innerHTML = '<h3 class="section-subheading">Your custom exercises</h3>' + list.map(function (ce) {
+      return '<div class="log-exercise-row">' +
+        '<div class="checkbox-label">' +
+          '<span class="log-ex-icon" aria-hidden="true">' + renderPoseSvg(ce.pose) + "</span>" +
+          "<span>" + escapeHtml(ce.name) + " (" + (phaseNames[ce.phaseNumber] || "") + " · " + escapeHtml(CATEGORY_LABELS[ce.category] || ce.category) + ")</span>" +
+        "</div>" +
+        '<div class="log-ex-prescription">' + escapeHtml(ce.prescription) + "</div>" +
+        '<button type="button" class="btn secondary custom-ex-remove-btn" data-id="' + ce.id + '" style="margin-top:6px;">Remove</button>' +
+      "</div>";
+    }).join("");
+  }
+
+  el("custom-ex-add-btn").addEventListener("click", function () {
+    var phaseNumber = Number(el("custom-ex-phase").value);
+    var category = el("custom-ex-category").value;
+    var name = el("custom-ex-name").value.trim();
+    var prescription = el("custom-ex-prescription").value.trim();
+    var pose = el("custom-ex-pose").value;
+    if (!name || !prescription) return;
+    addCustomExercise(phaseNumber, category, name, prescription, pose);
+    el("custom-ex-name").value = "";
+    el("custom-ex-prescription").value = "";
+    renderCustomExerciseList();
+    renderProgramView();
+  });
+
+  el("custom-exercise-list").addEventListener("click", function (e) {
+    var btn = e.target.closest(".custom-ex-remove-btn");
+    if (!btn) return;
+    removeCustomExercise(btn.getAttribute("data-id"));
+    renderCustomExerciseList();
+    renderProgramView();
+  });
+
+  function renderGateWarning() {
+    var banner = el("program-gate-warning");
+    if (!programPendingTransition) {
+      banner.classList.add("hidden");
+      return;
+    }
+    var gate = programPendingTransition.gate;
+    el("program-gate-warning-text").textContent =
+      "You've logged " + gate.completedSessions + " of " + gate.requiredSessions +
+      " recommended sessions in Phase " + gate.previousPhaseNumber +
+      ". You can continue to Phase " + gate.targetPhaseNumber + " anyway, or stay and log more sessions first.";
+    banner.classList.remove("hidden");
+  }
+
+  function renderProgramView() {
+    var state = ensureProgramState();
+    var phase = getPhaseByNumber(state.currentPhase);
+    if (!phase) return;
+
+    renderPhasePills(state);
+    el("program-week-label").textContent = "Week " + state.currentWeek + " of " + PROGRAM_META.totalWeeks;
+    el("program-progress-bar").style.width = Math.round((state.currentWeek / PROGRAM_META.totalWeeks) * 100) + "%";
+    renderGateWarning();
+    renderProgramReadinessBanner();
+    renderProstheticNote();
+    renderExerciseGroups(phase);
+    populateCustomExerciseForm();
+    renderCustomExerciseList();
+  }
+
+  function attemptSetPhase(targetPhaseNumber, targetWeek) {
+    var state = ensureProgramState();
+    var alreadyUnlocked = state.unlockedPhases.indexOf(targetPhaseNumber) !== -1;
+    if (alreadyUnlocked) {
+      state.currentPhase = targetPhaseNumber;
+      state.currentWeek = targetWeek;
+      saveProgramState(state);
+      programPendingTransition = null;
+      renderProgramView();
+      return;
+    }
+    var gate = getPhaseGateStatus(targetPhaseNumber);
+    if (gate.meetsMinimum) {
+      unlockPhase(targetPhaseNumber);
+      programPendingTransition = null;
+      renderProgramView();
+    } else {
+      programPendingTransition = { targetPhaseNumber: targetPhaseNumber, targetWeek: targetWeek, gate: gate };
+      renderProgramView();
+    }
+  }
+
+  function goToWeek(delta) {
+    var state = ensureProgramState();
+    var newWeek = state.currentWeek + delta;
+    if (newWeek < 1 || newWeek > PROGRAM_META.totalWeeks) return;
+    var newPhaseNumber = getPhaseForWeek(newWeek);
+    attemptSetPhase(newPhaseNumber, newWeek);
+  }
+
+  el("program-week-prev").addEventListener("click", function () { goToWeek(-1); });
+  el("program-week-next").addEventListener("click", function () { goToWeek(1); });
+
+  el("program-phase-pills").addEventListener("click", function (e) {
+    var btn = e.target.closest(".phase-pill");
+    if (!btn) return;
+    var phaseNumber = Number(btn.getAttribute("data-phase"));
+    var phase = getPhaseByNumber(phaseNumber);
+    if (phase) attemptSetPhase(phaseNumber, phase.weekRange[0]);
+  });
+
+  el("program-gate-confirm").addEventListener("click", function () {
+    if (!programPendingTransition) return;
+    var t = programPendingTransition;
+    unlockPhase(t.targetPhaseNumber);
+    programPendingTransition = null;
+    renderProgramView();
+  });
+
+  el("program-gate-cancel").addEventListener("click", function () {
+    programPendingTransition = null;
+    renderProgramView();
+  });
+
+  // Jump from a Program tab exercise card straight into the Log tab with
+  // that exercise pre-checked, so the prescription just seen stays visible
+  // as context instead of the user having to re-find the exercise by name.
+  function logExerciseFromProgram(exerciseId, phaseNumber) {
+    showView("log");
+    var phaseSelect = el("log-phase");
+    if (Number(phaseSelect.value) !== phaseNumber) {
+      phaseSelect.value = String(phaseNumber);
+      renderLogExerciseChecklist(phaseNumber);
+    }
+    var checkbox = document.querySelector('.log-ex-check[data-ex-id="' + exerciseId + '"]');
+    if (!checkbox) return;
+    if (!checkbox.checked) {
+      checkbox.checked = true;
+      checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    var row = checkbox.closest(".log-exercise-row");
+    row.scrollIntoView({ behavior: "smooth", block: "center" });
+    row.classList.add("log-ex-highlight");
+    setTimeout(function () { row.classList.remove("log-ex-highlight"); }, 1600);
+  }
+
+  el("program-exercise-groups").addEventListener("click", function (e) {
+    var btn = e.target.closest(".log-this-btn");
+    if (!btn) return;
+    logExerciseFromProgram(btn.getAttribute("data-ex-id"), Number(btn.getAttribute("data-phase")));
+  });
+
+  // ---------------------------------------------------------------------
+  // Session Tracker (Section 7) — logging UI, writes to ampfootballfit_sessions
+  // ---------------------------------------------------------------------
+  function todayISODate() {
+    var d = new Date();
+    var offsetMs = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - offsetMs).toISOString().slice(0, 10);
+  }
+
+  function numOrNull(value) {
+    if (value === "" || value === null || value === undefined) return null;
+    var n = Number(value);
+    return isNaN(n) ? null : n;
+  }
+
+  function generateSessionId() {
+    return "sess_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function renderLogExerciseChecklist(phaseNumber) {
+    var phase = getPhaseByNumber(phaseNumber);
+    if (!phase) return;
+    el("log-exercise-checklist").innerHTML = CATEGORY_ORDER.map(function (catKey) {
+      var exercises = filterToPreferredTier(phase.categories[catKey] || []);
+      var rows = exercises.map(function (ex) {
+        var iconHtml = renderPoseSvg(ex.pose) || (ex.icon || "🏃");
+        var fieldsHtml = catKey === "cardio"
+          ? '<div class="log-exercise-fields hidden"><p class="field-note">Use the session Duration and RPE fields above (no sets/reps/load needed for this one).</p></div>'
+          : '<div class="log-exercise-fields hidden">' +
+              '<input type="number" class="log-ex-sets" placeholder="Sets" min="0" step="1">' +
+              '<input type="number" class="log-ex-reps" placeholder="Reps" min="0" step="1">' +
+              '<input type="number" class="log-ex-load" placeholder="Load" min="0" step="0.5">' +
+            "</div>";
+        return '<div class="log-exercise-row" data-ex-id="' + ex.id + '">' +
+          '<label class="checkbox-label"><input type="checkbox" class="log-ex-check" data-ex-id="' + ex.id + '" data-ex-name="' + escapeHtml(ex.name) + '" data-ex-category="' + catKey + '">' +
+            '<span class="log-ex-icon" aria-hidden="true">' + iconHtml + "</span>" +
+            "<span>" + escapeHtml(ex.name) + "</span>" +
+          "</label>" +
+          '<div class="log-ex-prescription">' + escapeHtml(ex.prescription) + "</div>" +
+          fieldsHtml +
+        "</div>";
+      }).join("");
+      return '<div class="log-category"><h4>' + escapeHtml(CATEGORY_LABELS[catKey]) + "</h4>" + rows + "</div>";
+    }).join("");
+  }
+
+  el("log-exercise-checklist").addEventListener("change", function (e) {
+    if (!e.target.classList.contains("log-ex-check")) return;
+    var fields = e.target.closest(".log-exercise-row").querySelector(".log-exercise-fields");
+    fields.classList.toggle("hidden", !e.target.checked);
+  });
+
+  el("log-phase").addEventListener("change", function () {
+    renderLogExerciseChecklist(Number(this.value));
+  });
+
+  function resetLogForm() {
+    el("log-date").value = todayISODate();
+    el("log-duration").value = "";
+    el("log-rpe").value = "";
+    el("log-notes").value = "";
+    document.querySelectorAll("#log-exercise-checklist .log-ex-check").forEach(function (cb) {
+      cb.checked = false;
+      var row = cb.closest(".log-exercise-row");
+      row.querySelector(".log-exercise-fields").classList.add("hidden");
+      row.querySelectorAll("input[type=number]").forEach(function (input) { input.value = ""; });
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // Tier suggestion engine (Task 1) — non-destructive prompts only; never
+  // auto-swaps the prescribed exercise without explicit user acceptance.
+  // ---------------------------------------------------------------------
+  var ELEVATED_RISK_GROUPS = ["boxJump", "singleLegHop", "decelLanding"];
+  var pendingSuggestions = [];
+
+  function findExerciseDefById(id) {
+    var found = null;
+    PROGRAM_DATA.phases.forEach(function (phase) {
+      CATEGORY_ORDER.forEach(function (catKey) {
+        (phase.categories[catKey] || []).forEach(function (ex) {
+          if (ex.id === id) found = ex;
+        });
+      });
+    });
+    return found;
+  }
+
+  function findExerciseByGroupAndTier(group, tier) {
+    var found = null;
+    PROGRAM_DATA.phases.forEach(function (phase) {
+      CATEGORY_ORDER.forEach(function (catKey) {
+        (phase.categories[catKey] || []).forEach(function (ex) {
+          if (ex.progressionGroup === group && ex.tier === tier) found = ex;
+        });
+      });
+    });
+    return found;
+  }
+
+  function getExerciseOccurrences(exerciseId) {
+    var sessions = getSessions().slice().sort(function (a, b) {
+      var dateDiff = new Date(b.date) - new Date(a.date);
+      if (dateDiff !== 0) return dateDiff;
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+    var occurrences = [];
+    sessions.forEach(function (s) {
+      (s.exercises || []).forEach(function (ex) {
+        if (ex.id === exerciseId) occurrences.push({ rpe: s.rpe, sets: ex.sets, reps: ex.reps });
+      });
+    });
+    return occurrences; // most-recent-first
+  }
+
+  function meetsPrescription(occurrence, def) {
+    if (occurrence.sets == null || occurrence.reps == null) return null;
+    return occurrence.sets >= def.targetSetsMin && occurrence.reps >= def.targetRepsMin;
+  }
+
+  function computeSuggestionForExerciseId(exerciseId) {
+    var def = findExerciseDefById(exerciseId);
+    if (!def || !def.progressionGroup) return null;
+
+    var occurrences = getExerciseOccurrences(exerciseId);
+    if (!occurrences.length) return null;
+
+    var latest = occurrences[0];
+    var requiredStreak = ELEVATED_RISK_GROUPS.indexOf(def.progressionGroup) !== -1 ? 3 : 2;
+
+    var latestMeets = meetsPrescription(latest, def);
+    var highRpe = latest.rpe != null && latest.rpe >= 8;
+    var incomplete = latestMeets === false;
+    if ((highRpe || incomplete) && def.tier > 1) {
+      var downDef = findExerciseByGroupAndTier(def.progressionGroup, def.tier - 1);
+      if (downDef) {
+        return { progressionGroup: def.progressionGroup, direction: "down", fromTier: def.tier, toTier: def.tier - 1, fromName: def.name, toName: downDef.name };
+      }
+    }
+
+    if (def.tier < 3 && occurrences.length >= requiredStreak) {
+      var streak = occurrences.slice(0, requiredStreak);
+      var allClean = streak.every(function (occ) {
+        return occ.rpe != null && occ.rpe <= 4 && meetsPrescription(occ, def) === true;
+      });
+      if (allClean) {
+        var upDef = findExerciseByGroupAndTier(def.progressionGroup, def.tier + 1);
+        if (upDef) {
+          return { progressionGroup: def.progressionGroup, direction: "up", fromTier: def.tier, toTier: def.tier + 1, fromName: def.name, toName: upDef.name };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function computeSuggestionsForSession(session) {
+    var suggestions = [];
+    (session.exercises || []).forEach(function (ex) {
+      var suggestion = computeSuggestionForExerciseId(ex.id);
+      if (suggestion) suggestions.push(suggestion);
+    });
+    pendingSuggestions = suggestions;
+    renderSuggestions();
+  }
+
+  function renderSuggestions() {
+    var container = el("log-suggestions");
+    if (!pendingSuggestions.length) {
+      container.innerHTML = "";
+      return;
+    }
+    container.innerHTML = pendingSuggestions.map(function (s, i) {
+      var message = s.direction === "up"
+        ? "You've been solid on " + escapeHtml(s.fromName) + ". Try " + escapeHtml(s.toName) + " next time?"
+        : "Recent session on " + escapeHtml(s.fromName) + " looked tough. Try " + escapeHtml(s.toName) + " next time?";
+      return '<div class="card suggestion-card">' +
+        "<p>" + message + "</p>" +
+        '<div class="gate-warning-actions">' +
+          '<button type="button" class="btn secondary suggestion-dismiss" data-index="' + i + '">Dismiss</button>' +
+          '<button type="button" class="btn suggestion-accept" data-index="' + i + '">Try it next time</button>' +
+        "</div>" +
+      "</div>";
+    }).join("");
+  }
+
+  el("log-suggestions").addEventListener("click", function (e) {
+    var acceptBtn = e.target.closest(".suggestion-accept");
+    var dismissBtn = e.target.closest(".suggestion-dismiss");
+    var btn = acceptBtn || dismissBtn;
+    if (!btn) return;
+    var idx = Number(btn.getAttribute("data-index"));
+    var suggestion = pendingSuggestions[idx];
+    if (acceptBtn && suggestion) {
+      setPreferredTier(suggestion.progressionGroup, suggestion.toTier);
+    }
+    pendingSuggestions.splice(idx, 1);
+    renderSuggestions();
+  });
+
+  function saveSessionLog() {
+    var date = el("log-date").value || todayISODate();
+    var phase = Number(el("log-phase").value);
+    var duration = numOrNull(el("log-duration").value);
+    var rpe = numOrNull(el("log-rpe").value);
+    var notes = el("log-notes").value.trim();
+
+    var exercises = [];
+    document.querySelectorAll("#log-exercise-checklist .log-ex-check:checked").forEach(function (cb) {
+      var row = cb.closest(".log-exercise-row");
+      var setsInput = row.querySelector(".log-ex-sets");
+      var repsInput = row.querySelector(".log-ex-reps");
+      var loadInput = row.querySelector(".log-ex-load");
+      exercises.push({
+        id: cb.getAttribute("data-ex-id"),
+        name: cb.getAttribute("data-ex-name"),
+        category: cb.getAttribute("data-ex-category"),
+        sets: setsInput ? numOrNull(setsInput.value) : null,
+        reps: repsInput ? numOrNull(repsInput.value) : null,
+        load: loadInput ? numOrNull(loadInput.value) : null
+      });
+    });
+
+    var session = {
+      id: generateSessionId(),
+      date: date,
+      phase: phase,
+      durationMinutes: duration,
+      rpe: rpe,
+      exercises: exercises,
+      notes: notes,
+      createdAt: new Date().toISOString()
+    };
+
+    var sessions = getSessions();
+    sessions.push(session);
+    saveSessions(sessions);
+    computeSuggestionsForSession(session);
+    resetLogForm();
+    renderSessionList();
+  }
+
+  function formatExerciseSummary(ex) {
+    var parts = [];
+    if (ex.sets != null) parts.push(ex.sets + " sets");
+    if (ex.reps != null) parts.push(ex.reps + " reps");
+    if (ex.load != null) parts.push(ex.load + " load");
+    return ex.name + (parts.length ? " (" + parts.join(", ") + ")" : "");
+  }
+
+  function renderSessionList() {
+    var sessions = getSessions().slice().sort(function (a, b) {
+      var dateDiff = new Date(b.date) - new Date(a.date);
+      if (dateDiff !== 0) return dateDiff;
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+    var container = el("log-session-list");
+    if (!sessions.length) {
+      container.innerHTML = '<div class="placeholder-card">No sessions logged yet.</div>';
+      return;
+    }
+    container.innerHTML = sessions.map(function (s) {
+      var exSummary = s.exercises.length
+        ? s.exercises.map(formatExerciseSummary).join(", ")
+        : "No exercises marked complete";
+      var metaParts = [];
+      if (s.durationMinutes != null) metaParts.push(s.durationMinutes + " min");
+      if (s.rpe != null) metaParts.push("RPE " + s.rpe + "/10");
+      return '<div class="card session-card">' +
+        '<div class="session-card-header">' +
+          '<span class="session-date">' + escapeHtml(s.date) + "</span>" +
+          '<span class="session-phase">Phase ' + s.phase + "</span>" +
+          '<button type="button" class="btn secondary session-delete-btn" data-session-id="' + s.id + '">Delete</button>' +
+        "</div>" +
+        (metaParts.length ? '<div class="session-meta">' + escapeHtml(metaParts.join(" · ")) + "</div>" : "") +
+        '<div class="session-exercises">' + escapeHtml(exSummary) + "</div>" +
+        (s.notes ? '<div class="session-notes">' + escapeHtml(s.notes) + "</div>" : "") +
+      "</div>";
+    }).join("");
+  }
+
+  el("log-save-btn").addEventListener("click", saveSessionLog);
+
+  el("log-session-list").addEventListener("click", function (e) {
+    var btn = e.target.closest(".session-delete-btn");
+    if (!btn) return;
+    var id = btn.getAttribute("data-session-id");
+    var sessions = getSessions().filter(function (s) { return s.id !== id; });
+    saveSessions(sessions);
+    renderSessionList();
+  });
+
+  function initLogTab() {
+    var state = ensureProgramState();
+    el("log-date").value = todayISODate();
+    el("log-phase").value = String(state.currentPhase);
+    renderLogExerciseChecklist(state.currentPhase);
+    renderSessionList();
+  }
+
+  // ---------------------------------------------------------------------
+  // Sport Skills module (Section 5) — empty/user-editable framework.
+  // No invented drill technique content: seeded slots carry only the
+  // structural names from the brief and a placeholder marker requiring
+  // the user to supply real, source-attributed content.
+  // ---------------------------------------------------------------------
+  var SKILLS_PLACEHOLDER_NOTE = "[USER TO SUPPLY: verify with a coach before use]";
+
+  var SKILLS_CATEGORY_ORDER = ["crutchMobility", "ballSkills", "agility"];
+  var SKILLS_CATEGORY_LABELS = {
+    crutchMobility: "Crutch Mobility Drills",
+    ballSkills: "Ball Skills on Crutches",
+    agility: "Agility"
+  };
+
+  var SKILLS_SEED_DEFS = {
+    crutchMobility: ["Weight-shift drills", "Controlled acceleration/deceleration", "Turning and pivoting on crutches", "Falling and recovery technique"],
+    ballSkills: ["Dribbling stance and control", "Striking technique and balance points", "Passing"],
+    agility: ["Cone/ladder drill adaptations for crutch use"]
+  };
+
+  function generateDrillId() {
+    return "drill_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function generateCompletionId() {
+    return "comp_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function getSkillsData() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.skillsDrills);
+      var parsed = raw ? JSON.parse(raw) : null;
+      if (parsed && Array.isArray(parsed.drills) && Array.isArray(parsed.completions)) return parsed;
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveSkillsData(data) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.skillsDrills, JSON.stringify(data));
+    } catch (e) { /* storage unavailable */ }
+    return data;
+  }
+
+  function buildSeedSkillsData() {
+    var drills = [];
+    SKILLS_CATEGORY_ORDER.forEach(function (cat) {
+      SKILLS_SEED_DEFS[cat].forEach(function (name) {
+        drills.push({
+          id: generateDrillId(),
+          category: cat,
+          name: name,
+          description: SKILLS_PLACEHOLDER_NOTE,
+          videoUrl: "",
+          source: "",
+          isSeed: true,
+          createdAt: new Date().toISOString()
+        });
+      });
+    });
+    return { drills: drills, completions: [] };
+  }
+
+  function ensureSkillsData() {
+    var data = getSkillsData();
+    if (!data) {
+      data = buildSeedSkillsData();
+      saveSkillsData(data);
+    }
+    return data;
+  }
+
+  function renderDrillCard(drill, data) {
+    var completions = data.completions.filter(function (c) { return c.drillId === drill.id; });
+    var completionMeta = completions.length
+      ? completions.length + " completion" + (completions.length === 1 ? "" : "s") + " · last " +
+        completions.slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); })[0].date
+      : "Not yet completed";
+    var videoOpenLink = drill.videoUrl
+      ? '<a class="drill-video-open" href="' + escapeHtml(drill.videoUrl) + '" target="_blank" rel="noopener noreferrer">&#9654; Open video</a>'
+      : "";
+    return '<div class="card drill-card" data-drill-id="' + drill.id + '">' +
+      '<div class="drill-card-header">' +
+        '<input type="text" class="drill-name-input" data-field="name" value="' + escapeHtml(drill.name) + '" placeholder="Drill name">' +
+        '<button type="button" class="btn secondary drill-delete-btn">Delete</button>' +
+      "</div>" +
+      "<label>Description / how-to</label>" +
+      '<textarea class="drill-desc-input" data-field="description" placeholder="' + escapeHtml(SKILLS_PLACEHOLDER_NOTE) + '">' + escapeHtml(drill.description) + "</textarea>" +
+      "<label>Video link (opens externally)</label>" +
+      '<div class="drill-video-row">' +
+        '<input type="url" class="drill-video-input" data-field="videoUrl" value="' + escapeHtml(drill.videoUrl) + '" placeholder="https://youtube.com/...">' +
+        videoOpenLink +
+      "</div>" +
+      "<label>Source / verified by</label>" +
+      '<input type="text" class="drill-source-input" data-field="source" value="' + escapeHtml(drill.source) + '" placeholder="e.g. Coach Name, date or club session, date">' +
+      '<div class="drill-completion-row">' +
+        '<input type="text" class="drill-complete-note" placeholder="Optional note">' +
+        '<button type="button" class="btn secondary drill-complete-btn">Mark completed</button>' +
+      "</div>" +
+      '<div class="drill-completion-meta">' + escapeHtml(completionMeta) + "</div>" +
+    "</div>";
+  }
+
+  function renderSkillsView() {
+    var data = ensureSkillsData();
+    el("skills-categories").innerHTML = SKILLS_CATEGORY_ORDER.map(function (cat) {
+      var drillsInCat = data.drills.filter(function (d) { return d.category === cat; });
+      var cards = drillsInCat.map(function (d) { return renderDrillCard(d, data); }).join("");
+      return '<div class="skills-category">' +
+        "<h3>" + escapeHtml(SKILLS_CATEGORY_LABELS[cat]) + "</h3>" +
+        cards +
+        '<button type="button" class="btn secondary add-drill-btn" data-category="' + cat + '">+ Add custom drill</button>' +
+      "</div>";
+    }).join("");
+  }
+
+  el("skills-categories").addEventListener("change", function (e) {
+    var field = e.target.getAttribute("data-field");
+    if (!field) return;
+    var card = e.target.closest(".drill-card");
+    var drillId = card.getAttribute("data-drill-id");
+    var data = ensureSkillsData();
+    var drill = data.drills.find(function (d) { return d.id === drillId; });
+    if (!drill) return;
+    drill[field] = e.target.value;
+    saveSkillsData(data);
+    renderSkillsView();
+  });
+
+  el("skills-categories").addEventListener("click", function (e) {
+    var deleteBtn = e.target.closest(".drill-delete-btn");
+    if (deleteBtn) {
+      var deleteCard = deleteBtn.closest(".drill-card");
+      var deleteId = deleteCard.getAttribute("data-drill-id");
+      var data1 = ensureSkillsData();
+      data1.drills = data1.drills.filter(function (d) { return d.id !== deleteId; });
+      data1.completions = data1.completions.filter(function (c) { return c.drillId !== deleteId; });
+      saveSkillsData(data1);
+      renderSkillsView();
+      return;
+    }
+
+    var addBtn = e.target.closest(".add-drill-btn");
+    if (addBtn) {
+      var category = addBtn.getAttribute("data-category");
+      var data2 = ensureSkillsData();
+      data2.drills.push({
+        id: generateDrillId(),
+        category: category,
+        name: "New drill",
+        description: SKILLS_PLACEHOLDER_NOTE,
+        videoUrl: "",
+        source: "",
+        isSeed: false,
+        createdAt: new Date().toISOString()
+      });
+      saveSkillsData(data2);
+      renderSkillsView();
+      return;
+    }
+
+    var completeBtn = e.target.closest(".drill-complete-btn");
+    if (completeBtn) {
+      var completeCard = completeBtn.closest(".drill-card");
+      var completeId = completeCard.getAttribute("data-drill-id");
+      var noteInput = completeCard.querySelector(".drill-complete-note");
+      var data3 = ensureSkillsData();
+      data3.completions.push({
+        id: generateCompletionId(),
+        drillId: completeId,
+        date: todayISODate(),
+        note: noteInput ? noteInput.value.trim() : "",
+        createdAt: new Date().toISOString()
+      });
+      saveSkillsData(data3);
+      renderSkillsView();
+    }
+  });
+
+  // ---------------------------------------------------------------------
+  // Progress Dashboard (Section 8) — inline SVG charts, no CDN dependency
+  // ---------------------------------------------------------------------
+  function getMilestones() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.milestones);
+      var parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveMilestones(milestones) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.milestones, JSON.stringify(milestones));
+    } catch (e) { /* storage unavailable */ }
+    return milestones;
+  }
+
+  function buildLineChartSvg(points) {
+    var width = 300;
+    var height = 110;
+    var padding = 22;
+    if (!points.length) return '<div class="chart-empty">No data yet</div>';
+    var values = points.map(function (p) { return p.y; });
+    var minY = Math.min.apply(null, values);
+    var maxY = Math.max.apply(null, values);
+    if (minY === maxY) { minY -= 1; maxY += 1; }
+    var xStep = points.length > 1 ? (width - padding * 2) / (points.length - 1) : 0;
+    function scaleY(v) {
+      return height - padding - ((v - minY) / (maxY - minY)) * (height - padding * 2);
+    }
+    var coords = points.map(function (p, i) {
+      var x = padding + i * xStep;
+      var y = scaleY(p.y);
+      return { x: x, y: y };
+    });
+    var polyline = coords.map(function (c) { return c.x.toFixed(1) + "," + c.y.toFixed(1); }).join(" ");
+    var circles = coords.map(function (c, i) {
+      return '<circle cx="' + c.x.toFixed(1) + '" cy="' + c.y.toFixed(1) + '" r="3" fill="var(--accent)"><title>' +
+        escapeHtml(points[i].x + ": " + points[i].y) + "</title></circle>";
+    }).join("");
+    return '<svg class="line-chart" viewBox="0 0 ' + width + " " + height + '" preserveAspectRatio="none" style="width:100%;height:' + height + 'px;">' +
+      '<polyline points="' + polyline + '" fill="none" stroke="var(--accent)" stroke-width="2"/>' +
+      circles +
+      "</svg>";
+  }
+
+  function getExerciseCatalog() {
+    var seen = {};
+    var list = [];
+    PROGRAM_DATA.phases.forEach(function (phase) {
+      CATEGORY_ORDER.forEach(function (catKey) {
+        (phase.categories[catKey] || []).forEach(function (ex) {
+          if (!seen[ex.id]) {
+            seen[ex.id] = true;
+            list.push({ id: ex.id, name: ex.name, category: catKey });
+          }
+        });
+      });
+    });
+    return list;
+  }
+
+  function getExerciseHistory(exerciseId) {
+    var sessions = getSessions().slice().sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
+    var history = [];
+    sessions.forEach(function (s) {
+      (s.exercises || []).forEach(function (ex) {
+        if (ex.id === exerciseId) history.push({ date: s.date, sets: ex.sets, reps: ex.reps, load: ex.load, rpe: s.rpe });
+      });
+    });
+    return history;
+  }
+
+  // Suggests a small load bump for the next session, based on the last
+  // time this exercise was logged with a load value. No per-exercise RPE
+  // exists, so the session's overall RPE is used as the effort proxy — if
+  // that session was very hard (RPE 8+), hold the load instead of adding.
+  function computeSuggestedLoad(exerciseId) {
+    var loadHistory = getExerciseHistory(exerciseId).filter(function (h) { return h.load != null; });
+    if (!loadHistory.length) return null;
+    var last = loadHistory[loadHistory.length - 1];
+    var unit = getSettings().units;
+    var highRpe = last.rpe != null && last.rpe >= 8;
+    if (highRpe) {
+      return { lastLoad: last.load, lastDate: last.date, suggestedLoad: last.load, unit: unit, holding: true };
+    }
+    var increment = unit === "lb" ? 5 : (last.load < 20 ? 2.5 : Math.round(last.load * 0.05 * 2) / 2);
+    var suggested = Math.round((last.load + increment) * 2) / 2;
+    return { lastLoad: last.load, lastDate: last.date, suggestedLoad: suggested, unit: unit, holding: false };
+  }
+
+  // Heuristic for "this exercise is the kind where adding load is part of
+  // the plan" — used only to decide whether to show a "log a load to get
+  // a suggestion" nudge before any history exists. Matches prescriptions
+  // that mention load, resistance, or loadable equipment by name.
+  function isLikelyLoadable(def) {
+    var text = ((def.name || "") + " " + (def.prescription || "")).toLowerCase();
+    return /load|weight|resistance|carry|band|cable|dumbbell|kettlebell|barbell/.test(text);
+  }
+
+  function populateExerciseSelect() {
+    var sel = el("progress-exercise-select");
+    var prevValue = sel.value;
+    var catalog = getExerciseCatalog();
+    sel.innerHTML = catalog.map(function (ex) {
+      return '<option value="' + ex.id + '">' + escapeHtml(ex.name) + "</option>";
+    }).join("");
+    if (prevValue && catalog.some(function (ex) { return ex.id === prevValue; })) {
+      sel.value = prevValue;
+    }
+  }
+
+  function renderStrengthChart(exerciseId) {
+    var container = el("progress-strength-chart");
+    var def = exerciseId ? findExerciseDefById(exerciseId) : null;
+    el("progress-exercise-icon").innerHTML = def ? renderPoseSvg(def.pose) : "";
+    if (!exerciseId) {
+      container.innerHTML = '<div class="placeholder-card">No exercises available.</div>';
+      return;
+    }
+    var history = getExerciseHistory(exerciseId);
+    if (!history.length) {
+      container.innerHTML = '<div class="placeholder-card">No sessions logged for this exercise yet.</div>';
+      return;
+    }
+    var loadPoints = history.filter(function (h) { return h.load != null; }).map(function (h) { return { x: h.date, y: h.load }; });
+    var repsPoints = history.filter(function (h) { return h.reps != null; }).map(function (h) { return { x: h.date, y: h.reps }; });
+    var html = "";
+    if (loadPoints.length) html += '<div class="chart-block"><div class="chart-label">Load over time (' + escapeHtml(getSettings().units) + ')</div>' + buildLineChartSvg(loadPoints) + "</div>";
+    if (repsPoints.length) html += '<div class="chart-block"><div class="chart-label">Reps over time</div>' + buildLineChartSvg(repsPoints) + "</div>";
+    container.innerHTML = html || '<div class="placeholder-card">Logged sessions for this exercise have no sets/reps/load recorded yet.</div>';
+  }
+
+  function renderCardioChart() {
+    var container = el("progress-cardio-chart");
+    var sessions = getSessions().slice().sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
+    var cardioSessions = sessions.filter(function (s) {
+      return (s.exercises || []).some(function (ex) { return ex.category === "cardio"; });
+    });
+    if (!cardioSessions.length) {
+      container.innerHTML = '<div class="placeholder-card">No cardio sessions logged yet.</div>';
+      return;
+    }
+    var durationPoints = cardioSessions.filter(function (s) { return s.durationMinutes != null; }).map(function (s) { return { x: s.date, y: s.durationMinutes }; });
+    var rpePoints = cardioSessions.filter(function (s) { return s.rpe != null; }).map(function (s) { return { x: s.date, y: s.rpe }; });
+    var html = "";
+    if (durationPoints.length) html += '<div class="chart-block"><div class="chart-label">Session duration (min) on cardio days</div>' + buildLineChartSvg(durationPoints) + "</div>";
+    if (rpePoints.length) html += '<div class="chart-block"><div class="chart-label">Perceived effort (RPE) trend</div>' + buildLineChartSvg(rpePoints) + "</div>";
+    html += '<p class="field-note">Work duration is approximated from total session length. Log the specific work:rest interval structure in session notes for finer detail.</p>';
+    container.innerHTML = html;
+  }
+
+  function renderAdherenceHeatmap() {
+    var sessions = getSessions();
+    var countByDate = {};
+    sessions.forEach(function (s) { countByDate[s.date] = (countByDate[s.date] || 0) + 1; });
+
+    var totalDays = 84;
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - (totalDays - 1));
+    startDate.setDate(startDate.getDate() - startDate.getDay());
+
+    var cells = [];
+    var cursor = new Date(startDate);
+    while (cursor <= today) {
+      var iso = cursor.toISOString().slice(0, 10);
+      cells.push({ date: iso, count: countByDate[iso] || 0 });
+      cursor.setDate(cursor.getDate() + 1);
+    }
+
+    var weeks = [];
+    for (var i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
+
+    var cellSize = 12;
+    var gap = 3;
+    var svgWidth = weeks.length * (cellSize + gap);
+    var svgHeight = 7 * (cellSize + gap);
+    var rects = weeks.map(function (week, wi) {
+      return week.map(function (day, di) {
+        var level = day.count === 0 ? 0 : (day.count === 1 ? 1 : 2);
+        var fill = level === 0 ? "var(--surface-alt)" : (level === 1 ? "var(--accent-dim)" : "var(--accent)");
+        var x = wi * (cellSize + gap);
+        var y = di * (cellSize + gap);
+        return '<rect x="' + x + '" y="' + y + '" width="' + cellSize + '" height="' + cellSize + '" rx="2" fill="' + fill + '"><title>' +
+          day.date + ": " + day.count + " session" + (day.count === 1 ? "" : "s") + "</title></rect>";
+      }).join("");
+    }).join("");
+
+    el("progress-heatmap").innerHTML = '<svg viewBox="0 0 ' + svgWidth + " " + svgHeight + '" style="width:100%;height:auto;max-width:' + svgWidth + 'px;">' + rects + "</svg>";
+  }
+
+  function renderMilestoneTimeline() {
+    var milestones = getMilestones().slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+    var container = el("progress-milestone-timeline");
+    if (!milestones.length) {
+      container.innerHTML = '<div class="placeholder-card">No milestones logged yet.</div>';
+      return;
+    }
+    container.innerHTML = milestones.map(function (m) {
+      return '<div class="milestone-row"><span class="milestone-date">' + escapeHtml(m.date) + "</span>" +
+        '<span class="milestone-label">' + escapeHtml(m.label) + "</span>" +
+        (m.note ? '<div class="milestone-note">' + escapeHtml(m.note) + "</div>" : "") +
+      "</div>";
+    }).join("");
+  }
+
+  function exportSessionsToCsv() {
+    var sessions = getSessions();
+    var rows = [["date", "phase", "sessionDurationMinutes", "rpe", "exerciseId", "exerciseName", "category", "sets", "reps", "load", "notes"]];
+    sessions.forEach(function (s) {
+      if (!s.exercises || !s.exercises.length) {
+        rows.push([s.date, s.phase, s.durationMinutes, s.rpe, "", "", "", "", "", "", s.notes]);
+      } else {
+        s.exercises.forEach(function (ex) {
+          rows.push([s.date, s.phase, s.durationMinutes, s.rpe, ex.id, ex.name, ex.category, ex.sets, ex.reps, ex.load, s.notes]);
+        });
+      }
+    });
+    var csv = rows.map(function (row) {
+      return row.map(function (field) {
+        var str = field == null ? "" : String(field);
+        if (/[",\n]/.test(str)) str = '"' + str.replace(/"/g, '""') + '"';
+        return str;
+      }).join(",");
+    }).join("\r\n");
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "ampfootballfit_sessions_" + todayISODate() + ".csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  el("progress-exercise-select").addEventListener("change", function () {
+    renderStrengthChart(this.value);
+  });
+
+  el("progress-export-csv").addEventListener("click", exportSessionsToCsv);
+
+  // Plain-text progress summary, handed to the native share sheet (or the
+  // Web Share API in a browser) so it can go straight to a coach or physio
+  // through whatever messaging app is already on the phone, no file-hunting.
+  function buildProgressSummaryText() {
+    var lines = [];
+    lines.push("AmpFootballFit progress summary");
+    lines.push("Generated: " + todayISODate());
+    lines.push("");
+
+    var state = ensureProgramState();
+    var phase = getPhaseByNumber(state.currentPhase);
+    if (phase) {
+      lines.push("Phase " + phase.number + " (" + phase.name + "), week " + state.currentWeek + " of " + PROGRAM_META.totalWeeks);
+      lines.push("");
+    }
+
+    var units = getSettings().units;
+    var sessions = getSessions().slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); }).slice(0, 8);
+    lines.push("Recent sessions:");
+    if (!sessions.length) {
+      lines.push("No sessions logged yet.");
+    } else {
+      sessions.forEach(function (s) {
+        var header = s.date + ", Phase " + s.phase +
+          (s.durationMinutes != null ? ", " + s.durationMinutes + " min" : "") +
+          (s.rpe != null ? ", RPE " + s.rpe : "");
+        lines.push(header);
+        (s.exercises || []).forEach(function (ex) {
+          var bits = [];
+          if (ex.sets != null) bits.push(ex.sets + " sets");
+          if (ex.reps != null) bits.push(ex.reps + " reps");
+          if (ex.load != null) bits.push(ex.load + " " + units);
+          lines.push("  " + ex.name + (bits.length ? ": " + bits.join(", ") : ""));
+        });
+      });
+    }
+    lines.push("");
+
+    lines.push("Benchmarks (latest):");
+    var anyBenchmark = false;
+    BENCHMARK_DEFS.forEach(function (def) {
+      var history = getBenchmarkHistory(def.id);
+      if (!history.length) return;
+      anyBenchmark = true;
+      var latest = history[history.length - 1];
+      var line = def.name + ": " + latest.value + " " + def.unit;
+      if (history.length > 1) {
+        var baseline = history[0];
+        var diff = latest.value - baseline.value;
+        var improved = def.direction === "higher" ? diff > 0 : diff < 0;
+        line += " (baseline " + baseline.value + " " + def.unit + ", " +
+          (diff === 0 ? "no change" : (improved ? "improved" : "regressed") + " by " + Math.abs(diff).toFixed(1)) + ")";
+      }
+      lines.push(line);
+    });
+    if (!anyBenchmark) lines.push("No benchmarks logged yet.");
+    lines.push("");
+
+    var milestones = getMilestones().slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); }).slice(0, 5);
+    lines.push("Recent milestones:");
+    if (!milestones.length) {
+      lines.push("No milestones logged yet.");
+    } else {
+      milestones.forEach(function (m) { lines.push(m.date + ": " + m.label); });
+    }
+
+    return lines.join("\n");
+  }
+
+  function shareProgressSummary() {
+    var text = buildProgressSummaryText();
+    if (isNativeApp() && Capacitor.Plugins.Share) {
+      Capacitor.Plugins.Share.share({
+        title: "AmpFootballFit progress",
+        text: text,
+        dialogTitle: "Share progress"
+      }).catch(function () { /* user cancelled the share sheet */ });
+      return;
+    }
+    if (navigator.share) {
+      navigator.share({ title: "AmpFootballFit progress", text: text }).catch(function () { /* user cancelled */ });
+      return;
+    }
+    var blob = new Blob([text], { type: "text/plain;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "ampfootballfit_progress_" + todayISODate() + ".txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  el("progress-share-btn").addEventListener("click", shareProgressSummary);
+
+  // ---------------------------------------------------------------------
+  // Benchmarks & retests — periodic objective tests, distinct from daily
+  // session logs. Each def scores "higher" or "lower" as improvement so the
+  // baseline-vs-latest delta can be shown with a consistent up/down arrow.
+  // ---------------------------------------------------------------------
+  var BENCHMARK_DEFS = [
+    {
+      id: "slSquatReps30s", name: "Single-leg squat: max reps (30s)", unit: "reps", direction: "higher", step: 1, pose: "squat",
+      instructions: "Stand on your sound leg. In 30 seconds, count as many controlled single-leg squats as you can (full range, no bouncing). Rest as needed between attempts, but only your best 30-second set counts."
+    },
+    {
+      id: "slBalanceHold", name: "Single-leg balance hold", unit: "seconds", direction: "higher", step: 1, pose: "singleLegRDL",
+      instructions: "Stand on your sound leg, arms however feels natural. Time how long you can hold balance without touching your other foot down or grabbing support. Stop the clock at the first touch-down."
+    },
+    {
+      id: "boxJumpHeight", name: "Box jump height", unit: "cm", direction: "higher", step: 1, pose: "boxJump",
+      instructions: "Use the highest box/step you can jump onto with a solid two-foot landing (or your prescribed take-off pattern), under control, with no stumble. Record that box's height in cm."
+    },
+    {
+      id: "broadJumpDistance", name: "Broad jump distance", unit: "cm", direction: "higher", step: 1, pose: "decelLanding",
+      instructions: "Standing start, jump forward as far as possible and stick the landing (no falling backward or extra steps). Measure from the start line to the back of your closest heel on landing. Best of 3 attempts."
+    },
+    {
+      id: "sprint10m", name: "10m sprint time", unit: "seconds", direction: "lower", step: 0.1, pose: "sprintCrutches",
+      instructions: "Time a maximal-effort 10m sprint from a standing start (running or on crutches, whichever matches your current training). Lower time = better. Best of 2–3 attempts, with full recovery between."
+    },
+    {
+      id: "plankHold", name: "Plank hold", unit: "seconds", direction: "higher", step: 1, pose: "plank",
+      instructions: "Standard front plank on forearms, straight line from shoulders to hips. Time how long you can hold good form. Stop the clock as soon as your hips sag or lift noticeably."
+    }
+  ];
+
+  function getBenchmarkDef(testId) {
+    return BENCHMARK_DEFS.filter(function (b) { return b.id === testId; })[0];
+  }
+
+  function getBenchmarkEntries() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.benchmarks);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveBenchmarkEntries(entries) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.benchmarks, JSON.stringify(entries));
+    } catch (e) { /* storage unavailable */ }
+    return entries;
+  }
+
+  function generateBenchmarkId() {
+    return "bench_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function addBenchmarkEntry(testId, value, note) {
+    var entries = getBenchmarkEntries();
+    entries.push({
+      id: generateBenchmarkId(),
+      testId: testId,
+      date: todayISODate(),
+      value: value,
+      note: note || "",
+      createdAt: new Date().toISOString()
+    });
+    saveBenchmarkEntries(entries);
+  }
+
+  function getBenchmarkHistory(testId) {
+    return getBenchmarkEntries()
+      .filter(function (e) { return e.testId === testId; })
+      .sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
+  }
+
+  function populateBenchmarkTestSelect() {
+    var sel = el("benchmark-test-select");
+    var prevValue = sel.value;
+    sel.innerHTML = BENCHMARK_DEFS.map(function (b) {
+      return '<option value="' + b.id + '">' + escapeHtml(b.name) + "</option>";
+    }).join("");
+    if (prevValue && BENCHMARK_DEFS.some(function (b) { return b.id === prevValue; })) sel.value = prevValue;
+  }
+
+  function renderBenchmarkPanel() {
+    var testId = el("benchmark-test-select").value || BENCHMARK_DEFS[0].id;
+    var def = getBenchmarkDef(testId);
+    el("benchmark-value-label").textContent = "Value (" + def.unit + ")";
+    el("benchmark-value-input").step = def.step;
+    el("benchmark-instructions").textContent = def.instructions;
+    el("benchmark-icon").innerHTML = renderPoseSvg(def.pose);
+
+    var history = getBenchmarkHistory(testId);
+    var summaryEl = el("benchmark-summary");
+    if (!history.length) {
+      summaryEl.innerHTML = '<div class="placeholder-card">No results logged yet for this test. Log your baseline below.</div>';
+    } else {
+      var baseline = history[0];
+      var latest = history[history.length - 1];
+      var deltaHtml = "";
+      if (history.length > 1) {
+        var diff = latest.value - baseline.value;
+        var improved = def.direction === "higher" ? diff > 0 : diff < 0;
+        var pct = baseline.value !== 0 ? Math.abs(diff / baseline.value * 100) : null;
+        deltaHtml = '<div class="benchmark-delta ' + (diff === 0 ? "" : (improved ? "benchmark-improved" : "benchmark-regressed")) + '">' +
+          (diff === 0 ? "→" : (improved ? "▲" : "▼")) + " " + Math.abs(diff).toFixed(1) + " " + def.unit +
+          (pct != null ? " (" + pct.toFixed(0) + "%)" : "") + " vs baseline" +
+        "</div>";
+      }
+      summaryEl.innerHTML =
+        '<div class="benchmark-summary-row"><span>Baseline (' + escapeHtml(baseline.date) + ")</span><strong>" + baseline.value + " " + def.unit + "</strong></div>" +
+        '<div class="benchmark-summary-row"><span>Latest (' + escapeHtml(latest.date) + ")</span><strong>" + latest.value + " " + def.unit + "</strong></div>" +
+        deltaHtml;
+    }
+
+    var points = history.map(function (h) { return { x: h.date, y: h.value }; });
+    el("benchmark-chart").innerHTML = points.length ? buildLineChartSvg(points) : '<div class="chart-empty">No data yet</div>';
+
+    var historyList = el("benchmark-history-list");
+    historyList.innerHTML = !history.length ? "" : history.slice().reverse().map(function (h) {
+      return '<div class="milestone-row"><span class="milestone-date">' + escapeHtml(h.date) + '</span><span class="milestone-label">' + h.value + " " + def.unit + "</span>" +
+        (h.note ? '<div class="milestone-note">' + escapeHtml(h.note) + "</div>" : "") +
+      "</div>";
+    }).join("");
+  }
+
+  el("benchmark-test-select").addEventListener("change", renderBenchmarkPanel);
+
+  el("benchmark-log-btn").addEventListener("click", function () {
+    var testId = el("benchmark-test-select").value;
+    var value = numOrNull(el("benchmark-value-input").value);
+    if (value == null) return;
+    var note = el("benchmark-note-input").value.trim();
+    addBenchmarkEntry(testId, value, note);
+    el("benchmark-value-input").value = "";
+    el("benchmark-note-input").value = "";
+    renderBenchmarkPanel();
+  });
+
+  function renderReadinessTrendChart() {
+    var logs = getReadinessLogs().slice().sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
+    var container = el("progress-readiness-chart");
+    if (!logs.length) {
+      container.innerHTML = '<div class="placeholder-card">No readiness check-ins logged yet.</div>';
+      return;
+    }
+    var points = logs.map(function (l) { return { x: l.date, y: computeReadinessScore(l) }; });
+    container.innerHTML = buildLineChartSvg(points);
+  }
+
+  function renderProgressView() {
+    renderAdherenceHeatmap();
+    populateExerciseSelect();
+    var sel = el("progress-exercise-select");
+    renderStrengthChart(sel.value || (sel.options.length ? sel.options[0].value : null));
+    renderCardioChart();
+    renderMilestoneTimeline();
+    populateBenchmarkTestSelect();
+    renderBenchmarkPanel();
+    renderReadinessTrendChart();
+  }
+
+  // ---------------------------------------------------------------------
+  // Milestone tracking UI (Section 7) — user-triggered, timestamped
+  // ---------------------------------------------------------------------
+  function generateMilestoneId() {
+    return "mile_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+  }
+
+  function addMilestone(label, note) {
+    var milestones = getMilestones();
+    var entry = {
+      id: generateMilestoneId(),
+      date: todayISODate(),
+      label: label,
+      note: note,
+      createdAt: new Date().toISOString()
+    };
+    milestones.push(entry);
+    saveMilestones(milestones);
+    return entry;
+  }
+
+  function renderDashboardMilestoneList() {
+    var milestones = getMilestones().slice().sort(function (a, b) {
+      var dateDiff = new Date(b.date) - new Date(a.date);
+      if (dateDiff !== 0) return dateDiff;
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+    var container = el("dashboard-milestone-list");
+    if (!milestones.length) {
+      container.innerHTML = '<div class="placeholder-card">No milestones logged yet.</div>';
+      return;
+    }
+    container.innerHTML = milestones.map(function (m) {
+      return '<div class="card milestone-card">' +
+        '<div class="milestone-card-header">' +
+          '<span class="milestone-date">' + escapeHtml(m.date) + "</span>" +
+          '<button type="button" class="btn secondary milestone-delete-btn" data-milestone-id="' + m.id + '">Delete</button>' +
+        "</div>" +
+        '<div class="milestone-label">' + escapeHtml(m.label) + "</div>" +
+        (m.note ? '<div class="milestone-note">' + escapeHtml(m.note) + "</div>" : "") +
+      "</div>";
+    }).join("");
+  }
+
+  el("milestone-quick-grid").addEventListener("click", function (e) {
+    var btn = e.target.closest(".milestone-quick-btn");
+    if (!btn || btn.disabled) return;
+    var entry = addMilestone(btn.getAttribute("data-label"), "");
+    renderDashboardMilestoneList();
+
+    // Clicking gave no feedback before, so athletes kept re-clicking and
+    // logged duplicates. Disable + relabel briefly, and highlight the new
+    // card in the list below so the click is unmistakably registered.
+    var originalText = btn.textContent;
+    btn.disabled = true;
+    btn.classList.add("milestone-quick-btn-logged");
+    btn.textContent = "Logged";
+    setTimeout(function () {
+      btn.disabled = false;
+      btn.classList.remove("milestone-quick-btn-logged");
+      btn.textContent = originalText;
+    }, 1500);
+
+    var deleteBtn = document.querySelector('.milestone-delete-btn[data-milestone-id="' + entry.id + '"]');
+    var card = deleteBtn ? deleteBtn.closest(".milestone-card") : null;
+    if (card) {
+      card.classList.add("milestone-card-highlight");
+      card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      setTimeout(function () { card.classList.remove("milestone-card-highlight"); }, 1600);
+    }
+  });
+
+  el("milestone-log-custom-btn").addEventListener("click", function () {
+    var label = el("milestone-custom-label").value.trim();
+    if (!label) return;
+    var note = el("milestone-note").value.trim();
+    addMilestone(label, note);
+    el("milestone-custom-label").value = "";
+    el("milestone-note").value = "";
+    renderDashboardMilestoneList();
+  });
+
+  el("dashboard-milestone-list").addEventListener("click", function (e) {
+    var btn = e.target.closest(".milestone-delete-btn");
+    if (!btn) return;
+    var id = btn.getAttribute("data-milestone-id");
+    saveMilestones(getMilestones().filter(function (m) { return m.id !== id; }));
+    renderDashboardMilestoneList();
+  });
+
+  // ---------------------------------------------------------------------
+  // Daily readiness check-in — quick sleep/energy/soreness/limb-comfort
+  // self-rating. Informational and soft-advisory only (same "warn, don't
+  // block" philosophy as phase gating): a low score surfaces a caution
+  // note on the Program tab, it never prevents logging or training.
+  // Every dimension is scored 5 = best / 1 = worst so a single overall
+  // average is meaningful, even though that inverts the usual "soreness"
+  // framing (5 = no soreness here, not "very sore").
+  // ---------------------------------------------------------------------
+  var READINESS_DIMENSIONS = [
+    { id: "sleep", label: "Sleep quality", low: "Poor", high: "Great" },
+    { id: "energy", label: "Energy level", low: "Very low", high: "Very high" },
+    { id: "soreness", label: "Muscle soreness", low: "Very sore", high: "None" },
+    { id: "limbComfort", label: "Residual limb / socket comfort", low: "Irritated / painful", high: "Totally comfortable" }
+  ];
+  var READINESS_LOW_OVERALL = 3;
+  var READINESS_LOW_LIMB_COMFORT = 2;
+
+  function getReadinessLogs() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.readinessLogs);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveReadinessLogs(logs) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.readinessLogs, JSON.stringify(logs));
+    } catch (e) { /* storage unavailable */ }
+    return logs;
+  }
+
+  function getTodayReadinessLog() {
+    var today = todayISODate();
+    return getReadinessLogs().filter(function (r) { return r.date === today; })[0] || null;
+  }
+
+  function computeReadinessScore(entry) {
+    var sum = 0;
+    READINESS_DIMENSIONS.forEach(function (d) { sum += entry[d.id]; });
+    return sum / READINESS_DIMENSIONS.length;
+  }
+
+  function saveReadinessCheckIn(values) {
+    var logs = getReadinessLogs();
+    var today = todayISODate();
+    var existing = logs.filter(function (r) { return r.date === today; })[0];
+    if (existing) {
+      READINESS_DIMENSIONS.forEach(function (d) { existing[d.id] = values[d.id]; });
+      existing.note = values.note || "";
+      existing.updatedAt = new Date().toISOString();
+    } else {
+      var entry = { date: today, note: values.note || "", createdAt: new Date().toISOString() };
+      READINESS_DIMENSIONS.forEach(function (d) { entry[d.id] = values[d.id]; });
+      logs.push(entry);
+    }
+    saveReadinessLogs(logs);
+  }
+
+  function renderReadinessDimensionSelects(container, prefix, entry) {
+    container.innerHTML = READINESS_DIMENSIONS.map(function (d) {
+      var options = [1, 2, 3, 4, 5].map(function (v) {
+        var descriptor = v === 1 ? d.low : (v === 5 ? d.high : "");
+        var text = descriptor ? v + ": " + descriptor : String(v);
+        return '<option value="' + v + '">' + escapeHtml(text) + "</option>";
+      }).join("");
+      var current = entry ? entry[d.id] : 4;
+      return '<label for="' + prefix + "-" + d.id + '">' + escapeHtml(d.label) + "</label>" +
+        '<select id="' + prefix + "-" + d.id + '" data-dimension="' + d.id + '">' + options + "</select>";
+    }).join("");
+    READINESS_DIMENSIONS.forEach(function (d) {
+      var sel = el(prefix + "-" + d.id);
+      if (sel) sel.value = entry ? entry[d.id] : 4;
+    });
+  }
+
+  function renderReadinessCard() {
+    el("readiness-header-icon").innerHTML = renderPoseSvg("mobilityHamstring");
+    var entry = getTodayReadinessLog();
+    var formWrap = el("readiness-form-wrap");
+    var summaryWrap = el("readiness-summary-wrap");
+    if (!entry || readinessEditing) {
+      formWrap.classList.remove("hidden");
+      summaryWrap.classList.add("hidden");
+      renderReadinessDimensionSelects(el("readiness-selects"), "readiness", entry);
+      el("readiness-note").value = entry ? entry.note : "";
+    } else {
+      formWrap.classList.add("hidden");
+      summaryWrap.classList.remove("hidden");
+      var score = computeReadinessScore(entry);
+      summaryWrap.innerHTML =
+        '<div class="readiness-score">Today’s readiness: <strong>' + score.toFixed(1) + ' / 5</strong></div>' +
+        '<div class="field-note">' + READINESS_DIMENSIONS.map(function (d) {
+          return escapeHtml(d.label) + ": " + entry[d.id] + "/5";
+        }).join(" · ") + "</div>" +
+        (entry.note ? '<div class="milestone-note">' + escapeHtml(entry.note) + "</div>" : "") +
+        '<button type="button" class="btn secondary" id="readiness-edit-btn" style="margin-top:10px;">Edit today’s check-in</button>';
+    }
+  }
+
+  var readinessEditing = false;
+
+  el("readiness-save-btn").addEventListener("click", function () {
+    var values = { note: el("readiness-note").value.trim() };
+    READINESS_DIMENSIONS.forEach(function (d) {
+      values[d.id] = Number(el("readiness-" + d.id).value);
+    });
+    saveReadinessCheckIn(values);
+    readinessEditing = false;
+    renderReadinessCard();
+    renderProgramReadinessBanner();
+  });
+
+  el("readiness-summary-wrap").addEventListener("click", function (e) {
+    if (!e.target.closest("#readiness-edit-btn")) return;
+    readinessEditing = true;
+    renderReadinessCard();
+  });
+
+  // Soft-advisory caution banner on the Program tab — never blocks training,
+  // mirrors the phase-gate warning's "warn, don't block" tone.
+  function renderProgramReadinessBanner() {
+    var banner = el("program-readiness-warning");
+    var entry = getTodayReadinessLog();
+    if (!entry) {
+      banner.classList.add("hidden");
+      return;
+    }
+    var score = computeReadinessScore(entry);
+    var lowLimb = entry.limbComfort <= READINESS_LOW_LIMB_COMFORT;
+    if (score >= READINESS_LOW_OVERALL && !lowLimb) {
+      banner.classList.add("hidden");
+      return;
+    }
+    var text = lowLimb
+      ? "Today’s check-in flagged low residual limb / socket comfort. Consider an easier session, extra socket checks, or resting this area today."
+      : "Today’s readiness check-in is on the low side (" + score.toFixed(1) + "/5). Consider an easier session or extra recovery today.";
+    el("program-readiness-warning-text").textContent = text;
+    banner.classList.remove("hidden");
+  }
+
+  // Reminder note for athletes who don't train with their prosthetic for
+  // every exercise — the program's prescriptions assume typical prosthetic
+  // use unless stated otherwise, so this is a soft flag, not an attempt to
+  // rewrite specific exercises (that adaptation needs a physio/coach's eyes).
+  function renderProstheticNote() {
+    var banner = el("program-prosthetic-note");
+    var profile = getProfile();
+    if (!profile || (profile.prostheticUse !== "never" && profile.prostheticUse !== "varies")) {
+      banner.classList.add("hidden");
+      return;
+    }
+    var text = profile.prostheticUse === "never"
+      ? "Your profile says you train without your prosthetic. Exercises below assume typical prosthetic use unless noted: adapt setup/reps with your physio or coach where needed."
+      : "Your profile says prosthetic use varies by exercise. Check each exercise assumes what you expect, and adapt with your physio or coach where it doesn't.";
+    el("program-prosthetic-note-text").textContent = text;
+    banner.classList.remove("hidden");
+  }
+
+  // ---------------------------------------------------------------------
+  // Settings tab (Section 9) — language, units, data export/reset
+  // ---------------------------------------------------------------------
+  var SETTINGS_DEFAULTS = { language: "en", units: "kg" };
+
+  function getSettings() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.settings);
+      var parsed = raw ? JSON.parse(raw) : null;
+      if (parsed && typeof parsed === "object") {
+        return {
+          language: parsed.language || SETTINGS_DEFAULTS.language,
+          units: parsed.units || SETTINGS_DEFAULTS.units
+        };
+      }
+      return { language: SETTINGS_DEFAULTS.language, units: SETTINGS_DEFAULTS.units };
+    } catch (e) {
+      return { language: SETTINGS_DEFAULTS.language, units: SETTINGS_DEFAULTS.units };
+    }
+  }
+
+  function saveSettings(settings) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(settings));
+    } catch (e) { /* storage unavailable */ }
+    return settings;
+  }
+
+  function initSettingsTab() {
+    var settings = getSettings();
+    el("settings-language").value = settings.language;
+    el("settings-units").value = settings.units;
+    el("settings-reset-warning").classList.add("hidden");
+    renderProfilePhotoUi();
+    populateSettingsProfileForm();
+  }
+
+  // Lets an athlete update their profile after onboarding — activity level,
+  // amputation details, prosthetic use, etc. — since these genuinely change
+  // over time (e.g. K4 to K3 after a setback) and onboarding only ran once.
+  function populateSettingsProfileForm() {
+    var profile = getProfile() || {};
+    el("settings-amp-level").value = profile.amputationLevel || "";
+    el("settings-amp-side").value = profile.amputationSide || "";
+    el("settings-years-since").value = profile.yearsSinceAmputation != null ? profile.yearsSinceAmputation : "";
+    el("settings-prosthetic-use").value = profile.prostheticUse || "";
+    var activityLevel = profile.activityLevel || {};
+    if (activityLevel.mode === "plain") {
+      el("settings-activity-mode").value = "unsure";
+      el("settings-activity-plain-wrap").classList.remove("hidden");
+      el("settings-activity-plain").value = activityLevel.value || "";
+    } else {
+      el("settings-activity-mode").value = activityLevel.value || "";
+      el("settings-activity-plain-wrap").classList.add("hidden");
+      el("settings-activity-plain").value = "";
+    }
+    el("settings-crutch-exp").value = profile.crutchExperience || "";
+    el("settings-last-competitive").value = profile.timeSinceLastCompetitivePlay || "";
+    el("settings-fitness-baseline").value = profile.fitnessBaseline || "";
+    el("settings-pain-points").value = profile.painPoints || "";
+    el("settings-target").value = profile.target || "";
+    el("settings-days-per-week").value = profile.trainingDaysPerWeek != null ? profile.trainingDaysPerWeek : "";
+    el("settings-session-length").value = profile.sessionLengthMinutes != null ? profile.sessionLengthMinutes : "";
+    el("settings-profile-saved-note").classList.add("hidden");
+  }
+
+  el("settings-activity-mode").addEventListener("change", function () {
+    el("settings-activity-plain-wrap").classList.toggle("hidden", this.value !== "unsure");
+  });
+
+  el("settings-profile-save-btn").addEventListener("click", function () {
+    var existing = getProfile() || {};
+    var mode = el("settings-activity-mode").value;
+    var activityLevel = mode === "unsure"
+      ? { mode: "plain", value: el("settings-activity-plain").value }
+      : { mode: "klevel", value: mode };
+    var updated = Object.assign({}, existing, {
+      amputationLevel: el("settings-amp-level").value,
+      amputationSide: el("settings-amp-side").value,
+      yearsSinceAmputation: el("settings-years-since").value !== "" ? parseFloat(el("settings-years-since").value) : null,
+      prostheticUse: el("settings-prosthetic-use").value,
+      activityLevel: activityLevel,
+      crutchExperience: el("settings-crutch-exp").value,
+      timeSinceLastCompetitivePlay: el("settings-last-competitive").value,
+      fitnessBaseline: el("settings-fitness-baseline").value,
+      painPoints: el("settings-pain-points").value.trim(),
+      target: el("settings-target").value,
+      trainingDaysPerWeek: el("settings-days-per-week").value !== "" ? parseInt(el("settings-days-per-week").value, 10) : null,
+      sessionLengthMinutes: el("settings-session-length").value !== "" ? parseInt(el("settings-session-length").value, 10) : null,
+      updatedAt: new Date().toISOString()
+    });
+    saveProfile(updated);
+    el("settings-profile-saved-note").classList.remove("hidden");
+  });
+
+  function renderProfilePhotoUi() {
+    var native = isNativeApp();
+    var addBtn = el("settings-photo-add-btn");
+    var removeBtn = el("settings-photo-remove-btn");
+    var note = el("settings-photo-note");
+    var obAddBtn = el("ob-photo-add-btn");
+    var obNote = el("ob-photo-note");
+    var nativeNote = "Photo capture is only available in the installed Android app, not the browser version.";
+
+    if (!native) {
+      addBtn.classList.add("hidden");
+      removeBtn.classList.add("hidden");
+      note.textContent = nativeNote;
+      if (obAddBtn) obAddBtn.classList.add("hidden");
+      if (obNote) obNote.textContent = nativeNote;
+    } else {
+      addBtn.classList.remove("hidden");
+      note.textContent = "Optional, skip anytime.";
+      if (obAddBtn) obAddBtn.classList.remove("hidden");
+      if (obNote) obNote.textContent = "Optional, you can always add or change this later from Settings.";
+    }
+
+    getProfilePhotoDisplayUri().then(function (uri) {
+      var placeholderSvg = '<svg viewBox="0 0 24 24" class="profile-photo-placeholder-icon"><path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.5c-3.9 0-9.8 2-9.8 5.9v1.4h19.6v-1.4c0-3.9-5.9-5.9-9.8-5.9z"/></svg>';
+      [el("settings-photo-preview"), el("dashboard-photo-preview"), el("ob-photo-preview"), el("app-header-photo")].forEach(function (container) {
+        if (container) container.innerHTML = uri ? '<img src="' + uri + '" alt="Profile photo">' : placeholderSvg;
+      });
+      if (native) {
+        removeBtn.classList.toggle("hidden", !uri);
+        addBtn.textContent = uri ? "Change photo" : "Add photo";
+        if (obAddBtn) obAddBtn.textContent = uri ? "Change photo" : "Add a photo";
+      }
+      if (onboardingStep === ONBOARDING_PHOTO_STEP) {
+        el("ob-next").textContent = uri ? "Continue" : "Skip for now";
+      }
+    });
+  }
+
+  el("settings-photo-add-btn").addEventListener("click", function () {
+    captureProfilePhoto().then(function () {
+      renderProfilePhotoUi();
+    }).catch(function () {
+      // User cancelled the picker, or capture unavailable — leave state unchanged, never block the app on this.
+    });
+  });
+
+  el("ob-photo-add-btn").addEventListener("click", function () {
+    captureProfilePhoto().then(function () {
+      renderProfilePhotoUi();
+    }).catch(function () {
+      // User cancelled the picker — stays on this step, "Skip for now" label remains available.
+    });
+  });
+
+  el("settings-photo-remove-btn").addEventListener("click", function () {
+    removeProfilePhoto().then(function () {
+      renderProfilePhotoUi();
+    });
+  });
+
+  el("settings-language").addEventListener("change", function () {
+    var settings = getSettings();
+    settings.language = this.value;
+    saveSettings(settings);
+    applyStrings();
+  });
+
+  el("settings-units").addEventListener("change", function () {
+    var settings = getSettings();
+    settings.units = this.value;
+    saveSettings(settings);
+  });
+
+  function exportAllDataJson() {
+    var backup = {
+      exportedAt: new Date().toISOString(),
+      profile: getProfile(),
+      programState: ensureProgramState(),
+      sessions: getSessions(),
+      skillsDrills: ensureSkillsData(),
+      milestones: getMilestones(),
+      settings: getSettings(),
+      readinessLogs: getReadinessLogs(),
+      benchmarks: getBenchmarkEntries(),
+      customExercises: getCustomExercises()
+    };
+    var json = JSON.stringify(backup, null, 2);
+    var blob = new Blob([json], { type: "application/json;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "ampfootballfit_backup_" + todayISODate() + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function resetAllData() {
+    removeProfilePhoto().catch(function () { /* ignore — file may already be gone */ }).then(function () {
+      Object.keys(STORAGE_KEYS).forEach(function (key) {
+        try { localStorage.removeItem(STORAGE_KEYS[key]); } catch (e) { /* storage unavailable */ }
+      });
+      try { localStorage.removeItem(STORAGE_PREFIX + "last_view"); } catch (e) { /* storage unavailable */ }
+      window.location.reload();
+    });
+  }
+
+  el("settings-export-json-btn").addEventListener("click", exportAllDataJson);
+
+  el("settings-reset-btn").addEventListener("click", function () {
+    el("settings-reset-warning").classList.remove("hidden");
+  });
+
+  el("settings-reset-cancel").addEventListener("click", function () {
+    el("settings-reset-warning").classList.add("hidden");
+  });
+
+  el("settings-reset-confirm").addEventListener("click", function () {
+    resetAllData();
+  });
+
+  // ---------------------------------------------------------------------
+  // PWA installability — manifest + icons generated at runtime via canvas
+  // (no external image assets, stays a single offline file). Lets Android
+  // Chrome / iOS Safari "Add to Home Screen" with a real icon and a
+  // standalone (no browser chrome) launch.
+  // ---------------------------------------------------------------------
+  function makeAppIconDataUrl(size) {
+    var canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    var ctx = canvas.getContext("2d");
+    var radius = size * 0.22;
+    ctx.fillStyle = "#12151b";
+    ctx.beginPath();
+    ctx.moveTo(radius, 0);
+    ctx.lineTo(size - radius, 0);
+    ctx.quadraticCurveTo(size, 0, size, radius);
+    ctx.lineTo(size, size - radius);
+    ctx.quadraticCurveTo(size, size, size - radius, size);
+    ctx.lineTo(radius, size);
+    ctx.quadraticCurveTo(0, size, 0, size - radius);
+    ctx.lineTo(0, radius);
+    ctx.quadraticCurveTo(0, 0, radius, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.lineWidth = size * 0.02;
+    ctx.strokeStyle = "#3ea6ff";
+    ctx.stroke();
+    ctx.font = (size * 0.58) + "px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("⚽", size / 2, size * 0.54);
+    return canvas.toDataURL("image/png");
+  }
+
+  function setupPwaManifestAndIcons() {
+    try {
+      var icon192 = makeAppIconDataUrl(192);
+      var icon512 = makeAppIconDataUrl(512);
+      var icon180 = makeAppIconDataUrl(180);
+
+      var manifest = {
+        name: "AmpFootballFit",
+        short_name: "AmpFootballFit",
+        description: "Return-to-play conditioning for amputee football",
+        start_url: "./ampfootballfit.html",
+        display: "standalone",
+        background_color: "#0f1115",
+        theme_color: "#0f1115",
+        icons: [
+          { src: icon192, sizes: "192x192", type: "image/png" },
+          { src: icon512, sizes: "512x512", type: "image/png" }
+        ]
+      };
+      var manifestBlob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
+      el("pwa-manifest-link").setAttribute("href", URL.createObjectURL(manifestBlob));
+      el("pwa-favicon").setAttribute("href", icon192);
+      el("pwa-apple-touch-icon").setAttribute("href", icon180);
+    } catch (e) { /* canvas unavailable — app still works, just without a generated icon */ }
+  }
+
+  // ---------------------------------------------------------------------
+  // Guided workout player — "Start Workout" walks through today's
+  // preferred-tier exercises one at a time, then saves the whole session
+  // through the same saveSessions()/computeSuggestionsForSession() path
+  // the manual Log tab form already uses.
+  // ---------------------------------------------------------------------
+  var workoutPlayerState = null;
+  var workoutPlayerTimerInterval = null;
+
+  function getFlattenedPreferredExercises(phase) {
+    var list = [];
+    CATEGORY_ORDER.forEach(function (catKey) {
+      filterToPreferredTier(phase.categories[catKey] || []).forEach(function (ex) {
+        list.push({ ex: ex, category: catKey });
+      });
+    });
+    return list;
+  }
+
+  function startWorkoutPlayer() {
+    var state = ensureProgramState();
+    var phase = getPhaseByNumber(state.currentPhase);
+    if (!phase) return;
+    var items = getFlattenedPreferredExercises(phase);
+    if (!items.length) return;
+
+    workoutPlayerState = {
+      phase: state.currentPhase,
+      items: items,
+      entries: new Array(items.length).fill(null),
+      index: 0,
+      startedAt: Date.now()
+    };
+
+    el("wp-discard-warning").classList.add("hidden");
+    el("wp-exercise-screen").classList.remove("hidden");
+    el("wp-finish-screen").classList.add("hidden");
+    el("wp-nav").classList.remove("hidden");
+    el("workout-player-overlay").classList.remove("hidden");
+
+    renderWorkoutPlayerExercise();
+    clearInterval(workoutPlayerTimerInterval);
+    workoutPlayerTimerInterval = setInterval(updateWorkoutPlayerTimer, 1000);
+    updateWorkoutPlayerTimer();
+  }
+
+  function updateWorkoutPlayerTimer() {
+    if (!workoutPlayerState) return;
+    var elapsedSec = Math.floor((Date.now() - workoutPlayerState.startedAt) / 1000);
+    var mm = String(Math.floor(elapsedSec / 60)).padStart(2, "0");
+    var ss = String(elapsedSec % 60).padStart(2, "0");
+    el("wp-timer").textContent = mm + ":" + ss;
+  }
+
+  function renderWorkoutPlayerExercise() {
+    var state = workoutPlayerState;
+    var item = state.items[state.index];
+    var ex = item.ex;
+
+    el("wp-progress-label").textContent = "Exercise " + (state.index + 1) + " of " + state.items.length;
+
+    var estimateBits = ex.isEstimate
+      ? '<span class="estimate-badge">Estimate</span><div class="estimate-note">' + escapeHtml(ex.estimateNote || "") + "</div>"
+      : "";
+
+    el("wp-exercise-screen").innerHTML =
+      '<div class="wp-exercise-icon" aria-hidden="true">' + renderPoseSvg(ex.pose) + "</div>" +
+      '<h2 class="wp-exercise-name">' + escapeHtml(ex.name) + estimateBits + "</h2>" +
+      '<div class="wp-exercise-prescription">' + escapeHtml(ex.prescription) + "</div>" +
+      '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
+      '<div class="wp-fields">' +
+        '<input type="number" id="wp-sets" placeholder="Sets" min="0" step="1">' +
+        '<input type="number" id="wp-reps" placeholder="Reps" min="0" step="1">' +
+        '<input type="number" id="wp-load" placeholder="Load" min="0" step="0.5">' +
+      "</div>";
+
+    var existingEntry = state.entries[state.index];
+    if (existingEntry) {
+      el("wp-sets").value = existingEntry.sets != null ? existingEntry.sets : "";
+      el("wp-reps").value = existingEntry.reps != null ? existingEntry.reps : "";
+      el("wp-load").value = existingEntry.load != null ? existingEntry.load : "";
+    }
+
+    el("wp-back-btn").style.visibility = state.index === 0 ? "hidden" : "visible";
+    el("wp-next-btn").textContent = state.index === state.items.length - 1 ? "Finish" : "Done · Next";
+  }
+
+  function workoutPlayerAdvance(skip) {
+    var state = workoutPlayerState;
+    state.entries[state.index] = skip ? null : {
+      sets: numOrNull(el("wp-sets").value),
+      reps: numOrNull(el("wp-reps").value),
+      load: numOrNull(el("wp-load").value)
+    };
+    if (state.index === state.items.length - 1) {
+      showWorkoutPlayerFinishScreen();
+    } else {
+      state.index += 1;
+      renderWorkoutPlayerExercise();
+    }
+  }
+
+  function workoutPlayerBack() {
+    if (workoutPlayerState.index === 0) return;
+    workoutPlayerState.index -= 1;
+    renderWorkoutPlayerExercise();
+  }
+
+  function showWorkoutPlayerFinishScreen() {
+    clearInterval(workoutPlayerTimerInterval);
+    var state = workoutPlayerState;
+    var elapsedMinutes = Math.max(1, Math.round((Date.now() - state.startedAt) / 60000));
+    var completedCount = state.entries.filter(function (e) { return e !== null; }).length;
+
+    el("wp-exercise-screen").classList.add("hidden");
+    el("wp-nav").classList.add("hidden");
+
+    var finishScreen = el("wp-finish-screen");
+    finishScreen.classList.remove("hidden");
+    finishScreen.innerHTML =
+      "<h2>Workout complete</h2>" +
+      '<p class="field-note">' + completedCount + " of " + state.items.length + " exercises logged.</p>" +
+      '<label for="wp-duration">Session duration (minutes)</label>' +
+      '<input type="number" id="wp-duration" min="0" max="300" step="5" value="' + elapsedMinutes + '">' +
+      '<label for="wp-rpe">RPE (1–10)</label>' +
+      '<input type="number" id="wp-rpe" min="1" max="10" step="1" placeholder="e.g. 6">' +
+      '<label for="wp-notes">Notes</label>' +
+      '<textarea id="wp-notes" placeholder="Optional notes about this session"></textarea>' +
+      '<button type="button" class="btn" id="wp-save-btn" style="width: 100%; margin-top: 14px;">Save workout</button>';
+
+    el("wp-save-btn").addEventListener("click", saveWorkoutPlayerSession);
+  }
+
+  function saveWorkoutPlayerSession() {
+    var state = workoutPlayerState;
+    var exercises = [];
+    state.items.forEach(function (item, i) {
+      var entry = state.entries[i];
+      if (entry) {
+        exercises.push({ id: item.ex.id, name: item.ex.name, category: item.category, sets: entry.sets, reps: entry.reps, load: entry.load });
+      }
+    });
+
+    var session = {
+      id: generateSessionId(),
+      date: todayISODate(),
+      phase: state.phase,
+      durationMinutes: numOrNull(el("wp-duration").value),
+      rpe: numOrNull(el("wp-rpe").value),
+      exercises: exercises,
+      notes: el("wp-notes").value.trim(),
+      createdAt: new Date().toISOString()
+    };
+
+    var sessions = getSessions();
+    sessions.push(session);
+    saveSessions(sessions);
+    computeSuggestionsForSession(session);
+
+    closeWorkoutPlayer();
+    showView("log");
+  }
+
+  function closeWorkoutPlayer() {
+    clearInterval(workoutPlayerTimerInterval);
+    workoutPlayerState = null;
+    el("workout-player-overlay").classList.add("hidden");
+  }
+
+  el("program-start-workout-btn").addEventListener("click", startWorkoutPlayer);
+  el("wp-next-btn").addEventListener("click", function () { workoutPlayerAdvance(false); });
+  el("wp-skip-btn").addEventListener("click", function () { workoutPlayerAdvance(true); });
+  el("wp-back-btn").addEventListener("click", workoutPlayerBack);
+
+  el("wp-close-btn").addEventListener("click", function () {
+    var hasProgress = workoutPlayerState && workoutPlayerState.entries.some(function (e) { return e !== null; });
+    if (!hasProgress) {
+      closeWorkoutPlayer();
+      return;
+    }
+    el("wp-discard-warning").classList.remove("hidden");
+  });
+
+  el("wp-discard-cancel").addEventListener("click", function () {
+    el("wp-discard-warning").classList.add("hidden");
+  });
+
+  el("wp-discard-confirm").addEventListener("click", function () {
+    el("wp-discard-warning").classList.add("hidden");
+    closeWorkoutPlayer();
+  });
+
+  // ---------------------------------------------------------------------
+  // Launch splash — a brief personal welcome shown every time the app
+  // starts, sitting above onboarding/app underneath. Purely a startup
+  // greeting; has no bearing on the user's own editable profile photo.
+  // ---------------------------------------------------------------------
+  function initLaunchSplash() {
+    var overlay = el("launch-splash-overlay");
+
+    var dismissed = false;
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+      overlay.classList.add("launch-splash-fading");
+      setTimeout(function () { overlay.classList.add("hidden"); }, 450);
+    }
+
+    overlay.addEventListener("click", dismiss);
+    setTimeout(dismiss, 2800);
+  }
+
+  // ---------------------------------------------------------------------
+  // Init
+  // ---------------------------------------------------------------------
+  mergeCustomExercisesIntoProgramData();
+  applyStrings();
+  setupPwaManifestAndIcons();
+  initLaunchSplash();
+
+  var onboardingAlreadyComplete = false;
+  try { onboardingAlreadyComplete = localStorage.getItem(STORAGE_KEYS.onboardingComplete) === "true"; } catch (e) { /* storage unavailable */ }
+
+  // Onboarding is a first-install experience only (Task 3): once complete,
+  // it never re-triggers — even if the profile itself is later cleared or
+  // edited from Settings. Only a full data reset clears this flag.
+  if (onboardingAlreadyComplete) {
+    ensureProgramState();
+    initLogTab();
+    ensureSkillsData();
+    renderDashboardMilestoneList();
+    initSettingsTab();
+    el("onboarding-overlay").classList.add("hidden");
+    el("app").classList.remove("hidden");
+    var lastView = null;
+    try { lastView = localStorage.getItem(STORAGE_PREFIX + "last_view"); } catch (e) {}
+    showView(lastView || "dashboard");
+  } else {
+    startOnboarding();
+  }
+
+  // Exposed for later build steps
+  window.AmpFootballFit = {
+    STORAGE_KEYS: STORAGE_KEYS,
+    STORAGE_PREFIX: STORAGE_PREFIX,
+    t: t,
+    applyStrings: applyStrings,
+    showView: showView,
+    getProfile: getProfile,
+    saveProfile: saveProfile,
+    startOnboarding: startOnboarding,
+    program: {
+      META: PROGRAM_META,
+      DATA: PROGRAM_DATA,
+      POSES: POSE_LIBRARY,
+      getMinSessionsPerPhase: getMinSessionsPerPhase,
+      getPhaseByNumber: getPhaseByNumber,
+      getPhaseForWeek: getPhaseForWeek,
+      countSessionsForPhase: countSessionsForPhase,
+      getState: ensureProgramState,
+      saveState: saveProgramState,
+      getPhaseGateStatus: getPhaseGateStatus,
+      unlockPhase: unlockPhase,
+      getPreferredTier: getPreferredTier,
+      setPreferredTier: setPreferredTier,
+      filterToPreferredTier: filterToPreferredTier
+    },
+    sessions: {
+      getAll: getSessions,
+      saveAll: saveSessions
+    },
+    suggestions: {
+      computeForExerciseId: computeSuggestionForExerciseId,
+      getPending: function () { return pendingSuggestions; }
+    },
+    workoutPlayer: {
+      start: startWorkoutPlayer,
+      getState: function () { return workoutPlayerState; }
+    },
+    skills: {
+      getData: ensureSkillsData,
+      saveData: saveSkillsData
+    },
+    progress: {
+      getMilestones: getMilestones,
+      exportSessionsToCsv: exportSessionsToCsv
+    },
+    milestones: {
+      getAll: getMilestones,
+      saveAll: saveMilestones,
+      add: addMilestone
+    },
+    settings: {
+      get: getSettings,
+      save: saveSettings,
+      exportAllDataJson: exportAllDataJson,
+      resetAllData: resetAllData
+    },
+    pwa: {
+      setupManifestAndIcons: setupPwaManifestAndIcons
+    },
+    profilePhoto: {
+      capture: captureProfilePhoto,
+      getDisplayUri: getProfilePhotoDisplayUri,
+      remove: removeProfilePhoto,
+      hasPhoto: hasProfilePhoto
+    },
+    launchSplash: {
+      init: initLaunchSplash
+    }
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+# Local Android build toolchain (JDK + SDK), not part of the project itself
+android-toolchain/
+
+# Dependencies and build outputs (regenerable from source)
+android-app/node_modules/
+android-app/android/build/
+android-app/android/app/build/
+android-app/android/.gradle/
+android-app/android/.kotlin/
+android-app/android/capacitor-cordova-android-plugins/build/
+android-app/android/local.properties
+
+# Redundant/stale archive of android-app
+android-app.zip
+
+# Signing keys, should never be committed
+*.keystore
+*.jks
+
+# Claude Code local tool state (session/permission cache, not project source)
+.claude/
+
+# OS/editor cruft
+.DS_Store
