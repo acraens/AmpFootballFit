@@ -1238,6 +1238,14 @@
           <option value="regular">Regularly training</option>
         </select>
 
+        <label for="ob-strength-starting-point">For strength exercises like squats, step-ups, and presses, where are you starting from?</label>
+        <select id="ob-strength-starting-point">
+          <option value="">-- Select --</option>
+          <option value="full">Already training at full load, minimal deconditioning</option>
+          <option value="rebuilding">Rebuilding after time off, but have a base</option>
+          <option value="new">New to structured strength training, or significant time off</option>
+        </select>
+
         <label for="ob-pain-points">Pain points or injury history (optional)</label>
         <textarea id="ob-pain-points" placeholder="Free text (noted so sessions can be adapted)"></textarea>
         <p class="field-note">Flagged for your own awareness only, not a diagnosis. Discuss anything significant with a physio or doctor.</p>
@@ -1305,6 +1313,20 @@
   </div>
 </div>
 
+<div id="advanced-content-disclaimer-overlay" class="onboarding-overlay hidden" style="z-index: 200;">
+  <div class="onboarding-card">
+    <div id="advanced-disclaimer-form" style="padding: 20px;">
+      <h2>Before this unlocks</h2>
+      <p>These exercises are more advanced: added load, explosive/plyometric movement, or change-of-direction demand. They're intended for athletes already training at full capacity, not for return-to-play conditioning.</p>
+      <p>Reviewed by Bert Soogen, but you're responsible for judging your own readiness on any given day.</p>
+      <div class="onboarding-nav">
+        <button type="button" class="btn secondary" id="advanced-disclaimer-decline">Not yet</button>
+        <button type="button" class="btn" id="advanced-disclaimer-accept">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="workout-player-overlay" class="onboarding-overlay hidden">
   <div class="onboarding-card">
     <div class="workout-player-header">
@@ -1352,6 +1374,19 @@
           <svg viewBox="0 0 24 24" class="profile-photo-placeholder-icon"><path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.5c-3.9 0-9.8 2-9.8 5.9v1.4h19.6v-1.4c0-3.9-5.9-5.9-9.8-5.9z"/></svg>
         </div>
         <p class="dashboard-header-text">Welcome back</p>
+      </div>
+
+      <div class="card gate-warning hidden" id="strength-banner-card">
+        <p id="strength-banner-text">New: tell us your strength starting point to fine-tune your program.</p>
+        <div id="strength-banner-options" class="hidden">
+          <button type="button" class="btn secondary milestone-quick-btn strength-banner-option-btn" data-value="full" style="width: 100%; margin-bottom: 8px;">Already training at full load, minimal deconditioning</button>
+          <button type="button" class="btn secondary milestone-quick-btn strength-banner-option-btn" data-value="rebuilding" style="width: 100%; margin-bottom: 8px;">Rebuilding after time off, but have a base</button>
+          <button type="button" class="btn secondary milestone-quick-btn strength-banner-option-btn" data-value="new" style="width: 100%;">New to structured strength training, or significant time off</button>
+        </div>
+        <div class="gate-warning-actions" id="strength-banner-actions">
+          <button type="button" class="btn secondary" id="strength-banner-dismiss">Not now</button>
+          <button type="button" class="btn" id="strength-banner-answer">Tell us</button>
+        </div>
       </div>
 
       <div class="card">
@@ -1655,6 +1690,15 @@
           <option value="regular">Regularly training</option>
         </select>
 
+        <label for="settings-strength-starting-point">For strength exercises like squats, step-ups, and presses, where are you starting from?</label>
+        <select id="settings-strength-starting-point">
+          <option value="">-- Select --</option>
+          <option value="full">Already training at full load, minimal deconditioning</option>
+          <option value="rebuilding">Rebuilding after time off, but have a base</option>
+          <option value="new">New to structured strength training, or significant time off</option>
+        </select>
+        <p class="field-note">Changing this and saving re-sets the tier for every strength/power exercise family to match your new answer, including families you've already progressed through logged sessions. Only change it if your actual starting point has changed.</p>
+
         <label for="settings-pain-points">Pain points or injury history (optional)</label>
         <textarea id="settings-pain-points" placeholder="Free text (noted so sessions can be adapted)"></textarea>
 
@@ -1710,7 +1754,7 @@
         </div>
       </div>
 
-      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v2.7 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
+      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v3.0 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
       <p class="field-note hidden" style="text-align: center; margin-top: 4px;" id="settings-visit-counter-note">
         Anonymous web visit counter (web only, never in the app):
         <img id="settings-visit-counter-img" alt="web visit count" style="vertical-align: middle;">
@@ -1766,7 +1810,8 @@
     onboardingComplete: STORAGE_PREFIX + "onboarding_complete",
     readinessLogs: STORAGE_PREFIX + "readiness_logs",
     benchmarks: STORAGE_PREFIX + "benchmarks",
-    customExercises: STORAGE_PREFIX + "custom_exercises"
+    customExercises: STORAGE_PREFIX + "custom_exercises",
+    strengthBannerDismissed: STORAGE_PREFIX + "strength_banner_dismissed"
   };
 
   // ---------------------------------------------------------------------
@@ -1838,6 +1883,7 @@
     if (name === "dashboard" && typeof renderDashboardMilestoneList === "function") renderDashboardMilestoneList();
     if (name === "dashboard" && typeof renderProfilePhotoUi === "function") renderProfilePhotoUi();
     if (name === "dashboard" && typeof renderReadinessCard === "function") renderReadinessCard();
+    if (name === "dashboard" && typeof renderStrengthBanner === "function") renderStrengthBanner();
     if (name === "settings" && typeof initSettingsTab === "function") initSettingsTab();
   }
 
@@ -1962,6 +2008,7 @@
       never: "Never played competitively"
     },
     fitnessBaseline: { sedentary: "Sedentary", lightly_active: "Lightly active", regular: "Regularly training" },
+    strengthStartingPoint: { full: "Already training at full load", rebuilding: "Rebuilding after time off", new: "New to structured strength training" },
     target: { general_fitness: "General fitness", return_club: "Return to club training", return_competition: "Return to competition" },
     activityPlain: { low: "Low", moderate: "Moderate", high: "High" }
   };
@@ -2004,7 +2051,7 @@
   var ONBOARDING_REQUIRED_BY_STEP = {
     1: ["ob-amp-level", "ob-amp-side", "ob-prosthetic-use"],
     2: ["ob-activity-mode", "ob-crutch-exp", "ob-last-competitive"],
-    3: ["ob-fitness-baseline"],
+    3: ["ob-fitness-baseline", "ob-strength-starting-point"],
     4: ["ob-target", "ob-days-per-week", "ob-session-length"],
     5: []
   };
@@ -2033,11 +2080,19 @@
     return valid;
   }
 
+  // Set true only via the disclaimer being accepted mid-onboarding (see
+  // the ob-next handler). Kept as a plain variable, not written to the
+  // profile, until finishOnboarding() does the one real save — the
+  // profile doesn't exist yet to safely mutate before that point.
+  var onboardingAdvancedAccepted = false;
+
   function collectOnboardingData() {
     var mode = el("ob-activity-mode").value;
     var activityLevel = mode === "unsure"
       ? { mode: "plain", value: el("ob-activity-plain").value }
       : { mode: "klevel", value: mode };
+    var strengthStartingPoint = el("ob-strength-starting-point").value;
+    var advancedAccepted = strengthStartingPoint === "full" && onboardingAdvancedAccepted;
     return {
       amputationLevel: el("ob-amp-level").value,
       amputationSide: el("ob-amp-side").value,
@@ -2047,6 +2102,9 @@
       crutchExperience: el("ob-crutch-exp").value,
       timeSinceLastCompetitivePlay: el("ob-last-competitive").value,
       fitnessBaseline: el("ob-fitness-baseline").value,
+      strengthStartingPoint: strengthStartingPoint,
+      advancedContentAccepted: advancedAccepted,
+      advancedContentAcceptedAt: advancedAccepted ? new Date().toISOString() : null,
       painPoints: el("ob-pain-points").value.trim(),
       target: el("ob-target").value,
       trainingDaysPerWeek: el("ob-days-per-week").value !== "" ? parseInt(el("ob-days-per-week").value, 10) : null,
@@ -2067,6 +2125,7 @@
       ["Crutch experience", ONBOARDING_LABELS.crutchExperience[d.crutchExperience] || "Not set"],
       ["Last competitive play", ONBOARDING_LABELS.timeSinceLastCompetitivePlay[d.timeSinceLastCompetitivePlay] || "Not set"],
       ["Fitness baseline", ONBOARDING_LABELS.fitnessBaseline[d.fitnessBaseline] || "Not set"],
+      ["Strength starting point", ONBOARDING_LABELS.strengthStartingPoint[d.strengthStartingPoint] || "Not set"],
       ["Pain points / injury notes", d.painPoints || "Not set"],
       ["Target", ONBOARDING_LABELS.target[d.target] || "Not set"],
       ["Training days/week", d.trainingDaysPerWeek != null ? d.trainingDaysPerWeek : "Not set"],
@@ -2085,6 +2144,7 @@
     saveProfile(data);
     try { localStorage.setItem(STORAGE_KEYS.onboardingComplete, "true"); } catch (e) { /* storage unavailable */ }
     ensureProgramState();
+    applyStrengthTierPlacement(data.strengthStartingPoint);
     initLogTab();
     ensureSkillsData();
     renderDashboardMilestoneList();
@@ -2105,13 +2165,26 @@
     el("ob-activity-plain-wrap").classList.toggle("hidden", this.value !== "unsure");
   });
 
-  el("ob-next").addEventListener("click", function () {
-    if (!validateOnboardingStep(onboardingStep)) return;
+  function advanceOnboardingPastValidatedStep() {
     if (onboardingStep === ONBOARDING_TOTAL_STEPS) {
       finishOnboarding();
     } else {
       showOnboardingStep(onboardingStep + 1);
     }
+  }
+
+  el("ob-next").addEventListener("click", function () {
+    if (!validateOnboardingStep(onboardingStep)) return;
+    if (onboardingStep === 3 && el("ob-strength-starting-point").value === "full" && !onboardingAdvancedAccepted) {
+      showAdvancedDisclaimer(function () {
+        onboardingAdvancedAccepted = true;
+        advanceOnboardingPastValidatedStep();
+      }, function () {
+        // Declined — stay on this step so they can reconsider the answer.
+      });
+      return;
+    }
+    advanceOnboardingPastValidatedStep();
   });
 
   el("ob-back").addEventListener("click", function () {
@@ -2147,13 +2220,16 @@
             { id: "sls-squat-t1", name: "Assisted box squat", prescription: "2–3 sets x 10–15 reps, sit to a raised surface, full hand support on rail/counter", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 1, targetSetsMin: 2, targetRepsMin: 10 },
             { id: "p1-sls-squat", name: "Bodyweight squat (assisted)", prescription: "2–3 sets x 10–15 reps, use support as needed for balance", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 2, targetSetsMin: 2, targetRepsMin: 10 },
             { id: "sls-squat-t3", name: "Loaded single-leg-biased squat", prescription: "3 sets x 8–12 reps, add external load (dumbbell/vest) as tolerated, minimal hand support", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+            { id: "sls-squat-t4", name: "Explosive/jump squat", prescription: "3 sets x 6–8 reps, jump squat with controlled landing, single-leg-biased", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 4, targetSetsMin: 3, targetRepsMin: 6, requiresAdvancedUnlock: true },
             { id: "p1-sls-stepup", name: "Step-ups", prescription: "2–3 sets x 8–12 reps (sound leg loaded)", icon: "🪜", pose: "stepUp" },
             { id: "sls-bridge-t1", name: "Glute bridge (feet elevated close, short lever)", prescription: "2–3 sets x 12–15 reps", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 1, targetSetsMin: 2, targetRepsMin: 12 },
             { id: "p1-sls-bridge", name: "Glute bridges", prescription: "2–3 sets x 12–15 reps", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 2, targetSetsMin: 2, targetRepsMin: 12 },
             { id: "sls-bridge-t3", name: "Single-leg glute bridge", prescription: "3 sets x 8–12 reps, sound leg only, opposite leg lifted", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+            { id: "sls-bridge-t4", name: "Single-leg hip thrust (loaded)", prescription: "3 sets x 8–10 reps, elevated shoulders, external load", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 4, targetSetsMin: 3, targetRepsMin: 8, requiresAdvancedUnlock: true },
             { id: "sls-calf-t1", name: "Calf raise (supported, partial range)", prescription: "2–3 sets x 15–20 reps, hands on rail, comfortable range only", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 1, targetSetsMin: 2, targetRepsMin: 15 },
             { id: "p1-sls-calf", name: "Calf raises (sound leg)", prescription: "2–3 sets x 15–20 reps", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 2, targetSetsMin: 2, targetRepsMin: 15 },
-            { id: "sls-calf-t3", name: "Single-leg calf raise (loaded)", prescription: "3 sets x 10–15 reps, add load as tolerated, full range", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 3, targetSetsMin: 3, targetRepsMin: 10 }
+            { id: "sls-calf-t3", name: "Single-leg calf raise (loaded)", prescription: "3 sets x 10–15 reps, add load as tolerated, full range", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 3, targetSetsMin: 3, targetRepsMin: 10 },
+            { id: "sls-calf-t4", name: "Single-leg pogo/rebound hop", prescription: "3 sets x 8–10 reps, quick ground-contact rebounding", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 4, targetSetsMin: 3, targetRepsMin: 8, requiresAdvancedUnlock: true }
           ],
           upperBody: [
             { id: "p1-ub-pushup", name: "Seated/incline push-ups", prescription: "2–3 sets x 12–20 reps, light-to-moderate effort (endurance focus)", icon: "💪", pose: "pushUp" },
@@ -2196,12 +2272,15 @@
             { id: "sls-rdl-t1", name: "Assisted hip hinge (two-hand support)", prescription: "2–3 sets x 8–10 reps, both hands on support, focus on hinge pattern", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
             { id: "p2-sls-rdl", name: "Single-leg RDL (support as needed)", prescription: "3 sets x 6–10 reps", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 2, targetSetsMin: 3, targetRepsMin: 6 },
             { id: "sls-rdl-t3", name: "Single-leg RDL (loaded, unsupported)", prescription: "3 sets x 6–8 reps, light load, no hand support", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 3, targetSetsMin: 3, targetRepsMin: 6 },
+            { id: "sls-rdl-t4", name: "Heavy eccentric-focus RDL", prescription: "3 sets x 5–6 reps, slow 3–4s lowering phase, heavier load", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 4, targetSetsMin: 3, targetRepsMin: 5, requiresAdvancedUnlock: true },
             { id: "sls-lunge-t1", name: "Lateral step + return (supported)", prescription: "2–3 sets x 8–10 reps, hand support, small range", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
             { id: "p2-sls-lunge", name: "Lateral lunges (sound leg)", prescription: "3 sets x 8–10 reps", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 2, targetSetsMin: 3, targetRepsMin: 8 },
             { id: "sls-lunge-t3", name: "Lateral lunge (loaded)", prescription: "3 sets x 8–10 reps, add load, increase range", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+            { id: "sls-lunge-t4", name: "Lateral bound (skater hop)", prescription: "3 sets x 6–8 reps, controlled stick-the-landing each rep", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 4, targetSetsMin: 3, targetRepsMin: 6, requiresAdvancedUnlock: true },
             { id: "sls-boxjump-t1", name: "Step-down practice (controlled landing only)", prescription: "2–3 sets x 6–8 reps, low step, no jump (landing mechanics only)", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 1, targetSetsMin: 2, targetRepsMin: 6 },
             { id: "p2-sls-boxjump", name: "Box jumps (low height, controlled landing)", prescription: "3 sets x 4–6 reps, focus on soft landing mechanics", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 2, targetSetsMin: 3, targetRepsMin: 4 },
-            { id: "sls-boxjump-t3", name: "Box jump (increased height, single-leg landing focus)", prescription: "3 sets x 4–6 reps, progress height only after landing mechanics confirmed solid", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 3, targetSetsMin: 3, targetRepsMin: 4 }
+            { id: "sls-boxjump-t3", name: "Box jump (increased height, single-leg landing focus)", prescription: "3 sets x 4–6 reps, progress height only after landing mechanics confirmed solid", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 3, targetSetsMin: 3, targetRepsMin: 4 },
+            { id: "sls-boxjump-t4", name: "Increased height, single-leg takeoff/landing", prescription: "3 sets x 4–5 reps", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 4, targetSetsMin: 3, targetRepsMin: 4, requiresAdvancedUnlock: true }
           ],
           upperBody: [
             { id: "p2-ub-press", name: "Presses/rows/pulls (increased load)", prescription: "3–4 sets x 8–12 reps", icon: "🏋️‍♀️", pose: "press" },
@@ -2237,9 +2316,13 @@
             { id: "sls-hop-t1", name: "Small hop-in-place (soft landing)", prescription: "2–3 sets x 4–6 reps, minimal height, focus on stick-the-landing", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 1, targetSetsMin: 2, targetRepsMin: 4 },
             { id: "p3-sls-hop", name: "Single-leg hops/bounds", prescription: "3–4 sets x 4–6 reps, progress distance/height gradually", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 2, targetSetsMin: 3, targetRepsMin: 4 },
             { id: "sls-hop-t3", name: "Single-leg bounds (distance/height progression)", prescription: "3–4 sets x 4–6 reps, progressive distance or height", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 3, targetSetsMin: 3, targetRepsMin: 4 },
+            { id: "sls-hop-t4", name: "Hop-to-stick with change of direction", prescription: "3–4 sets x 4–6 reps, multi-directional", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 4, targetSetsMin: 3, targetRepsMin: 4, requiresAdvancedUnlock: true },
             { id: "sls-decel-t1", name: "Static landing hold practice", prescription: "2–3 sets x 4–6 reps, step down and hold landing position 2–3s", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 1, targetSetsMin: 2, targetRepsMin: 4 },
             { id: "p3-sls-decel", name: "Deceleration/landing mechanics", prescription: "3–4 sets x 4–6 reps, focus on control not max output", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 2, targetSetsMin: 3, targetRepsMin: 4 },
-            { id: "sls-decel-t3", name: "Deceleration from approach/light sprint", prescription: "3–4 sets x 4–6 reps, add short approach run before landing", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 3, targetSetsMin: 3, targetRepsMin: 4 }
+            { id: "sls-decel-t3", name: "Deceleration from approach/light sprint", prescription: "3–4 sets x 4–6 reps, add short approach run before landing", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 3, targetSetsMin: 3, targetRepsMin: 4 },
+            { id: "sls-decel-t4", name: "Decel from sprint approach + cut", prescription: "3–4 sets x 4–6 reps, add directional change on landing", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 4, targetSetsMin: 3, targetRepsMin: 4, requiresAdvancedUnlock: true },
+            { id: "sls-broadjump-adv", name: "Broad jump / horizontal bound", prescription: "3 sets x 4–6 reps, standing broad jump on sound leg, controlled landing, progressive distance", icon: "📏", pose: "broadJump", requiresAdvancedUnlock: true },
+            { id: "cond-agility-adv", name: "Reactive agility (cone touches / cutting)", prescription: "3–4 sets x 20–30s, sound-leg cone-touch reactive pattern or single-leg cutting drill", icon: "🚧", pose: "reactiveAgility", requiresAdvancedUnlock: true }
           ],
           upperBody: [
             { id: "p3-ub-max", name: "Maximal strength block", prescription: "3–5 sets x 3–6 reps, higher load", icon: "🏋️‍♂️", pose: "press" },
@@ -2257,6 +2340,14 @@
               pose: "sprintCrutches",
               isEstimate: true,
               estimateNote: CARDIO_ESTIMATE_NOTE
+            },
+            {
+              id: "cond-sprint-adv",
+              name: "Sprint mechanics / acceleration",
+              prescription: "4–6 reps x 10–20m, upright sprint acceleration from standing start, full recovery between reps",
+              icon: "🏃‍♂️",
+              pose: "sprintMechanics",
+              requiresAdvancedUnlock: true
             }
           ],
           mobility: [
@@ -2433,7 +2524,15 @@
       legL: [[48, 52], [40, 64], [44, 88]], legR: [[48, 52], [62, 58], [74, 50]],
       extras: ['<line x1="22" y1="54" x2="14" y2="88" stroke="var(--accent-dim)" stroke-width="3"/>'],
       ground: [10, 88, 85, 88]
-    }
+    },
+    // These three are new advanced-content-only families (see
+    // requiresAdvancedUnlock). Joint-coordinate data is unused now
+    // (renderPoseSvg just checks existence and loads a static image at
+    // exercise-images/<poseId>.png) — kept as empty placeholders for
+    // structural consistency with the rest of this table.
+    broadJump: {},
+    sprintMechanics: {},
+    reactiveAgility: {}
   };
 
   function renderPoseSvg(poseId) {
@@ -2524,6 +2623,7 @@
   // always shown as-is.
   function filterToPreferredTier(exercises) {
     return exercises.filter(function (ex) {
+      if (ex.requiresAdvancedUnlock && !qualifiesForAdvancedContent()) return false;
       if (!ex.progressionGroup) return true;
       return ex.tier === getPreferredTier(ex.progressionGroup);
     });
@@ -2969,6 +3069,153 @@
   }
 
   // ---------------------------------------------------------------------
+  // Strength starting-point calibration — lets a profile that's already
+  // training at full load start above the universal Tier 2 default,
+  // without disturbing anyone who has already earned/lost tiers through
+  // real logged sessions. Only ever WRITES tiers at the moment a starting
+  // point is first chosen or actively changed; never runs silently.
+  // ---------------------------------------------------------------------
+  var ALL_TIERED_GROUPS = [
+    "squat", "gluteBridge", "calfRaise", "row", "deadBug", "sidePlank",
+    "antiRotation", "singleLegRDL", "lateralLunge", "boxJump",
+    "loadedCarry", "rotationalCore", "singleLegHop", "decelLanding"
+  ];
+  var STRENGTH_STARTING_TIER = { full: 3, rebuilding: 2, new: 1 };
+
+  // Families with a Tier 4 (advanced, "full" self-report + disclaimer
+  // only). Dead bug / side plank / anti-rotation stay capped at Tier 3
+  // (isometric/hold work); loaded carry, rotational core, and row also
+  // have no Tier 4 defined.
+  var TIER4_ELIGIBLE_GROUPS = ["squat", "gluteBridge", "calfRaise", "singleLegRDL", "lateralLunge", "boxJump", "singleLegHop", "decelLanding"];
+
+  function applyStrengthTierPlacement(startingPoint) {
+    var tier = STRENGTH_STARTING_TIER[startingPoint];
+    if (!tier) return;
+    ALL_TIERED_GROUPS.forEach(function (group) { setPreferredTier(group, tier); });
+  }
+
+  function qualifiesForAdvancedContent(profile) {
+    profile = profile || getProfile();
+    return !!profile && profile.strengthStartingPoint === "full" && profile.advancedContentAccepted === true;
+  }
+
+  // Shows the disclaimer overlay (stacks over onboarding or the main app
+  // alike, see its z-index) and only proceeds down onAccept once the
+  // athlete has actively agreed. Declining never saves "full" — the
+  // caller is expected to leave the prior selection in place instead.
+  // Pure UI primitive — shows/hides the overlay and reports the choice.
+  // Deliberately has no side effects of its own (no profile save), since
+  // it's used both mid-onboarding (before any profile exists to mutate)
+  // and post-onboarding (Settings, Dashboard banner) — each caller knows
+  // how to persist the outcome correctly for its own context.
+  function showAdvancedDisclaimer(onAccept, onDecline) {
+    var overlay = el("advanced-content-disclaimer-overlay");
+    var acceptBtn = el("advanced-disclaimer-accept");
+    var declineBtn = el("advanced-disclaimer-decline");
+    overlay.classList.remove("hidden");
+
+    function cleanup() {
+      overlay.classList.add("hidden");
+      acceptBtn.removeEventListener("click", acceptHandler);
+      declineBtn.removeEventListener("click", declineHandler);
+    }
+    function acceptHandler() {
+      cleanup();
+      if (onAccept) onAccept();
+    }
+    function declineHandler() {
+      cleanup();
+      if (onDecline) onDecline();
+    }
+    acceptBtn.addEventListener("click", acceptHandler);
+    declineBtn.addEventListener("click", declineHandler);
+  }
+
+  // Migration for the already-active app: default silently to "rebuilding"
+  // (matches today's universal Tier 2 start exactly) without ever touching
+  // preferredTierByGroup, since an existing user's actual tiers may have
+  // already diverged from Tier 2 through real earned suggest-up/down
+  // history. Flags the profile so the Dashboard banner knows to offer a
+  // real answer later; that flag clears the moment the user actively
+  // engages with it (whether they change the value or just dismiss it).
+  function migrateStrengthStartingPointIfNeeded() {
+    var profile = getProfile();
+    if (!profile || profile.strengthStartingPoint) return;
+    profile.strengthStartingPoint = "rebuilding";
+    profile.strengthStartingPointMigratedDefault = true;
+    saveProfile(profile);
+  }
+
+  // Dashboard banner — only ever shown for profiles migrated onto the
+  // silent "rebuilding" default, never for profiles that answered this
+  // during onboarding. Disappears the moment the user actively engages
+  // (answers or dismisses); reachable again afterward from Settings.
+  function renderStrengthBanner() {
+    var card = el("strength-banner-card");
+    var profile = getProfile();
+    var dismissed = false;
+    try { dismissed = localStorage.getItem(STORAGE_KEYS.strengthBannerDismissed) === "true"; } catch (e) { /* storage unavailable */ }
+    var shouldShow = !!profile && profile.strengthStartingPointMigratedDefault === true && !dismissed;
+    card.classList.toggle("hidden", !shouldShow);
+    if (shouldShow) {
+      el("strength-banner-options").classList.add("hidden");
+      el("strength-banner-actions").classList.remove("hidden");
+    }
+  }
+
+  el("strength-banner-dismiss").addEventListener("click", function () {
+    try { localStorage.setItem(STORAGE_KEYS.strengthBannerDismissed, "true"); } catch (e) { /* storage unavailable */ }
+    renderStrengthBanner();
+  });
+
+  el("strength-banner-answer").addEventListener("click", function () {
+    el("strength-banner-actions").classList.add("hidden");
+    el("strength-banner-options").classList.remove("hidden");
+  });
+
+  el("strength-banner-options").addEventListener("click", function (e) {
+    var btn = e.target.closest(".strength-banner-option-btn");
+    if (!btn) return;
+    var value = btn.getAttribute("data-value");
+    commitStrengthStartingPoint(value, function (committed) {
+      if (!committed) return; // "full" disclaimer declined — leave the banner up to reconsider
+      var p = getProfile();
+      delete p.strengthStartingPointMigratedDefault;
+      saveProfile(p);
+      try { localStorage.setItem(STORAGE_KEYS.strengthBannerDismissed, "true"); } catch (e) { /* storage unavailable */ }
+      renderStrengthBanner();
+      if (typeof populateSettingsProfileForm === "function") populateSettingsProfileForm();
+    });
+  });
+
+  // Central entry point for setting strengthStartingPoint from a context
+  // where a profile already exists (Settings, the Dashboard banner) —
+  // NOT onboarding, which handles its own pre-profile acceptance state
+  // (see onboardingAdvancedAccepted below). Handles the "full" disclaimer
+  // gate uniformly so no call site can bypass it.
+  function commitStrengthStartingPoint(value, onDone) {
+    if (value === "full" && !qualifiesForAdvancedContent()) {
+      showAdvancedDisclaimer(function () {
+        var p = getProfile();
+        p.strengthStartingPoint = "full";
+        p.advancedContentAccepted = true;
+        p.advancedContentAcceptedAt = new Date().toISOString();
+        saveProfile(p);
+        applyStrengthTierPlacement("full");
+        if (onDone) onDone(true);
+      }, function () {
+        if (onDone) onDone(false);
+      });
+      return;
+    }
+    var p2 = getProfile();
+    p2.strengthStartingPoint = value;
+    saveProfile(p2);
+    applyStrengthTierPlacement(value);
+    if (onDone) onDone(true);
+  }
+
+  // ---------------------------------------------------------------------
   // Tier suggestion engine (Task 1) — non-destructive prompts only; never
   // auto-swaps the prescribed exercise without explicit user acceptance.
   // ---------------------------------------------------------------------
@@ -3039,7 +3286,16 @@
       }
     }
 
-    if (def.tier < 3 && occurrences.length >= requiredStreak) {
+    // Tier 3 is the ceiling for everyone by default. Tier 4 only opens up
+    // for profiles that self-reported "full" and accepted the advanced-
+    // content disclaimer, and only for the families that have a Tier 4
+    // defined at all (see TIER4_ELIGIBLE_GROUPS).
+    var tierCeiling = 3;
+    if (def.tier === 3 && TIER4_ELIGIBLE_GROUPS.indexOf(def.progressionGroup) !== -1 && qualifiesForAdvancedContent()) {
+      tierCeiling = 4;
+    }
+
+    if (def.tier < tierCeiling && occurrences.length >= requiredStreak) {
       var streak = occurrences.slice(0, requiredStreak);
       var allClean = streak.every(function (occ) {
         return occ.rpe != null && occ.rpe <= 4 && meetsPrescription(occ, def) === true;
@@ -4196,6 +4452,7 @@
     el("settings-crutch-exp").value = profile.crutchExperience || "";
     el("settings-last-competitive").value = profile.timeSinceLastCompetitivePlay || "";
     el("settings-fitness-baseline").value = profile.fitnessBaseline || "";
+    el("settings-strength-starting-point").value = profile.strengthStartingPoint || "";
     el("settings-pain-points").value = profile.painPoints || "";
     el("settings-target").value = profile.target || "";
     el("settings-days-per-week").value = profile.trainingDaysPerWeek != null ? profile.trainingDaysPerWeek : "";
@@ -4209,6 +4466,8 @@
 
   el("settings-profile-save-btn").addEventListener("click", function () {
     var existing = getProfile() || {};
+    var previousStrengthStartingPoint = existing.strengthStartingPoint;
+    var newStrengthStartingPoint = el("settings-strength-starting-point").value;
     var mode = el("settings-activity-mode").value;
     var activityLevel = mode === "unsure"
       ? { mode: "plain", value: el("settings-activity-plain").value }
@@ -4228,8 +4487,29 @@
       sessionLengthMinutes: el("settings-session-length").value !== "" ? parseInt(el("settings-session-length").value, 10) : null,
       updatedAt: new Date().toISOString()
     });
+    // strengthStartingPoint has real side effects (tier re-placement, and
+    // a disclaimer gate for "full"), so it's deliberately left out of this
+    // generic merge and handled separately below via
+    // commitStrengthStartingPoint, which owns that field exclusively.
+    updated.strengthStartingPoint = previousStrengthStartingPoint;
     saveProfile(updated);
-    el("settings-profile-saved-note").classList.remove("hidden");
+
+    if (newStrengthStartingPoint && newStrengthStartingPoint !== previousStrengthStartingPoint) {
+      commitStrengthStartingPoint(newStrengthStartingPoint, function (committed) {
+        if (committed) {
+          var p = getProfile();
+          delete p.strengthStartingPointMigratedDefault;
+          saveProfile(p);
+          try { localStorage.setItem(STORAGE_KEYS.strengthBannerDismissed, "true"); } catch (e) { /* storage unavailable */ }
+          if (typeof renderStrengthBanner === "function") renderStrengthBanner();
+        } else {
+          el("settings-strength-starting-point").value = previousStrengthStartingPoint || "";
+        }
+        el("settings-profile-saved-note").classList.remove("hidden");
+      });
+    } else {
+      el("settings-profile-saved-note").classList.remove("hidden");
+    }
   });
 
   function renderProfilePhotoUi() {
@@ -4652,6 +4932,7 @@
   // edited from Settings. Only a full data reset clears this flag.
   if (onboardingAlreadyComplete) {
     ensureProgramState();
+    migrateStrengthStartingPointIfNeeded();
     initLogTab();
     ensureSkillsData();
     renderDashboardMilestoneList();
