@@ -454,7 +454,7 @@
     margin-top: 0;
   }
 
-  .log-this-btn {
+  .log-this-btn, .exercise-photo-btn, .exercise-photo-remove-btn {
     padding: 6px 12px;
     font-size: 0.78rem;
     flex-shrink: 0;
@@ -523,9 +523,8 @@
     margin-bottom: 10px;
   }
 
-  #wp-exercise-screen .exercise-video-link {
-    display: block;
-    text-align: center;
+  #wp-exercise-screen .exercise-card-actions {
+    justify-content: center;
     margin-bottom: 16px;
   }
 
@@ -1121,6 +1120,8 @@
 </head>
 <body>
 
+<input type="file" id="exercise-photo-input" accept="image/*" capture="environment" class="hidden">
+
 <div id="launch-splash-overlay" class="launch-splash">
   <div class="launch-splash-photo-wrap">
     <img src="app-assets/logo-badge.png" alt="" aria-hidden="true"/>
@@ -1449,6 +1450,8 @@
 
       <button type="button" class="btn" id="program-start-workout-btn" style="width: 100%; margin-bottom: 16px;">&#9654; Start Workout</button>
 
+      <p class="field-note hidden" id="program-session-info" style="text-align: center; margin: -8px 0 16px;"></p>
+
       <div id="program-exercise-groups"></div>
 
       <div class="card" id="custom-exercise-card">
@@ -1747,7 +1750,7 @@
         </div>
       </div>
 
-      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v3.2 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
+      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v3.3 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
       <p class="field-note hidden" style="text-align: center; margin-top: 4px;" id="settings-visit-counter-note">
         Anonymous web visit counter (web only, never in the app):
         <img id="settings-visit-counter-img" alt="web visit count" style="vertical-align: middle;">
@@ -1804,7 +1807,8 @@
     readinessLogs: STORAGE_PREFIX + "readiness_logs",
     benchmarks: STORAGE_PREFIX + "benchmarks",
     customExercises: STORAGE_PREFIX + "custom_exercises",
-    strengthBannerDismissed: STORAGE_PREFIX + "strength_banner_dismissed"
+    strengthBannerDismissed: STORAGE_PREFIX + "strength_banner_dismissed",
+    exercisePhotos: STORAGE_PREFIX + "exercise_photos"
   };
 
   // ---------------------------------------------------------------------
@@ -1979,6 +1983,95 @@
     try { localStorage.removeItem(STORAGE_KEYS.profilePhotoPath); } catch (e) { /* storage unavailable */ }
     if (!path || !isNativeApp()) return Promise.resolve();
     return Capacitor.Plugins.Filesystem.deleteFile({ path: path, directory: "DATA" }).catch(function () { /* already gone */ });
+  }
+
+  // ---------------------------------------------------------------------
+  // Per-exercise photos — lets an athlete swap in their own reference
+  // photo (of themselves, or from a coach) for any exercise, built-in or
+  // custom. Unlike the profile photo, this uses a plain <input type=file>
+  // + canvas downscale rather than the native Camera/Filesystem plugins,
+  // so it works identically in the browser/PWA build and the native app —
+  // most athletes are expected to use this in a browser, not the APK.
+  // Stored as downscaled JPEG data URLs directly in localStorage, keyed
+  // by exercise id, since there's no native filesystem to fall back to
+  // on the web build.
+  // ---------------------------------------------------------------------
+  var EXERCISE_PHOTO_MAX_DIM = 640;
+
+  function getExercisePhotos() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.exercisePhotos);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function getExercisePhoto(exerciseId) {
+    if (!exerciseId) return null;
+    return getExercisePhotos()[exerciseId] || null;
+  }
+
+  function saveExercisePhoto(exerciseId, dataUrl) {
+    var photos = getExercisePhotos();
+    photos[exerciseId] = dataUrl;
+    try { localStorage.setItem(STORAGE_KEYS.exercisePhotos, JSON.stringify(photos)); } catch (e) { /* storage unavailable, e.g. quota */ }
+  }
+
+  function removeExercisePhoto(exerciseId) {
+    var photos = getExercisePhotos();
+    delete photos[exerciseId];
+    try { localStorage.setItem(STORAGE_KEYS.exercisePhotos, JSON.stringify(photos)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function readAndResizeImageFile(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = function () {
+        var img = new Image();
+        img.onerror = reject;
+        img.onload = function () {
+          var scale = Math.min(1, EXERCISE_PHOTO_MAX_DIM / Math.max(img.width, img.height));
+          var w = Math.max(1, Math.round(img.width * scale));
+          var h = Math.max(1, Math.round(img.height * scale));
+          var canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL("image/jpeg", 0.72));
+        };
+        img.src = String(reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Shared by every view that renders an exercise's icon/illustration: a
+  // user-supplied photo (any exercise, built-in or custom) always wins
+  // over the built-in pose illustration.
+  function renderExerciseIcon(ex) {
+    var photo = ex ? getExercisePhoto(ex.id) : null;
+    if (photo) return '<img src="' + photo + '" class="exercise-illustration" alt="" aria-hidden="true"/>';
+    return renderPoseSvg(ex ? ex.pose : null);
+  }
+
+  var exercisePhotoTargetId = null;
+
+  function requestExercisePhotoCapture(exerciseId) {
+    exercisePhotoTargetId = exerciseId;
+    el("exercise-photo-input").click();
+  }
+
+  function refreshAllExerciseIconViews() {
+    var state = ensureProgramState();
+    var phase = getPhaseByNumber(state.currentPhase);
+    if (phase) {
+      renderExerciseGroups(phase);
+      renderLogExerciseChecklist(state.currentPhase);
+    }
+    renderCustomExerciseList();
+    if (typeof workoutPlayerState !== "undefined" && workoutPlayerState) renderWorkoutPlayerExercise();
   }
 
   // ---------------------------------------------------------------------
@@ -2622,6 +2715,81 @@
     });
   }
 
+  // ---------------------------------------------------------------------
+  // Session planning — splits the phase's exercises across the athlete's
+  // stated training days/week and trims to fit their stated session
+  // length, so someone training 15 min x 2/week doesn't see the exact
+  // same list as someone training 60 min x 3/week. Mobility and cardio
+  // stay in every session (low time cost, meant to be done frequently);
+  // the three higher-volume categories rotate round-robin across days so
+  // the week's full exercise set still gets covered over time. Which day
+  // of the rotation "today" is comes from how many sessions have already
+  // been logged for this phase, so it advances naturally with real use
+  // rather than needing separate day-tracking state.
+  // ---------------------------------------------------------------------
+  var SESSION_SPLIT_CATEGORIES = ["singleLegStrength", "upperBody", "core"];
+  var DEFAULT_TRAINING_DAYS_PER_WEEK = 3;
+
+  // Prescriptions are free text ("3 sets x 8-12 reps"), not structured
+  // data, so this is a deliberately simple fixed per-category estimate
+  // for trimming order rather than an attempt to parse exact set/rep
+  // counts — it only needs to be roughly right, not to the minute.
+  var CATEGORY_MINUTE_ESTIMATE = { singleLegStrength: 5, upperBody: 4, core: 3, mobility: 2 };
+  var CARDIO_DEFAULT_MINUTES = 15;
+
+  function estimateExerciseMinutes(ex, catKey) {
+    if (catKey === "cardio") {
+      var match = /(\d+)\s*[–-]\s*(\d+)\s*min/.exec(ex.prescription || "");
+      if (match) return (parseInt(match[1], 10) + parseInt(match[2], 10)) / 2;
+      return CARDIO_DEFAULT_MINUTES;
+    }
+    return CATEGORY_MINUTE_ESTIMATE[catKey] || 4;
+  }
+
+  // Trim order when a session runs over the stated time budget — first
+  // entry is dropped first. Mobility/cardio can be done outside the
+  // dedicated session; single-leg strength is the program's core rehab
+  // content, so it's protected longest.
+  var SESSION_TRIM_PRIORITY = ["mobility", "cardio", "upperBody", "core", "singleLegStrength"];
+
+  function buildSessionPlanForPhase(phase) {
+    var profile = getProfile();
+    var daysPerWeek = Math.max(1, Math.min(7, (profile && profile.trainingDaysPerWeek) || DEFAULT_TRAINING_DAYS_PER_WEEK));
+    var sessionMinutes = profile ? profile.sessionLengthMinutes : null;
+    var dayIndex = countSessionsForPhase(phase.number) % daysPerWeek;
+
+    var items = [];
+    CATEGORY_ORDER.forEach(function (catKey) {
+      var exercises = filterToPreferredTier(phase.categories[catKey] || []);
+      if (daysPerWeek > 1 && SESSION_SPLIT_CATEGORIES.indexOf(catKey) !== -1) {
+        exercises = exercises.filter(function (ex, i) { return i % daysPerWeek === dayIndex; });
+      }
+      exercises.forEach(function (ex) { items.push({ ex: ex, category: catKey }); });
+    });
+
+    var trimmed = false;
+    if (sessionMinutes) {
+      var total = items.reduce(function (sum, item) { return sum + estimateExerciseMinutes(item.ex, item.category); }, 0);
+      var priorityIdx = 0;
+      while (total > sessionMinutes && items.length > 1 && priorityIdx < SESSION_TRIM_PRIORITY.length) {
+        var catToTrim = SESSION_TRIM_PRIORITY[priorityIdx];
+        var lastIdx = -1;
+        for (var i = items.length - 1; i >= 0; i--) {
+          if (items[i].category === catToTrim) { lastIdx = i; break; }
+        }
+        if (lastIdx === -1) {
+          priorityIdx += 1;
+          continue;
+        }
+        total -= estimateExerciseMinutes(items[lastIdx].ex, items[lastIdx].category);
+        items.splice(lastIdx, 1);
+        trimmed = true;
+      }
+    }
+
+    return { items: items, dayIndex: dayIndex, daysPerWeek: daysPerWeek, sessionMinutes: sessionMinutes, trimmed: trimmed };
+  }
+
   // Soft gate per Section 4: warn, don't hard-block. Returns whether the
   // minimum session count from the prior phase has been met, but the caller
   // decides whether to allow unlocking regardless.
@@ -2790,8 +2958,27 @@
   }
 
   function renderExerciseGroups(phase) {
-    el("program-exercise-groups").innerHTML = CATEGORY_ORDER.map(function (catKey) {
-      var exercises = filterToPreferredTier(phase.categories[catKey] || []);
+    var plan = buildSessionPlanForPhase(phase);
+
+    var infoEl = el("program-session-info");
+    if (plan.daysPerWeek > 1 || plan.trimmed) {
+      var infoBits = ["Day " + (plan.dayIndex + 1) + " of " + plan.daysPerWeek + " this week's split"];
+      if (plan.trimmed) infoBits.push("trimmed to fit your " + plan.sessionMinutes + "-min sessions");
+      infoEl.textContent = infoBits.join(" · ") + ". Edit this anytime in Settings.";
+      infoEl.classList.remove("hidden");
+    } else {
+      infoEl.classList.add("hidden");
+    }
+
+    var byCategory = {};
+    plan.items.forEach(function (item) {
+      (byCategory[item.category] = byCategory[item.category] || []).push(item.ex);
+    });
+
+    el("program-exercise-groups").innerHTML = CATEGORY_ORDER.filter(function (catKey) {
+      return byCategory[catKey] && byCategory[catKey].length;
+    }).map(function (catKey) {
+      var exercises = byCategory[catKey];
       var cards = exercises.map(function (ex) {
         var estimateBits = ex.isEstimate
           ? '<span class="estimate-badge">Estimate</span><div class="estimate-note">' + escapeHtml(ex.estimateNote || "") + "</div>"
@@ -2806,8 +2993,12 @@
         } else if (isLikelyLoadable(ex)) {
           loadSuggestionHtml = '<div class="load-suggestion load-suggestion-muted">Log a load next time you do this one: you\'ll get a suggested progression here.</div>';
         }
+        var photoBtnLabel = getExercisePhoto(ex.id) ? "🖼️ Replace photo" : "📷 Add your photo";
+        var removePhotoBtn = getExercisePhoto(ex.id)
+          ? '<button type="button" class="btn secondary exercise-photo-remove-btn" data-ex-id="' + ex.id + '">Remove photo</button>'
+          : "";
         return '<div class="exercise-card' + (ex.isEstimate ? " estimate" : "") + '">' +
-          '<div class="exercise-icon" aria-hidden="true">' + renderPoseSvg(ex.pose) + "</div>" +
+          '<div class="exercise-icon" aria-hidden="true">' + renderExerciseIcon(ex) + "</div>" +
           '<div class="exercise-card-body">' +
             '<div class="exercise-name">' + escapeHtml(ex.name) + customBadge + estimateBits + "</div>" +
             '<div class="exercise-prescription">' + escapeHtml(ex.prescription) + "</div>" +
@@ -2815,6 +3006,8 @@
             '<div class="exercise-card-actions">' +
               '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
               '<button type="button" class="btn secondary log-this-btn" data-ex-id="' + ex.id + '" data-phase="' + phase.number + '">+ Log this</button>' +
+              '<button type="button" class="btn secondary exercise-photo-btn" data-ex-id="' + ex.id + '">' + photoBtnLabel + "</button>" +
+              removePhotoBtn +
             "</div>" +
           "</div>" +
         "</div>";
@@ -2849,7 +3042,7 @@
     container.innerHTML = '<h3 class="section-subheading">Your custom exercises</h3>' + list.map(function (ce) {
       return '<div class="log-exercise-row">' +
         '<div class="checkbox-label">' +
-          '<span class="log-ex-icon" aria-hidden="true">' + renderPoseSvg(ce.pose) + "</span>" +
+          '<span class="log-ex-icon" aria-hidden="true">' + renderExerciseIcon(ce) + "</span>" +
           "<span>" + escapeHtml(ce.name) + " (" + (phaseNames[ce.phaseNumber] || "") + " · " + escapeHtml(CATEGORY_LABELS[ce.category] || ce.category) + ")</span>" +
         "</div>" +
         '<div class="log-ex-prescription">' + escapeHtml(ce.prescription) + "</div>" +
@@ -2987,9 +3180,40 @@
   }
 
   el("program-exercise-groups").addEventListener("click", function (e) {
-    var btn = e.target.closest(".log-this-btn");
-    if (!btn) return;
-    logExerciseFromProgram(btn.getAttribute("data-ex-id"), Number(btn.getAttribute("data-phase")));
+    var logBtn = e.target.closest(".log-this-btn");
+    if (logBtn) {
+      logExerciseFromProgram(logBtn.getAttribute("data-ex-id"), Number(logBtn.getAttribute("data-phase")));
+      return;
+    }
+    handleExercisePhotoButtonClick(e);
+  });
+
+  // Shared by every exercise-photo button across views (Program cards,
+  // the workout player, custom exercise list) since they all render the
+  // same data-ex-id buttons but live in containers created/replaced at
+  // different times.
+  function handleExercisePhotoButtonClick(e) {
+    var addBtn = e.target.closest(".exercise-photo-btn");
+    if (addBtn) {
+      requestExercisePhotoCapture(addBtn.getAttribute("data-ex-id"));
+      return;
+    }
+    var removeBtn = e.target.closest(".exercise-photo-remove-btn");
+    if (removeBtn) {
+      removeExercisePhoto(removeBtn.getAttribute("data-ex-id"));
+      refreshAllExerciseIconViews();
+    }
+  }
+
+  el("exercise-photo-input").addEventListener("change", function (e) {
+    var file = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!file || !exercisePhotoTargetId) return;
+    var targetId = exercisePhotoTargetId;
+    readAndResizeImageFile(file).then(function (dataUrl) {
+      saveExercisePhoto(targetId, dataUrl);
+      refreshAllExerciseIconViews();
+    }).catch(function () { /* unreadable image file, ignore */ });
   });
 
   // ---------------------------------------------------------------------
@@ -3017,7 +3241,7 @@
     el("log-exercise-checklist").innerHTML = CATEGORY_ORDER.map(function (catKey) {
       var exercises = filterToPreferredTier(phase.categories[catKey] || []);
       var rows = exercises.map(function (ex) {
-        var iconHtml = renderPoseSvg(ex.pose) || (ex.icon || "🏃");
+        var iconHtml = renderExerciseIcon(ex) || (ex.icon || "🏃");
         var fieldsHtml = catKey === "cardio"
           ? '<div class="log-exercise-fields hidden"><p class="field-note">Use the session Duration and RPE fields above (no sets/reps/load needed for this one).</p></div>'
           : '<div class="log-exercise-fields hidden">' +
@@ -3748,7 +3972,7 @@
   function renderStrengthChart(exerciseId) {
     var container = el("progress-strength-chart");
     var def = exerciseId ? findExerciseDefById(exerciseId) : null;
-    el("progress-exercise-icon").innerHTML = def ? renderPoseSvg(def.pose) : "";
+    el("progress-exercise-icon").innerHTML = def ? renderExerciseIcon(def) : "";
     if (!exerciseId) {
       container.innerHTML = '<div class="placeholder-card">No exercises available.</div>';
       return;
@@ -4698,13 +4922,7 @@
   var workoutPlayerTimerInterval = null;
 
   function getFlattenedPreferredExercises(phase) {
-    var list = [];
-    CATEGORY_ORDER.forEach(function (catKey) {
-      filterToPreferredTier(phase.categories[catKey] || []).forEach(function (ex) {
-        list.push({ ex: ex, category: catKey });
-      });
-    });
-    return list;
+    return buildSessionPlanForPhase(phase).items;
   }
 
   function startWorkoutPlayer() {
@@ -4753,11 +4971,20 @@
       ? '<span class="estimate-badge">Estimate</span><div class="estimate-note">' + escapeHtml(ex.estimateNote || "") + "</div>"
       : "";
 
+    var wpPhotoBtnLabel = getExercisePhoto(ex.id) ? "🖼️ Replace photo" : "📷 Add your photo";
+    var wpRemovePhotoBtn = getExercisePhoto(ex.id)
+      ? '<button type="button" class="btn secondary exercise-photo-remove-btn" data-ex-id="' + ex.id + '">Remove photo</button>'
+      : "";
+
     el("wp-exercise-screen").innerHTML =
-      '<div class="wp-exercise-icon" aria-hidden="true">' + renderPoseSvg(ex.pose) + "</div>" +
+      '<div class="wp-exercise-icon" aria-hidden="true">' + renderExerciseIcon(ex) + "</div>" +
       '<h2 class="wp-exercise-name">' + escapeHtml(ex.name) + estimateBits + "</h2>" +
       '<div class="wp-exercise-prescription">' + escapeHtml(ex.prescription) + "</div>" +
-      '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
+      '<div class="exercise-card-actions">' +
+        '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
+        '<button type="button" class="btn secondary exercise-photo-btn" data-ex-id="' + ex.id + '">' + wpPhotoBtnLabel + "</button>" +
+        wpRemovePhotoBtn +
+      "</div>" +
       '<div class="wp-fields">' +
         '<input type="number" id="wp-sets" placeholder="Sets" min="0" step="1">' +
         '<input type="number" id="wp-reps" placeholder="Reps" min="0" step="1">' +
@@ -4861,6 +5088,7 @@
   el("wp-next-btn").addEventListener("click", function () { workoutPlayerAdvance(false); });
   el("wp-skip-btn").addEventListener("click", function () { workoutPlayerAdvance(true); });
   el("wp-back-btn").addEventListener("click", workoutPlayerBack);
+  el("wp-exercise-screen").addEventListener("click", handleExercisePhotoButtonClick);
 
   el("wp-close-btn").addEventListener("click", function () {
     var hasProgress = workoutPlayerState && workoutPlayerState.entries.some(function (e) { return e !== null; });
