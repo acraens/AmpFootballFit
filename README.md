@@ -36,7 +36,9 @@ The entire app is one self-contained file: **`ampfootballfit.html`** (also publi
 
 All data (sessions, benchmarks, readiness logs, milestones, profile) stays in local storage on the device. There is no server and nothing leaves the device except through the explicit Share/export buttons.
 
-One disclosed exception: the web/PWA version loads a small anonymous visit-counter badge ([hits.sh](https://hits.sh/)) so we can gauge reach, visible (not hidden) in the Settings tab next to the badge itself. It never runs in the installed Android app.
+Two disclosed exceptions:
+- The web/PWA version loads a small anonymous visit-counter badge ([hits.sh](https://hits.sh/)) so we can gauge reach, visible (not hidden) in the Settings tab next to the badge itself. It never runs in the installed Android app.
+- The installed Android app makes one read-only request to GitHub's public release API on launch (cached for 24h) to check whether a newer version is available, since the APK isn't distributed through a store with automatic updates. If so, a dismissible banner on the Dashboard links to the release. No data is sent, only a version number is read back. Never runs in the browser/PWA version, which already always serves the latest build.
 
 ## Contributing
 

@@ -176,6 +176,7 @@
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
+    text-decoration: none;
   }
 
   .btn.secondary {
@@ -389,7 +390,7 @@
     gap: 10px;
   }
 
-  .gate-warning-actions .btn { flex: 1; }
+  .gate-warning-actions .btn { flex: 1; text-align: center; }
 
   .exercise-group {
     margin-bottom: 18px;
@@ -1370,6 +1371,14 @@
         <p class="dashboard-header-text">Welcome back</p>
       </div>
 
+      <div class="card gate-warning hidden" id="update-banner-card">
+        <p id="update-banner-text"></p>
+        <div class="gate-warning-actions">
+          <button type="button" class="btn secondary" id="update-banner-dismiss">Not now</button>
+          <a class="btn" id="update-banner-link" target="_blank" rel="noopener noreferrer">View update</a>
+        </div>
+      </div>
+
       <div class="card gate-warning hidden" id="strength-banner-card">
         <p id="strength-banner-text">New: tell us your strength starting point to fine-tune your program.</p>
         <div id="strength-banner-options" class="hidden">
@@ -1750,7 +1759,7 @@
         </div>
       </div>
 
-      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v3.3 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
+      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v3.4 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
       <p class="field-note hidden" style="text-align: center; margin-top: 4px;" id="settings-visit-counter-note">
         Anonymous web visit counter (web only, never in the app):
         <img id="settings-visit-counter-img" alt="web visit count" style="vertical-align: middle;">
@@ -1808,8 +1817,15 @@
     benchmarks: STORAGE_PREFIX + "benchmarks",
     customExercises: STORAGE_PREFIX + "custom_exercises",
     strengthBannerDismissed: STORAGE_PREFIX + "strength_banner_dismissed",
-    exercisePhotos: STORAGE_PREFIX + "exercise_photos"
+    exercisePhotos: STORAGE_PREFIX + "exercise_photos",
+    updateCheckCache: STORAGE_PREFIX + "update_check_cache",
+    updateDismissedVersion: STORAGE_PREFIX + "update_dismissed_version"
   };
+
+  // Kept in sync with the footer text (#settings-build-info) and
+  // android-app/android/app/build.gradle's versionName by hand on every
+  // release, same as those two already are with each other.
+  var APP_VERSION = "3.4";
 
   // ---------------------------------------------------------------------
   // String table — English now, structure ready for nl/fr (brief section 9)
@@ -1881,6 +1897,7 @@
     if (name === "dashboard" && typeof renderProfilePhotoUi === "function") renderProfilePhotoUi();
     if (name === "dashboard" && typeof renderReadinessCard === "function") renderReadinessCard();
     if (name === "dashboard" && typeof renderStrengthBanner === "function") renderStrengthBanner();
+    if (name === "dashboard" && typeof renderUpdateBanner === "function") renderUpdateBanner();
     if (name === "settings" && typeof initSettingsTab === "function") initSettingsTab();
   }
 
@@ -3403,6 +3420,86 @@
       renderStrengthBanner();
       if (typeof populateSettingsProfileForm === "function") populateSettingsProfileForm();
     });
+  });
+
+  // ---------------------------------------------------------------------
+  // Update check — native app only. The APK isn't distributed through a
+  // store, so there's no automatic update mechanism; this makes one small
+  // read-only request to GitHub's public release API to find out whether
+  // a newer version exists, so returning athletes get pointed at the
+  // download instead of silently staying on an old build. Disclosed in
+  // the README alongside the visit-counter exception, since it's a
+  // network call the "nothing leaves the device" claim needs to cover.
+  // Cached for 24h so it isn't refetched on every single app launch.
+  // ---------------------------------------------------------------------
+  var UPDATE_CHECK_URL = "https://api.github.com/repos/acraens/AmpFootballFit/releases/latest";
+  var UPDATE_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
+
+  function parseVersionParts(v) {
+    return String(v || "").replace(/^v/i, "").split(".").map(function (n) { return parseInt(n, 10) || 0; });
+  }
+
+  // Returns true if `a` is a newer version than `b`.
+  function isVersionNewer(a, b) {
+    var pa = parseVersionParts(a), pb = parseVersionParts(b);
+    for (var i = 0; i < Math.max(pa.length, pb.length); i++) {
+      var da = pa[i] || 0, db = pb[i] || 0;
+      if (da !== db) return da > db;
+    }
+    return false;
+  }
+
+  function getUpdateCheckCache() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.updateCheckCache);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function checkForAppUpdate() {
+    if (!isNativeApp()) return;
+    var cache = getUpdateCheckCache();
+    var isFresh = cache && cache.checkedAt && (Date.now() - cache.checkedAt) < UPDATE_CHECK_INTERVAL_MS;
+    if (isFresh) {
+      renderUpdateBanner();
+      return;
+    }
+    fetch(UPDATE_CHECK_URL, { headers: { Accept: "application/vnd.github+json" } })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (data) {
+        if (!data || !data.tag_name) return;
+        var result = { checkedAt: Date.now(), latestVersion: data.tag_name, url: data.html_url || "https://github.com/acraens/AmpFootballFit/releases/latest" };
+        try { localStorage.setItem(STORAGE_KEYS.updateCheckCache, JSON.stringify(result)); } catch (e) { /* storage unavailable */ }
+        renderUpdateBanner();
+      })
+      .catch(function () { /* offline or GitHub unreachable — silently skip, not core functionality */ });
+  }
+
+  function renderUpdateBanner() {
+    var card = el("update-banner-card");
+    var cache = getUpdateCheckCache();
+    if (!cache || !cache.latestVersion) {
+      card.classList.add("hidden");
+      return;
+    }
+    var dismissed = null;
+    try { dismissed = localStorage.getItem(STORAGE_KEYS.updateDismissedVersion); } catch (e) { /* storage unavailable */ }
+    var shouldShow = isVersionNewer(cache.latestVersion, APP_VERSION) && dismissed !== cache.latestVersion;
+    card.classList.toggle("hidden", !shouldShow);
+    if (shouldShow) {
+      el("update-banner-text").textContent = "A new version (" + cache.latestVersion + ") is available — you're on v" + APP_VERSION + ".";
+      el("update-banner-link").href = cache.url;
+    }
+  }
+
+  el("update-banner-dismiss").addEventListener("click", function () {
+    var cache = getUpdateCheckCache();
+    if (cache && cache.latestVersion) {
+      try { localStorage.setItem(STORAGE_KEYS.updateDismissedVersion, cache.latestVersion); } catch (e) { /* storage unavailable */ }
+    }
+    renderUpdateBanner();
   });
 
   // Central entry point for setting strengthStartingPoint from a context
@@ -5154,6 +5251,7 @@
   if (onboardingAlreadyComplete) {
     ensureProgramState();
     migrateStrengthStartingPointIfNeeded();
+    checkForAppUpdate();
     initLogTab();
     ensureSkillsData();
     renderDashboardMilestoneList();
