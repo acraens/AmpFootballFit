@@ -6,6 +6,8 @@ A free, offline-first return-to-play conditioning app for amputee football (crut
 
 **Android app (APK):** [Download the latest release](https://github.com/acraens/AmpFootballFit/releases/latest) (`AmpFootballFit.apk`). This is not signed for the Play Store, so Android will warn about an unrecognized app; you'll need to allow "install from unknown sources" for your browser/file manager to install it. The camera-based profile photo feature only works in this native version, not the browser/PWA version above.
 
+**Get notified about new versions:** [Watch this repo](https://github.com/acraens/AmpFootballFit/subscription) and choose **Custom → Releases** — GitHub will email you whenever a new version ships. (Needs a free GitHub account; if you're using the browser/PWA version above, you're always automatically on the latest version already.)
+
 ## What it is
 
 - A 12-week, 3-phase strength & conditioning program (Base, Load Progression, Sport Transfer), with exercises that adapt tier by tier based on how sessions actually go.
