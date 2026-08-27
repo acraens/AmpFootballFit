@@ -663,6 +663,23 @@
     font-weight: 400;
   }
 
+  .exercise-equipment {
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    font-size: 0.78rem;
+  }
+  .exercise-equipment .eq-needs { color: var(--text-dim); }
+  .exercise-equipment .eq-needs.eq-none { font-style: italic; }
+  .exercise-equipment .eq-mine { color: var(--accent); font-weight: 600; }
+  .exercise-equipment .eq-note-btn { padding: 4px 10px; font-size: 0.75rem; }
+  .exercise-equipment .eq-editor { flex-basis: 100%; display: flex; gap: 6px; margin-top: 4px; }
+  .exercise-equipment .eq-editor.hidden { display: none; }
+  .exercise-equipment .eq-editor .eq-note-input { flex: 1; font-size: 0.85rem; padding: 8px 10px; }
+  .exercise-equipment .eq-editor .eq-note-save { padding: 4px 12px; font-size: 0.75rem; flex-shrink: 0; }
+
   /* Session Tracker (Log tab) */
   .section-subheading {
     font-size: 0.95rem;
@@ -1513,7 +1530,9 @@
       <h2 data-i18n="tab.skills">Skills</h2>
 
       <div class="card skills-intro">
-        <p>This is a framework for you to fill in from a physio, video footage, or club sessions. AmpFootballFit does not provide sport-technique instruction. Add a video link and note the source for anything you fill in.</p>
+        <p><strong>What this tab is for:</strong> a place to keep the football-technique drills your coach or physio gives you &mdash; things like crutch turns, striking balance, or dribbling control. AmpFootballFit doesn't teach technique itself, so this starts mostly empty and you fill it in.</p>
+        <p><strong>For each drill:</strong> paste a video link (from your coach, or one you found), note who showed it to you or verified it, and tap <em>Mark completed</em> each time you practise it so you can see what you're actually working on.</p>
+        <p class="field-note">A few common drill names are listed under each heading as starting points &mdash; edit or delete them freely, or add your own with <em>+ Add custom drill</em>.</p>
       </div>
 
       <div id="skills-categories"></div>
@@ -1783,7 +1802,7 @@
 
       <div class="card" id="settings-update-card">
         <h3>App version</h3>
-        <p class="field-note">You're on v<span id="settings-update-current">4.0</span>. This app never checks for updates on its own &mdash; it only checks when you ask it to, and asks first every time.</p>
+        <p class="field-note">You're on v<span id="settings-update-current">4.1</span>. This app never checks for updates on its own &mdash; it only checks when you ask it to, and asks first every time.</p>
         <button type="button" class="btn secondary" id="settings-update-check-btn" style="width: 100%;">Check for updates</button>
 
         <div class="card gate-warning hidden" id="settings-update-confirm" style="margin-top: 12px;">
@@ -1797,7 +1816,7 @@
         <div class="hidden" id="settings-update-result" style="margin-top: 12px;"></div>
       </div>
 
-      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v4.0 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
+      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v4.1 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
       <p class="field-note" style="text-align: center; margin-top: 4px;">
         <a href="mailto:alexander.craens@gmail.com?subject=Notify%20me%20about%20AmpFootballFit%20updates" style="color: var(--accent);">🔔 Email me to get notified about new versions</a>
       </p>
@@ -1858,7 +1877,8 @@
     benchmarks: STORAGE_PREFIX + "benchmarks",
     customExercises: STORAGE_PREFIX + "custom_exercises",
     strengthBannerDismissed: STORAGE_PREFIX + "strength_banner_dismissed",
-    exercisePhotos: STORAGE_PREFIX + "exercise_photos"
+    exercisePhotos: STORAGE_PREFIX + "exercise_photos",
+    exerciseEquipmentNotes: STORAGE_PREFIX + "exercise_equipment_notes"
   };
 
   // Per-exercise "discussed with my care team" confirmations for the
@@ -1871,7 +1891,7 @@
   // Kept in sync with the footer text (#settings-build-info),
   // android-app/android/app/build.gradle's versionName, and the published
   // version.json by hand on every release.
-  var APP_VERSION = "4.0";
+  var APP_VERSION = "4.1";
 
   // ---------------------------------------------------------------------
   // String table — English now, structure ready for nl/fr (brief section 9)
@@ -2084,6 +2104,91 @@
     var photos = getExercisePhotos();
     delete photos[exerciseId];
     try { localStorage.setItem(STORAGE_KEYS.exercisePhotos, JSON.stringify(photos)); } catch (e) { /* storage unavailable */ }
+  }
+
+  // ---------------------------------------------------------------------
+  // Equipment — an app-defined tag per exercise (what the prescription
+  // assumes) plus a free-text per-exercise note the athlete can set for
+  // what they actually use. The note is stored per exercise id, same
+  // shape as exercise photos. Display only for now: nothing filters or
+  // rewrites prescriptions off the back of it.
+  // ---------------------------------------------------------------------
+  var EXERCISE_EQUIPMENT = {
+    // Phase 1
+    "sls-squat-t1": ["support (rail/counter)"], "p1-sls-squat": ["support (as needed)"],
+    "sls-squat-t3": ["dumbbell / vest"], "p1-sls-stepup": ["step / box"],
+    "sls-bridge-t1": ["low step (feet elevated)"], "sls-bridge-t4": ["bench", "dumbbell / vest"],
+    "sls-calf-t1": ["support (rail)"], "sls-calf-t3": ["dumbbell / vest"],
+    "p1-ub-pushup": ["bench / chair / step"], "ub-row-t1": ["resistance band"],
+    "p1-ub-row": ["resistance band"], "ub-row-t3": ["heavy band or cable"],
+    "p1-ub-press": ["dumbbells"], "core-deadbug-t3": ["ankle weight (optional)"],
+    "core-antirot-t1": ["resistance band"], "p1-core-antirot": ["resistance band"],
+    "core-antirot-t3": ["resistance band"],
+    // Phase 2
+    "p2-sls-stepup": ["step / box", "dumbbells / vest"], "sls-rdl-t1": ["support (two hands)"],
+    "p2-sls-rdl": ["support (as needed)"], "sls-rdl-t3": ["dumbbells"], "sls-rdl-t4": ["dumbbells"],
+    "sls-lunge-t1": ["support"], "sls-lunge-t3": ["dumbbells"],
+    "sls-boxjump-t1": ["low step"], "p2-sls-boxjump": ["box"], "sls-boxjump-t3": ["box"], "sls-boxjump-t4": ["box"],
+    "p2-ub-press": ["dumbbells", "band"], "core-carry-t1": ["dumbbell"], "p2-core-carry": ["dumbbells"],
+    "core-carry-t3": ["dumbbells"], "core-rot-t1": ["resistance band"], "p2-core-rotational": ["resistance band"],
+    "core-rot-t3": ["heavy band or cable"],
+    // Phase 3
+    "sls-decel-t1": ["step / box"], "sls-decel-t3": ["open space"], "sls-decel-t4": ["open space"],
+    "sls-broadjump-adv": ["open space"], "cond-agility-adv": ["cones", "open space"],
+    "p3-ub-max": ["dumbbells / barbell"], "p3-ub-endurance": ["dumbbells", "band"],
+    "p3-cardio-rsa": ["open space"], "cond-sprint-adv": ["open space"]
+  };
+
+  function exerciseEquipmentTags(ex) {
+    if (!ex) return [];
+    if (Array.isArray(ex.equipment)) return ex.equipment;
+    return EXERCISE_EQUIPMENT[ex.id] || [];
+  }
+
+  function getExerciseEquipmentNotes() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEYS.exerciseEquipmentNotes);
+      var parsed = raw ? JSON.parse(raw) : {};
+      return (parsed && typeof parsed === "object") ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function getExerciseEquipmentNote(exerciseId) {
+    if (!exerciseId) return "";
+    return getExerciseEquipmentNotes()[exerciseId] || "";
+  }
+
+  function setExerciseEquipmentNote(exerciseId, text) {
+    var notes = getExerciseEquipmentNotes();
+    text = (text || "").trim();
+    if (text) notes[exerciseId] = text;
+    else delete notes[exerciseId];
+    try { localStorage.setItem(STORAGE_KEYS.exerciseEquipmentNotes, JSON.stringify(notes)); } catch (e) { /* storage unavailable */ }
+  }
+
+  // Shared equipment block. `editable` adds the note button + inline editor
+  // (Program cards); read-only elsewhere (workout player, Log checklist).
+  function equipmentBlockHtml(ex, editable) {
+    var tags = exerciseEquipmentTags(ex);
+    var note = getExerciseEquipmentNote(ex.id);
+    var tagLine = tags.length
+      ? '<span class="eq-needs">Equipment: ' + escapeHtml(tags.join(" · ")) + "</span>"
+      : '<span class="eq-needs eq-none">No equipment needed</span>';
+    var noteLine = note ? '<span class="eq-mine">Yours: ' + escapeHtml(note) + "</span>" : "";
+    if (!editable) {
+      return '<div class="exercise-equipment">' + tagLine + noteLine + "</div>";
+    }
+    return '<div class="exercise-equipment">' + tagLine + noteLine +
+      '<button type="button" class="btn secondary eq-note-btn" data-ex-id="' + escapeHtml(ex.id) + '">' +
+        (note ? "Edit equipment note" : "Add equipment note") +
+      "</button>" +
+      '<div class="eq-editor hidden">' +
+        '<input type="text" class="eq-note-input" data-ex-id="' + escapeHtml(ex.id) + '" value="' + escapeHtml(note) + '" placeholder="What you use for this, e.g. 15kg dumbbell + folded towel">' +
+        '<button type="button" class="btn secondary eq-note-save" data-ex-id="' + escapeHtml(ex.id) + '">Save</button>' +
+      "</div>" +
+    "</div>";
   }
 
   function readAndResizeImageFile(file) {
@@ -3075,6 +3180,7 @@
             '<div class="exercise-name">' + escapeHtml(ex.name) + customBadge + estimateBits + "</div>" +
             '<div class="exercise-prescription">' + escapeHtml(ex.prescription) + "</div>" +
             loadSuggestionHtml +
+            equipmentBlockHtml(ex, true) +
             '<div class="exercise-card-actions">' +
               '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
               '<button type="button" class="btn secondary log-this-btn" data-ex-id="' + ex.id + '" data-phase="' + phase.number + '">+ Log this</button>' +
@@ -3269,6 +3375,25 @@
       renderLogExerciseChecklist(logPhase);
       return;
     }
+    var eqToggle = e.target.closest(".eq-note-btn");
+    if (eqToggle) {
+      var editor = eqToggle.parentNode.querySelector(".eq-editor");
+      if (editor) {
+        editor.classList.toggle("hidden");
+        if (!editor.classList.contains("hidden")) {
+          var inp = editor.querySelector(".eq-note-input");
+          if (inp) inp.focus();
+        }
+      }
+      return;
+    }
+    var eqSave = e.target.closest(".eq-note-save");
+    if (eqSave) {
+      var saveInput = eqSave.parentNode.querySelector(".eq-note-input");
+      setExerciseEquipmentNote(eqSave.getAttribute("data-ex-id"), saveInput ? saveInput.value : "");
+      refreshAllExerciseIconViews(); // Program cards + Log checklist share the block
+      return;
+    }
     handleExercisePhotoButtonClick(e);
   });
 
@@ -3339,6 +3464,7 @@
             "<span>" + escapeHtml(ex.name) + "</span>" +
           "</label>" +
           '<div class="log-ex-prescription">' + escapeHtml(ex.prescription) + "</div>" +
+          equipmentBlockHtml(ex, false) +
           fieldsHtml +
         "</div>";
       }).join("");
@@ -3866,7 +3992,7 @@
   // structural names from the brief and a placeholder marker requiring
   // the user to supply real, source-attributed content.
   // ---------------------------------------------------------------------
-  var SKILLS_PLACEHOLDER_NOTE = "[USER TO SUPPLY: verify with a coach before use]";
+  var SKILLS_PLACEHOLDER_NOTE = "Not filled in yet. After a coach or physio shows you this drill, write what it is in your own words here (e.g. \"on crutches, shift weight fully onto the left crutch, hold 3s, return — 10 reps each side\"), then add the video link and who showed it to you.";
 
   var SKILLS_CATEGORY_ORDER = ["crutchMobility", "ballSkills", "agility"];
   var SKILLS_CATEGORY_LABELS = {
@@ -3915,7 +4041,7 @@
           id: generateDrillId(),
           category: cat,
           name: name,
-          description: SKILLS_PLACEHOLDER_NOTE,
+          description: "",
           videoUrl: "",
           source: "",
           isSeed: true,
@@ -4013,7 +4139,7 @@
         id: generateDrillId(),
         category: category,
         name: "New drill",
-        description: SKILLS_PLACEHOLDER_NOTE,
+        description: "",
         videoUrl: "",
         source: "",
         isSeed: false,
@@ -4084,7 +4210,7 @@
       prescription: "5–10 rounds: breathe in 4s, hold 4s, out 4s, hold 4s. Sitting or lying, before training or sleep. Stop if light-headed." },
     { id: "supp-breath-diaphragm", name: "Diaphragmatic breathing", icon: "🫁", isSupplementary: true,
       prescription: "5 min at ~6 breaths/min. Hand on belly rises, hand on chest stays still; slow out through pursed lips." },
-    { id: "supp-reaction", name: "Reaction & first-step drill", icon: "⚡", isSupplementary: true,
+    { id: "supp-reaction", name: "Reaction & first-step drill", icon: "⚡", isSupplementary: true, equipment: ["open space", "partner or ball (optional)"],
       prescription: "4–6 x: on a partner's call or a ball drop, explode 2–3 steps and reset. Focus on a fast first move, not distance." },
     { id: "supp-mob-hipflexor", name: "Hip flexor stretch — non-amputated side", icon: "🦵", isSupplementary: true,
       prescription: "Half-kneel, non-amputated leg back, pelvis tucked, ease forward. Hold 30s x 2–3. Slow and pain-free." },
@@ -4092,15 +4218,15 @@
       prescription: "On your back, non-amputated ankle across the opposite thigh, draw the thigh in. Hold 30s x 2–3." },
     { id: "supp-mob-lowerback", name: "Lower back stretch — non-amputated side", icon: "🧘", isSupplementary: true,
       prescription: "On your back, knees bent, let both knees drop toward the non-amputated side, shoulders down. Hold 20–30s x 2–3." },
-    { id: "supp-prop-sl-eyes", name: "Single-leg balance, eyes closed", icon: "👁️", isSupplementary: true,
+    { id: "supp-prop-sl-eyes", name: "Single-leg balance, eyes closed", icon: "👁️", isSupplementary: true, equipment: ["support (wall/chair)"],
       prescription: "Non-amputated leg, next to support. Steady with eyes open, then close them and hold with control. 3–5 rounds. Touch down the moment control goes." },
-    { id: "supp-prop-foam", name: "Foam-pad balance", icon: "🧽", isSupplementary: true,
+    { id: "supp-prop-foam", name: "Foam-pad balance", icon: "🧽", isSupplementary: true, equipment: ["foam pad or folded towel", "support (wall/chair)"],
       prescription: "Stand on a foam pad or folded towel on the non-amputated leg, near support. Hold with control; progress to eyes closed later. 3–5 rounds." },
-    { id: "supp-socket-balance-load", name: "Balance on your prosthesis", icon: "⚖️", isSupplementary: true,
+    { id: "supp-socket-balance-load", name: "Balance on your prosthesis", icon: "⚖️", isSupplementary: true, equipment: ["support on both sides (rails/counters)"],
       requiresGuidedConsent: true,
       consentText: "This exercise loads your prosthesis during balance work. Confirm you have discussed this with your prosthetist.",
       prescription: "Between support on both sides, shift weight onto the prosthetic side and hold with as little hand support as is safe. 3–5 rounds. Stop for socket pain, pistoning or pinching." },
-    { id: "supp-socket-myofascial", name: "Myofascial self-massage near the socket interface", icon: "💆", isSupplementary: true,
+    { id: "supp-socket-myofascial", name: "Myofascial self-massage near the socket interface", icon: "💆", isSupplementary: true, equipment: ["soft massage ball (optional)"],
       requiresGuidedConsent: true,
       consentText: "This exercise involves pressure near your socket interface and scar tissue. Confirm you have discussed this with your prosthetist or physiotherapist.",
       prescription: "Prosthesis off. Light, slow pressure on the muscle around the residual limb with flat fingers or a soft ball, 3–5 min. Stay off scar, sores and numb areas. Check the skin afterwards." }
@@ -4162,9 +4288,16 @@
   // renderProgramView() whenever a phase changes or a confirmation lands.
   el("program-exercise-groups").addEventListener("change", function (e) {
     var cb = e.target.closest("[data-supp-consent-checkbox]");
-    if (!cb) return;
-    var box = cb.closest(".supp-consent");
-    if (box) box.querySelector("[data-supp-consent-confirm]").disabled = !cb.checked;
+    if (cb) {
+      var box = cb.closest(".supp-consent");
+      if (box) box.querySelector("[data-supp-consent-confirm]").disabled = !cb.checked;
+      return;
+    }
+    var eqInput = e.target.closest(".eq-note-input");
+    if (eqInput) {
+      setExerciseEquipmentNote(eqInput.getAttribute("data-ex-id"), eqInput.value);
+      refreshAllExerciseIconViews();
+    }
   });
 
   // ---------------------------------------------------------------------
@@ -5308,6 +5441,7 @@
       '<div class="wp-exercise-icon" aria-hidden="true">' + renderExerciseIcon(ex) + "</div>" +
       '<h2 class="wp-exercise-name">' + escapeHtml(ex.name) + estimateBits + "</h2>" +
       '<div class="wp-exercise-prescription">' + escapeHtml(ex.prescription) + "</div>" +
+      equipmentBlockHtml(ex, false) +
       '<div class="exercise-card-actions">' +
         '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
         '<button type="button" class="btn secondary exercise-photo-btn" data-ex-id="' + ex.id + '">' + wpPhotoBtnLabel + "</button>" +
@@ -5402,8 +5536,40 @@
     saveSessions(sessions);
     computeSuggestionsForSession(session);
 
-    closeWorkoutPlayer();
-    showView("log");
+    // Confirm in place instead of dropping the athlete on the Log tab's
+    // blank manual-entry form, which read as "now enter it all again"
+    // (tester feedback). The manual Log form is for sessions done without
+    // the in-app player.
+    var loggedCount = exercises.length;
+    var summaryBits = [loggedCount + " exercise" + (loggedCount === 1 ? "" : "s") + " logged"];
+    if (session.durationMinutes != null) summaryBits.push(session.durationMinutes + " min");
+    if (session.rpe != null) summaryBits.push("RPE " + session.rpe);
+
+    var hasTips = pendingSuggestions.length > 0;
+    var finishScreen = el("wp-finish-screen");
+    finishScreen.innerHTML =
+      "<h2>Session saved ✓</h2>" +
+      '<p class="field-note">' + escapeHtml(summaryBits.join(" · ")) + " · Phase " + session.phase + ".</p>" +
+      (hasTips
+        ? '<p class="field-note">' + pendingSuggestions.length + " progression tip" + (pendingSuggestions.length === 1 ? "" : "s") +
+          " ready, based on how this went — you'll find them on the Log tab.</p>"
+        : "") +
+      '<button type="button" class="btn" id="wp-done-btn" style="width: 100%; margin-top: 14px;">Done</button>' +
+      (hasTips
+        ? '<button type="button" class="btn secondary" id="wp-review-btn" style="width: 100%; margin-top: 8px;">Review tips now</button>'
+        : "");
+
+    el("wp-done-btn").addEventListener("click", function () {
+      closeWorkoutPlayer();
+      showView("program");
+    });
+    var reviewBtn = el("wp-review-btn");
+    if (reviewBtn) {
+      reviewBtn.addEventListener("click", function () {
+        closeWorkoutPlayer();
+        showView("log");
+      });
+    }
   }
 
   function closeWorkoutPlayer() {
