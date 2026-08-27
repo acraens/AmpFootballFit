@@ -40,7 +40,7 @@ All data (sessions, benchmarks, readiness logs, milestones, profile) stays in lo
 
 Two disclosed exceptions:
 - The web/PWA version loads a small anonymous visit-counter badge ([hits.sh](https://hits.sh/)) so we can gauge reach, visible (not hidden) in the Settings tab next to the badge itself. It never runs in the installed Android app.
-- The installed Android app makes one read-only request to GitHub's public release API on launch (cached for 24h) to check whether a newer version is available, since the APK isn't distributed through a store with automatic updates. If so, a dismissible banner on the Dashboard links to the release. No data is sent, only a version number is read back. Never runs in the browser/PWA version, which already always serves the latest build.
+- The installed Android app can check whether a newer version is available (the APK isn't distributed through a store with automatic updates). This never happens on its own: it only runs when you tap "Check for updates" in Settings, and it asks for permission before every single check &mdash; there's no "remember my choice" and no background checking. On a yes, it reads one small file ([`version.json`](version.json)) from this repo over `raw.githubusercontent.com` and compares the version number. No data is sent, only a version number is read back. The button isn't shown in the browser/PWA version, which is always served fresh from GitHub Pages.
 
 ## Contributing
 

@@ -1117,6 +1117,75 @@
     color: var(--text-dim);
     margin: 0;
   }
+
+  /* Supplementary techniques */
+  .supp-back-btn { margin-bottom: 12px; font-size: 0.82rem; }
+
+  .supp-intro p { margin: 0; font-size: 0.85rem; color: var(--text-dim); }
+
+  .supp-category { margin-bottom: 22px; }
+
+  .supp-category > h3 {
+    margin: 0 0 4px;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .supp-category-blurb { font-size: 0.82rem; color: var(--text-dim); margin: 0 0 10px; }
+
+  .supp-notice { border-color: var(--warn); }
+  .supp-notice p { margin: 0 0 10px; font-size: 0.85rem; }
+
+  .supp-ex-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+
+  .supp-ex-head { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .supp-ex-head .supp-ex-icon { font-size: 1.3rem; line-height: 1; flex-shrink: 0; }
+  .supp-ex-head .supp-ex-name { flex: 1; font-weight: 600; font-size: 0.9rem; }
+  .supp-ex-head .supp-ex-chev { color: var(--text-dim); font-size: 0.8rem; flex-shrink: 0; }
+  .supp-ex-lock { font-size: 0.72rem; color: var(--warn); white-space: nowrap; flex-shrink: 0; }
+
+  .supp-ex-body { margin-top: 12px; font-size: 0.86rem; color: var(--text); line-height: 1.5; }
+  .supp-ex-body ol, .supp-ex-body ul { margin: 8px 0; padding-left: 20px; }
+  .supp-ex-body li { margin-bottom: 4px; }
+  .supp-ex-body p { margin: 0 0 8px; }
+  .supp-ex-body p:last-child { margin-bottom: 0; }
+  .supp-ex-body .field-note { color: var(--text-dim); }
+
+  .supp-consent { border: 1px solid var(--warn); border-radius: var(--radius); padding: 14px; margin-top: 12px; }
+  .supp-consent > p { margin: 0 0 4px; font-size: 0.86rem; }
+  .supp-consent .supp-consent-check {
+    display: flex; gap: 8px; align-items: flex-start;
+    font-size: 0.85rem; margin: 12px 0; cursor: pointer; color: var(--text);
+  }
+  .supp-consent .supp-consent-check input { width: auto; margin-top: 2px; flex-shrink: 0; }
+  .supp-consent .btn:disabled { opacity: 0.45; cursor: default; }
+
+  .supp-pacer {
+    text-align: center; padding: 18px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface-alt); margin: 10px 0;
+  }
+  .supp-pacer-phase { font-size: 1.05rem; font-weight: 600; }
+  .supp-pacer-count { font-size: 2rem; font-weight: 700; color: var(--accent); }
+
+  .supp-reaction-target {
+    width: 100%; padding: 30px 16px; border-radius: var(--radius); border: none;
+    font-size: 1rem; font-weight: 600; font-family: inherit; cursor: pointer;
+    background: var(--surface-alt); color: var(--text); margin: 10px 0;
+  }
+  .supp-reaction-target.is-wait { background: var(--danger); color: #200; }
+  .supp-reaction-target.is-go { background: var(--accent); color: #04121c; }
+  .supp-reaction-result { font-size: 0.85rem; color: var(--text-dim); }
+
+  .supp-timer-display { font-size: 1.6rem; font-weight: 700; text-align: center; margin: 10px 0; }
 </style>
 </head>
 <body>
@@ -1371,14 +1440,6 @@
         <p class="dashboard-header-text">Welcome back</p>
       </div>
 
-      <div class="card gate-warning hidden" id="update-banner-card">
-        <p id="update-banner-text"></p>
-        <div class="gate-warning-actions">
-          <button type="button" class="btn secondary" id="update-banner-dismiss">Not now</button>
-          <a class="btn" id="update-banner-link" target="_blank" rel="noopener noreferrer">View update</a>
-        </div>
-      </div>
-
       <div class="card gate-warning hidden" id="strength-banner-card">
         <p id="strength-banner-text">New: tell us your strength starting point to fine-tune your program.</p>
         <div id="strength-banner-options" class="hidden">
@@ -1404,6 +1465,12 @@
           <button type="button" class="btn" id="readiness-save-btn" style="width: 100%; margin-top: 10px;">Save check-in</button>
         </div>
         <div id="readiness-summary-wrap" class="hidden"></div>
+      </div>
+
+      <div class="card" id="supplementary-entry-card">
+        <h3>Supplementary techniques</h3>
+        <p class="field-note">Optional additions to your main program: breathing and reaction work, mobility for your non-amputated side, balance and proprioception, and a few prosthesis/socket-specific drills.</p>
+        <button type="button" class="btn secondary" id="supplementary-open-btn" style="width: 100%; margin-top: 6px;">Open supplementary techniques</button>
       </div>
 
       <div class="card">
@@ -1759,7 +1826,23 @@
         </div>
       </div>
 
-      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v3.4 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
+      <div class="card" id="settings-update-card">
+        <h3>App version</h3>
+        <p class="field-note">You're on v<span id="settings-update-current">4.0</span>. This app never checks for updates on its own &mdash; it only checks when you ask it to, and asks first every time.</p>
+        <button type="button" class="btn secondary" id="settings-update-check-btn" style="width: 100%;">Check for updates</button>
+
+        <div class="card gate-warning hidden" id="settings-update-confirm" style="margin-top: 12px;">
+          <p>Check GitHub for a newer version? This sends a request to GitHub.</p>
+          <div class="gate-warning-actions">
+            <button type="button" class="btn secondary" id="settings-update-confirm-no">No</button>
+            <button type="button" class="btn" id="settings-update-confirm-yes">Yes</button>
+          </div>
+        </div>
+
+        <div class="hidden" id="settings-update-result" style="margin-top: 12px;"></div>
+      </div>
+
+      <p class="field-note" style="text-align: center; margin-top: 4px;" id="settings-build-info">AmpFootballFit v4.0 &middot; &copy; 2026 A. Craens &middot; <a href="https://github.com/acraens" target="_blank" rel="noopener noreferrer" style="color: var(--text-dim);">github.com/acraens</a></p>
       <p class="field-note" style="text-align: center; margin-top: 4px;">
         <a href="mailto:alexander.craens@gmail.com?subject=Notify%20me%20about%20AmpFootballFit%20updates" style="color: var(--accent);">🔔 Email me to get notified about new versions</a>
       </p>
@@ -1767,6 +1850,17 @@
         Anonymous web visit counter (web only, never in the app):
         <img id="settings-visit-counter-img" alt="web visit count" style="vertical-align: middle;">
       </p>
+    </section>
+
+    <section class="view" id="view-supplementary">
+      <button type="button" class="btn secondary supp-back-btn" id="supplementary-back-btn">&#8249; Back to Dashboard</button>
+      <h2>Supplementary techniques</h2>
+
+      <div class="card supp-intro">
+        <p>These are optional additions to your main conditioning program, not a replacement for it. Most are freely available. A few balance drills carry a one-time heads-up, and the prosthesis/socket drills ask you to confirm per exercise that you've discussed them with your care team.</p>
+      </div>
+
+      <div id="supplementary-categories"></div>
     </section>
   </main>
 
@@ -1821,14 +1915,20 @@
     customExercises: STORAGE_PREFIX + "custom_exercises",
     strengthBannerDismissed: STORAGE_PREFIX + "strength_banner_dismissed",
     exercisePhotos: STORAGE_PREFIX + "exercise_photos",
-    updateCheckCache: STORAGE_PREFIX + "update_check_cache",
-    updateDismissedVersion: STORAGE_PREFIX + "update_dismissed_version"
+    supplementaryBalanceNoticeSeen: STORAGE_PREFIX + "supp_balance_notice_seen"
   };
 
-  // Kept in sync with the footer text (#settings-build-info) and
-  // android-app/android/app/build.gradle's versionName by hand on every
-  // release, same as those two already are with each other.
-  var APP_VERSION = "3.4";
+  // Per-exercise "discussed with my care team" confirmations for the
+  // prosthesis/socket supplementary exercises (Task 1c). Deliberately its
+  // own namespace, one key per exercise id (consent:<exerciseId>), kept
+  // separate from calibration/progress data so a data-model change to one
+  // can never silently clear the other.
+  var SUPP_CONSENT_PREFIX = STORAGE_PREFIX + "consent:";
+
+  // Kept in sync with the footer text (#settings-build-info),
+  // android-app/android/app/build.gradle's versionName, and the published
+  // version.json by hand on every release.
+  var APP_VERSION = "4.0";
 
   // ---------------------------------------------------------------------
   // String table — English now, structure ready for nl/fr (brief section 9)
@@ -1883,24 +1983,33 @@
   // Tab navigation
   // ---------------------------------------------------------------------
   function showView(name) {
+    // Leaving the Supplementary view (or re-entering it) must stop any
+    // running pacer / reaction / hold-timer widget.
+    if (typeof suppRunCleanup === "function") suppRunCleanup();
+    if (name !== "supplementary") suppBalanceNoticeActive = null;
     document.querySelectorAll(".view").forEach(function (el) {
       el.classList.toggle("active", el.id === "view-" + name);
     });
     document.querySelectorAll(".tab-btn").forEach(function (btn) {
       btn.classList.toggle("active", btn.getAttribute("data-view") === name);
     });
-    try {
-      localStorage.setItem(STORAGE_PREFIX + "last_view", name);
-    } catch (e) { /* storage unavailable, non-critical */ }
+    // "supplementary" is reached from a Dashboard card, not a tab, and has
+    // no tab-bar entry — don't persist it as last_view or a relaunch would
+    // land on a view with no active tab.
+    if (name !== "supplementary") {
+      try {
+        localStorage.setItem(STORAGE_PREFIX + "last_view", name);
+      } catch (e) { /* storage unavailable, non-critical */ }
+    }
     if (name === "program" && typeof renderProgramView === "function") renderProgramView();
     if (name === "log" && typeof renderSessionList === "function") renderSessionList();
     if (name === "skills" && typeof renderSkillsView === "function") renderSkillsView();
     if (name === "progress" && typeof renderProgressView === "function") renderProgressView();
+    if (name === "supplementary" && typeof renderSupplementaryView === "function") renderSupplementaryView();
     if (name === "dashboard" && typeof renderDashboardMilestoneList === "function") renderDashboardMilestoneList();
     if (name === "dashboard" && typeof renderProfilePhotoUi === "function") renderProfilePhotoUi();
     if (name === "dashboard" && typeof renderReadinessCard === "function") renderReadinessCard();
     if (name === "dashboard" && typeof renderStrengthBanner === "function") renderStrengthBanner();
-    if (name === "dashboard" && typeof renderUpdateBanner === "function") renderUpdateBanner();
     if (name === "settings" && typeof initSettingsTab === "function") initSettingsTab();
   }
 
@@ -3426,17 +3535,19 @@
   });
 
   // ---------------------------------------------------------------------
-  // Update check — native app only. The APK isn't distributed through a
-  // store, so there's no automatic update mechanism; this makes one small
-  // read-only request to GitHub's public release API to find out whether
-  // a newer version exists, so returning athletes get pointed at the
-  // download instead of silently staying on an old build. Disclosed in
-  // the README alongside the visit-counter exception, since it's a
-  // network call the "nothing leaves the device" claim needs to cover.
-  // Cached for 24h so it isn't refetched on every single app launch.
+  // Update check — manual only, and asks first every single time.
+  //
+  // The APK isn't distributed through a store, so there's no automatic
+  // update path. Rather than check silently on launch, the app does
+  // nothing until the user taps "Check for updates" in Settings; then it
+  // asks permission before making any network request, every time — no
+  // "remember my choice", no cached result, no background check. On a
+  // yes, it reads one small JSON file from the repo and compares its
+  // `version` field against APP_VERSION. Disclosed in the README, since
+  // it's the one network call the "nothing leaves the device" claim
+  // needs to cover.
   // ---------------------------------------------------------------------
-  var UPDATE_CHECK_URL = "https://api.github.com/repos/acraens/AmpFootballFit/releases/latest";
-  var UPDATE_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
+  var VERSION_JSON_URL = "https://raw.githubusercontent.com/acraens/AmpFootballFit/main/version.json";
 
   function parseVersionParts(v) {
     return String(v || "").replace(/^v/i, "").split(".").map(function (n) { return parseInt(n, 10) || 0; });
@@ -3452,57 +3563,79 @@
     return false;
   }
 
-  function getUpdateCheckCache() {
-    try {
-      var raw = localStorage.getItem(STORAGE_KEYS.updateCheckCache);
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) {
-      return null;
-    }
+  function renderUpdateResult(build) {
+    var out = el("settings-update-result");
+    out.innerHTML = "";
+    build(out);
+    out.classList.remove("hidden");
   }
 
-  function checkForAppUpdate() {
-    if (!isNativeApp()) return;
-    var cache = getUpdateCheckCache();
-    var isFresh = cache && cache.checkedAt && (Date.now() - cache.checkedAt) < UPDATE_CHECK_INTERVAL_MS;
-    if (isFresh) {
-      renderUpdateBanner();
-      return;
-    }
-    fetch(UPDATE_CHECK_URL, { headers: { Accept: "application/vnd.github+json" } })
-      .then(function (res) { return res.ok ? res.json() : null; })
-      .then(function (data) {
-        if (!data || !data.tag_name) return;
-        var result = { checkedAt: Date.now(), latestVersion: data.tag_name, url: data.html_url || "https://github.com/acraens/AmpFootballFit/releases/latest" };
-        try { localStorage.setItem(STORAGE_KEYS.updateCheckCache, JSON.stringify(result)); } catch (e) { /* storage unavailable */ }
-        renderUpdateBanner();
+  // Only ever called after the user has said "Yes" to the confirm prompt.
+  function performUpdateCheck() {
+    renderUpdateResult(function (out) {
+      var p = document.createElement("p");
+      p.className = "field-note";
+      p.textContent = "Checking…";
+      out.appendChild(p);
+    });
+    fetch(VERSION_JSON_URL, { cache: "no-store" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
       })
-      .catch(function () { /* offline or GitHub unreachable — silently skip, not core functionality */ });
+      .then(function (data) {
+        var latest = data && data.version != null ? String(data.version) : null;
+        if (!latest) throw new Error("no version field");
+        renderUpdateResult(function (out) {
+          if (isVersionNewer(latest, APP_VERSION)) {
+            var head = document.createElement("p");
+            head.textContent = "Version " + latest + " available — you're on v" + APP_VERSION + ".";
+            out.appendChild(head);
+            if (data.releaseNotes) {
+              var notes = document.createElement("p");
+              notes.className = "field-note";
+              notes.textContent = String(data.releaseNotes);
+              out.appendChild(notes);
+            }
+            var link = document.createElement("a");
+            link.className = "btn";
+            link.style.width = "100%";
+            link.style.marginTop = "8px";
+            link.href = data.downloadUrl ? String(data.downloadUrl) : "https://github.com/acraens/AmpFootballFit/releases/latest";
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = "View the new version";
+            out.appendChild(link);
+          } else {
+            var ok = document.createElement("p");
+            ok.textContent = "You have the latest version (v" + APP_VERSION + ").";
+            out.appendChild(ok);
+          }
+        });
+      })
+      .catch(function () {
+        renderUpdateResult(function (out) {
+          var err = document.createElement("p");
+          err.textContent = "Couldn't reach GitHub just now. Check your connection and try again.";
+          out.appendChild(err);
+        });
+      });
   }
 
-  function renderUpdateBanner() {
-    var card = el("update-banner-card");
-    var cache = getUpdateCheckCache();
-    if (!cache || !cache.latestVersion) {
-      card.classList.add("hidden");
-      return;
-    }
-    var dismissed = null;
-    try { dismissed = localStorage.getItem(STORAGE_KEYS.updateDismissedVersion); } catch (e) { /* storage unavailable */ }
-    var shouldShow = isVersionNewer(cache.latestVersion, APP_VERSION) && dismissed !== cache.latestVersion;
-    card.classList.toggle("hidden", !shouldShow);
-    if (shouldShow) {
-      el("update-banner-text").textContent = "A new version (" + cache.latestVersion + ") is available — you're on v" + APP_VERSION + ".";
-      el("update-banner-link").href = cache.url;
-    }
-  }
+  el("settings-update-check-btn").addEventListener("click", function () {
+    el("settings-update-result").classList.add("hidden");
+    el("settings-update-result").innerHTML = "";
+    el("settings-update-confirm").classList.remove("hidden");
+  });
 
-  el("update-banner-dismiss").addEventListener("click", function () {
-    var cache = getUpdateCheckCache();
-    if (cache && cache.latestVersion) {
-      try { localStorage.setItem(STORAGE_KEYS.updateDismissedVersion, cache.latestVersion); } catch (e) { /* storage unavailable */ }
-    }
-    renderUpdateBanner();
+  el("settings-update-confirm-no").addEventListener("click", function () {
+    // Explicit "No" — the confirm card just closes. No fetch, no storage write.
+    el("settings-update-confirm").classList.add("hidden");
+  });
+
+  el("settings-update-confirm-yes").addEventListener("click", function () {
+    el("settings-update-confirm").classList.add("hidden");
+    performUpdateCheck();
   });
 
   // Central entry point for setting strengthStartingPoint from a context
@@ -3952,6 +4085,439 @@
       saveSkillsData(data3);
       renderSkillsView();
     }
+  });
+
+  // ---------------------------------------------------------------------
+  // Supplementary techniques — a standalone content area reached from a
+  // Dashboard card (not a tab). Three subcategories with different access
+  // levels:
+  //   free    (1a) — open, no gate, no notice
+  //   balance (1b) — open, but a one-time awareness notice the first time
+  //                  the section is opened
+  //   socket  (1c) — prosthesis/socket work; each exercise carries its own
+  //                  consentText and a per-exercise blocking confirmation,
+  //                  stored one key per exercise under the SUPP_CONSENT_PREFIX
+  //                  namespace. Content for an unconfirmed exercise is never
+  //                  put in the DOM, so there's nothing to reach by back
+  //                  navigation or routing.
+  // Consent text lives on the data objects (consentText), never hardcoded
+  // in the rendering code, so a new socket exercise only needs a data entry.
+  // ---------------------------------------------------------------------
+  var SUPPLEMENTARY_DATA = [
+    {
+      key: "free",
+      label: "Foundations",
+      blurb: "Freely available. No sign-off needed.",
+      exercises: [
+        {
+          id: "supp-breath-box", icon: "🌬️", name: "Box breathing (4-4-4-4)", kind: "breathing-pacer",
+          intro: "Equal four-count breathing to settle the nervous system before training or sleep.",
+          steps: [
+            "Sit or lie somewhere comfortable.",
+            "Breathe in through the nose for 4 seconds.",
+            "Hold for 4 seconds.",
+            "Breathe out through the mouth for 4 seconds.",
+            "Hold for 4 seconds, then repeat for 5–10 rounds."
+          ],
+          notes: ["Stop and breathe normally if you feel light-headed."]
+        },
+        {
+          id: "supp-breath-diaphragm", icon: "🫁", name: "Diaphragmatic breathing", kind: "text",
+          intro: "Slow belly breathing that trains the diaphragm rather than the chest and shoulders.",
+          steps: [
+            "Lie on your back, knees bent, one hand on the chest and one on the belly.",
+            "Breathe in slowly through the nose so the belly hand rises while the chest hand stays still.",
+            "Breathe out slowly through pursed lips, letting the belly fall.",
+            "Aim for about 6 breaths per minute, 5 minutes at a time."
+          ]
+        },
+        {
+          id: "supp-reaction-tap", icon: "⚡", name: "Reaction tap", kind: "reaction",
+          intro: "A quick reaction-time check. Wait for the panel to turn green, then tap as fast as you can.",
+          notes: ["Tapping before it turns green resets the round."]
+        },
+        {
+          id: "supp-mob-hipflexor", icon: "🦵", name: "Hip flexor stretch — non-amputated side", kind: "text",
+          intro: "Static stretch for the front of the hip on the non-amputated side.",
+          steps: [
+            "Half-kneel with the non-amputated leg back, knee on a pad.",
+            "Tuck the pelvis under and shift weight gently forward until you feel a stretch at the front of the hip.",
+            "Hold 30 seconds, ribs down. 2–3 rounds."
+          ],
+          notes: ["Only the non-amputated side is covered here. Keep it slow and pain-free."]
+        },
+        {
+          id: "supp-mob-piriformis", icon: "🍑", name: "Piriformis stretch — non-amputated side", kind: "text",
+          intro: "Static stretch for the deep glute on the non-amputated side.",
+          steps: [
+            "Lie on your back. Cross the non-amputated ankle over the opposite thigh.",
+            "Reach through and gently draw the supporting thigh toward the chest until you feel a stretch deep in the glute.",
+            "Hold 30 seconds. 2–3 rounds."
+          ]
+        },
+        {
+          id: "supp-mob-lowerback", icon: "🧘", name: "Lower back stretch — non-amputated side", kind: "text",
+          intro: "Gentle rotational stretch for the lower back toward the non-amputated side.",
+          steps: [
+            "Lie on your back with both knees bent.",
+            "Let both knees drop slowly toward the non-amputated side, keeping both shoulders on the floor.",
+            "Hold 20–30 seconds, then return. 2–3 rounds as comfortable."
+          ]
+        },
+        {
+          id: "supp-sleep-info", icon: "😴", name: "Sleep & recovery", kind: "info",
+          intro: "Sleep is where most of the physical adaptation from training actually happens.",
+          steps: [
+            "Keep a consistent sleep and wake time, including non-training days.",
+            "Keep the room dark and cool; get daylight early in the day to anchor your body clock.",
+            "Avoid heavy training and screens in the last hour before bed — wind-down breathing can help.",
+            "Expect to need more sleep on heavy training days. That's normal, not a setback."
+          ],
+          notes: ["General information, not medical advice. Raise persistent sleep problems with your care team."]
+        }
+      ]
+    },
+    {
+      key: "balance",
+      label: "Balance & proprioception",
+      blurb: "Freely available. A one-time heads-up shows the first time you open this section.",
+      notice: "These exercises challenge your balance. Build up slowly and stop if you feel pain or instability.",
+      exercises: [
+        {
+          id: "supp-prop-sl-eyes", icon: "👁️", name: "Single-leg balance, eyes closed", kind: "hold-timer",
+          intro: "Balance on the non-amputated leg with eyes closed to train position sense without visual input.",
+          steps: [
+            "Stand next to a wall or sturdy chair you can grab.",
+            "Balance on the non-amputated leg, eyes open, until steady.",
+            "Close your eyes and hold with control. Use the timer to track it.",
+            "3–5 rounds, resting between."
+          ],
+          notes: ["Keep a hand hovering near support. Open your eyes and touch down the moment control goes."]
+        },
+        {
+          id: "supp-prop-foam", icon: "🧽", name: "Foam-pad balance", kind: "hold-timer",
+          intro: "Balancing on an unstable surface such as a foam pad or folded towel raises the proprioceptive demand.",
+          steps: [
+            "Place a foam pad or thick folded towel next to support.",
+            "Stand on it with the non-amputated leg, eyes open.",
+            "Hold with control; progress by widening the arms, then later closing the eyes.",
+            "3–5 rounds."
+          ],
+          notes: ["Do this near a wall. Skip the eyes-closed progression until eyes-open feels solid."]
+        }
+      ]
+    },
+    {
+      key: "socket",
+      label: "Prosthesis & socket work",
+      blurb: "Each exercise here asks you to confirm once, per exercise, that you've talked it through with your care team.",
+      exercises: [
+        {
+          id: "supp-socket-balance-load", icon: "⚖️", name: "Balance on your prosthesis", kind: "hold-timer",
+          requiresGuidedConsent: true,
+          consentText: "This exercise loads your prosthesis during balance work. Confirm you have discussed this with your prosthetist.",
+          intro: "Weight-bearing balance work through the prosthetic side.",
+          steps: [
+            "Stand between support on both sides (a counter, rails, or a chair each side).",
+            "Shift weight onto the prosthetic side and find a stable position.",
+            "Hold with as little hand support as is safe; use the timer to track control time.",
+            "3–5 rounds, resting fully between."
+          ],
+          notes: ["Stop for socket pain, pistoning, or skin pinching. Report any new discomfort to your prosthetist."]
+        },
+        {
+          id: "supp-socket-myofascial", icon: "💆", name: "Myofascial self-massage near the socket interface", kind: "text",
+          requiresGuidedConsent: true,
+          consentText: "This exercise involves pressure near your socket interface and scar tissue. Confirm you have discussed this with your prosthetist or physiotherapist.",
+          intro: "Gentle soft-tissue work around — not directly on — the socket interface and scar tissue.",
+          steps: [
+            "With the prosthesis off, use flat fingers or a soft ball.",
+            "Work the muscle around the residual limb with light, slow pressure, staying off open or fragile skin.",
+            "Spend 3–5 minutes, breathing slowly.",
+            "Finish by checking the skin for any new redness or breakdown."
+          ],
+          notes: ["Never work directly on unhealed scar, sores, or numb areas. Stop if pain increases."]
+        }
+      ]
+    }
+  ];
+
+  var SUPP_NON_ORDERED_KINDS = ["info"];
+  var suppExpandedId = null;
+  var suppCleanupFns = [];
+  // null = not yet decided this visit; true/false = show the 1b balance
+  // notice for the rest of this visit. Reset to null when the view is left
+  // (see showView), so a fresh visit re-checks the persisted "seen" flag.
+  var suppBalanceNoticeActive = null;
+
+  function suppRunCleanup() {
+    suppCleanupFns.forEach(function (fn) { try { fn(); } catch (e) { /* best effort */ } });
+    suppCleanupFns = [];
+  }
+
+  function hasGuidedConsent(exId) {
+    try { return localStorage.getItem(SUPP_CONSENT_PREFIX + exId) === "true"; } catch (e) { return false; }
+  }
+  function setGuidedConsent(exId) {
+    try { localStorage.setItem(SUPP_CONSENT_PREFIX + exId, "true"); } catch (e) { /* storage unavailable */ }
+  }
+  function suppBalanceNoticeSeen() {
+    try { return localStorage.getItem(STORAGE_KEYS.supplementaryBalanceNoticeSeen) === "true"; } catch (e) { return false; }
+  }
+  function markSuppBalanceNoticeSeen() {
+    try { localStorage.setItem(STORAGE_KEYS.supplementaryBalanceNoticeSeen, "true"); } catch (e) { /* storage unavailable */ }
+  }
+  function suppFindExercise(id) {
+    var found = null;
+    SUPPLEMENTARY_DATA.forEach(function (cat) {
+      cat.exercises.forEach(function (ex) { if (ex.id === id) found = ex; });
+    });
+    return found;
+  }
+  function getAllGuidedConsent() {
+    var out = {};
+    try {
+      Object.keys(localStorage).forEach(function (k) {
+        if (k.indexOf(SUPP_CONSENT_PREFIX) === 0) out[k.slice(SUPP_CONSENT_PREFIX.length)] = localStorage.getItem(k);
+      });
+    } catch (e) { /* storage unavailable */ }
+    return out;
+  }
+
+  function suppListHtml(items, ordered) {
+    if (!items || !items.length) return "";
+    var tag = ordered ? "ol" : "ul";
+    return "<" + tag + ">" + items.map(function (s) { return "<li>" + escapeHtml(s) + "</li>"; }).join("") + "</" + tag + ">";
+  }
+
+  function suppTextBodyHtml(ex) {
+    var html = "";
+    if (ex.intro) html += "<p>" + escapeHtml(ex.intro) + "</p>";
+    html += suppListHtml(ex.steps, SUPP_NON_ORDERED_KINDS.indexOf(ex.kind) === -1);
+    (ex.notes || []).forEach(function (n) { html += '<p class="field-note">' + escapeHtml(n) + "</p>"; });
+    return html;
+  }
+
+  function suppWidgetHtml(ex) {
+    if (ex.kind === "breathing-pacer") {
+      return '<div class="supp-pacer">' +
+        '<div class="supp-pacer-phase" data-supp-pacer-phase>Ready</div>' +
+        '<div class="supp-pacer-count" data-supp-pacer-count>4</div>' +
+        '</div>' +
+        '<button type="button" class="btn secondary" data-supp-pacer-toggle style="width:100%;">Start</button>';
+    }
+    if (ex.kind === "reaction") {
+      return '<button type="button" class="supp-reaction-target" data-supp-reaction>Tap to start</button>' +
+        '<p class="supp-reaction-result" data-supp-reaction-result>Last: — · Best: —</p>';
+    }
+    if (ex.kind === "hold-timer") {
+      return '<div class="supp-timer-display" data-supp-timer-display>00:00</div>' +
+        '<div class="gate-warning-actions">' +
+          '<button type="button" class="btn secondary" data-supp-timer-toggle>Start</button>' +
+          '<button type="button" class="btn secondary" data-supp-timer-reset>Reset</button>' +
+        '</div>';
+    }
+    return "";
+  }
+
+  function suppExerciseCardHtml(ex) {
+    var expanded = suppExpandedId === ex.id;
+    var locked = !!ex.requiresGuidedConsent && !hasGuidedConsent(ex.id);
+    var head = '<div class="supp-ex-head" data-supp-ex="' + escapeHtml(ex.id) + '">' +
+      '<span class="supp-ex-icon" aria-hidden="true">' + escapeHtml(ex.icon || "•") + '</span>' +
+      '<span class="supp-ex-name">' + escapeHtml(ex.name) + '</span>' +
+      (locked
+        ? '<span class="supp-ex-lock">🔒 Confirm first</span>'
+        : '<span class="supp-ex-chev" aria-hidden="true">' + (expanded ? "▲" : "▼") + '</span>') +
+      '</div>';
+    var body = "";
+    if (expanded && locked) {
+      body = '<div class="supp-consent" data-supp-consent="' + escapeHtml(ex.id) + '">' +
+        '<p>' + escapeHtml(ex.consentText) + '</p>' +
+        '<label class="supp-consent-check">' +
+          '<input type="checkbox" data-supp-consent-checkbox> I confirm I have discussed this with my care team.' +
+        '</label>' +
+        '<button type="button" class="btn" data-supp-consent-confirm disabled>Confirm</button>' +
+      '</div>';
+    } else if (expanded) {
+      body = '<div class="supp-ex-body">' + suppTextBodyHtml(ex) + suppWidgetHtml(ex) + '</div>';
+    }
+    return '<div class="supp-ex-card" data-supp-card="' + escapeHtml(ex.id) + '">' + head + body + '</div>';
+  }
+
+  function renderSupplementaryView() {
+    suppRunCleanup();
+    var host = el("supplementary-categories");
+    if (!host) return;
+    host.innerHTML = SUPPLEMENTARY_DATA.map(function (cat) {
+      var noticeHtml = "";
+      if (cat.notice) {
+        if (suppBalanceNoticeActive === null) {
+          // First render of this visit: decide from the persisted flag, then
+          // mark it seen straight away so it never returns in a later session
+          // (AC2), even if the user never taps "Got it".
+          suppBalanceNoticeActive = !suppBalanceNoticeSeen();
+          markSuppBalanceNoticeSeen();
+        }
+        if (suppBalanceNoticeActive) {
+          noticeHtml = '<div class="card supp-notice" data-supp-notice>' +
+            '<p>' + escapeHtml(cat.notice) + '</p>' +
+            '<button type="button" class="btn secondary" data-supp-notice-dismiss>Got it</button>' +
+          '</div>';
+        }
+      }
+      return '<div class="supp-category">' +
+        '<h3>' + escapeHtml(cat.label) + '</h3>' +
+        '<p class="supp-category-blurb">' + escapeHtml(cat.blurb) + '</p>' +
+        noticeHtml +
+        cat.exercises.map(suppExerciseCardHtml).join("") +
+      '</div>';
+    }).join("");
+
+    if (suppExpandedId) {
+      var ex = suppFindExercise(suppExpandedId);
+      var card = host.querySelector('[data-supp-card="' + suppExpandedId + '"]');
+      if (ex && card && !(ex.requiresGuidedConsent && !hasGuidedConsent(ex.id))) {
+        suppInitWidget(card, ex);
+      }
+    }
+  }
+
+  function suppInitWidget(card, ex) {
+    if (ex.kind === "breathing-pacer") {
+      var phases = [
+        { label: "Breathe in", secs: 4 },
+        { label: "Hold", secs: 4 },
+        { label: "Breathe out", secs: 4 },
+        { label: "Hold", secs: 4 }
+      ];
+      var phaseEl = card.querySelector("[data-supp-pacer-phase]");
+      var countEl = card.querySelector("[data-supp-pacer-count]");
+      var toggle = card.querySelector("[data-supp-pacer-toggle]");
+      var timer = null, pi = 0, remaining = phases[0].secs;
+      function stop() {
+        if (timer) { clearInterval(timer); timer = null; }
+        toggle.textContent = "Start";
+        phaseEl.textContent = "Ready";
+        countEl.textContent = "4";
+        pi = 0; remaining = phases[0].secs;
+      }
+      function tick() {
+        remaining -= 1;
+        if (remaining <= 0) { pi = (pi + 1) % phases.length; remaining = phases[pi].secs; }
+        phaseEl.textContent = phases[pi].label;
+        countEl.textContent = String(remaining);
+      }
+      toggle.addEventListener("click", function () {
+        if (timer) { stop(); return; }
+        pi = 0; remaining = phases[0].secs;
+        phaseEl.textContent = phases[0].label;
+        countEl.textContent = String(remaining);
+        toggle.textContent = "Stop";
+        timer = setInterval(tick, 1000);
+      });
+      suppCleanupFns.push(stop);
+    } else if (ex.kind === "reaction") {
+      var target = card.querySelector("[data-supp-reaction]");
+      var resultEl = card.querySelector("[data-supp-reaction-result]");
+      var state = "idle", waitTimer = null, goAt = 0, best = null;
+      function toIdle(msg) {
+        state = "idle";
+        target.classList.remove("is-wait", "is-go");
+        target.textContent = msg || "Tap to start";
+      }
+      target.addEventListener("click", function () {
+        if (state === "idle") {
+          state = "wait";
+          target.classList.add("is-wait");
+          target.classList.remove("is-go");
+          target.textContent = "Wait for green…";
+          waitTimer = setTimeout(function () {
+            state = "go";
+            target.classList.remove("is-wait");
+            target.classList.add("is-go");
+            target.textContent = "TAP!";
+            goAt = Date.now();
+          }, 1200 + Math.random() * 2300);
+        } else if (state === "wait") {
+          if (waitTimer) { clearTimeout(waitTimer); waitTimer = null; }
+          toIdle("Too soon — tap to try again");
+        } else if (state === "go") {
+          var ms = Date.now() - goAt;
+          if (best == null || ms < best) best = ms;
+          resultEl.textContent = "Last: " + ms + " ms · Best: " + best + " ms";
+          toIdle("Tap to go again");
+        }
+      });
+      suppCleanupFns.push(function () { if (waitTimer) clearTimeout(waitTimer); });
+    } else if (ex.kind === "hold-timer") {
+      var disp = card.querySelector("[data-supp-timer-display]");
+      var tToggle = card.querySelector("[data-supp-timer-toggle]");
+      var tReset = card.querySelector("[data-supp-timer-reset]");
+      var interval = null, startedAt = 0, accumulated = 0;
+      function fmt(ms) {
+        var s = Math.floor(ms / 1000);
+        return ("0" + Math.floor(s / 60)).slice(-2) + ":" + ("0" + (s % 60)).slice(-2);
+      }
+      function render() { disp.textContent = fmt(accumulated + (interval ? Date.now() - startedAt : 0)); }
+      function stopTimer() {
+        if (!interval) return;
+        accumulated += Date.now() - startedAt;
+        clearInterval(interval); interval = null;
+        tToggle.textContent = "Start";
+        render();
+      }
+      tToggle.addEventListener("click", function () {
+        if (interval) { stopTimer(); return; }
+        startedAt = Date.now();
+        interval = setInterval(render, 200);
+        tToggle.textContent = "Stop";
+      });
+      tReset.addEventListener("click", function () {
+        if (interval) { clearInterval(interval); interval = null; }
+        accumulated = 0;
+        tToggle.textContent = "Start";
+        disp.textContent = "00:00";
+      });
+      suppCleanupFns.push(function () { if (interval) clearInterval(interval); });
+    }
+  }
+
+  el("supplementary-categories").addEventListener("click", function (e) {
+    var head = e.target.closest(".supp-ex-head");
+    if (head) {
+      var id = head.getAttribute("data-supp-ex");
+      suppExpandedId = suppExpandedId === id ? null : id;
+      renderSupplementaryView();
+      return;
+    }
+    if (e.target.closest("[data-supp-notice-dismiss]")) {
+      suppBalanceNoticeActive = false; // flag already persisted; just close it for this visit
+      renderSupplementaryView();
+      return;
+    }
+    var confirmBtn = e.target.closest("[data-supp-consent-confirm]");
+    if (confirmBtn) {
+      if (confirmBtn.disabled) return;
+      var box = confirmBtn.closest(".supp-consent");
+      var exId = box.getAttribute("data-supp-consent");
+      setGuidedConsent(exId);
+      suppExpandedId = exId; // stay open so the now-unlocked content shows
+      renderSupplementaryView();
+    }
+  });
+
+  el("supplementary-categories").addEventListener("change", function (e) {
+    var cb = e.target.closest("[data-supp-consent-checkbox]");
+    if (!cb) return;
+    var confirmBtn = cb.closest(".supp-consent").querySelector("[data-supp-consent-confirm]");
+    confirmBtn.disabled = !cb.checked;
+  });
+
+  el("supplementary-open-btn").addEventListener("click", function () { showView("supplementary"); });
+  el("supplementary-back-btn").addEventListener("click", function () {
+    suppExpandedId = null;
+    showView("dashboard");
   });
 
   // ---------------------------------------------------------------------
@@ -4743,6 +5309,13 @@
     el("settings-language").value = settings.language;
     el("settings-units").value = settings.units;
     el("settings-reset-warning").classList.add("hidden");
+    // Update check is for the installed app only — the web/PWA build is
+    // always served fresh from GitHub Pages, so there's nothing to check.
+    el("settings-update-card").classList.toggle("hidden", !isNativeApp());
+    el("settings-update-current").textContent = APP_VERSION;
+    el("settings-update-confirm").classList.add("hidden");
+    el("settings-update-result").classList.add("hidden");
+    el("settings-update-result").innerHTML = "";
     renderProfilePhotoUi();
     populateSettingsProfileForm();
   }
@@ -4913,7 +5486,8 @@
       settings: getSettings(),
       readinessLogs: getReadinessLogs(),
       benchmarks: getBenchmarkEntries(),
-      customExercises: getCustomExercises()
+      customExercises: getCustomExercises(),
+      guidedConsent: getAllGuidedConsent()
     };
     var json = JSON.stringify(backup, null, 2);
     var blob = new Blob([json], { type: "application/json;charset=utf-8;" });
@@ -4932,6 +5506,13 @@
       Object.keys(STORAGE_KEYS).forEach(function (key) {
         try { localStorage.removeItem(STORAGE_KEYS[key]); } catch (e) { /* storage unavailable */ }
       });
+      // Per-exercise guided-consent flags live in their own consent: namespace,
+      // outside STORAGE_KEYS — sweep them by prefix so a reset clears them too.
+      try {
+        Object.keys(localStorage)
+          .filter(function (k) { return k.indexOf(SUPP_CONSENT_PREFIX) === 0; })
+          .forEach(function (k) { localStorage.removeItem(k); });
+      } catch (e) { /* storage unavailable */ }
       try { localStorage.removeItem(STORAGE_PREFIX + "last_view"); } catch (e) { /* storage unavailable */ }
       window.location.reload();
     });
@@ -5254,7 +5835,6 @@
   if (onboardingAlreadyComplete) {
     ensureProgramState();
     migrateStrengthStartingPointIfNeeded();
-    checkForAppUpdate();
     initLogTab();
     ensureSkillsData();
     renderDashboardMilestoneList();
@@ -5263,6 +5843,8 @@
     el("app").classList.remove("hidden");
     var lastView = null;
     try { lastView = localStorage.getItem(STORAGE_PREFIX + "last_view"); } catch (e) {}
+    // "supplementary" is never persisted, but guard anyway — it isn't a tab.
+    if (lastView === "supplementary") lastView = null;
     showView(lastView || "dashboard");
   } else {
     startOnboarding();
@@ -5309,6 +5891,16 @@
     skills: {
       getData: ensureSkillsData,
       saveData: saveSkillsData
+    },
+    supplementary: {
+      DATA: SUPPLEMENTARY_DATA,
+      render: renderSupplementaryView,
+      hasGuidedConsent: hasGuidedConsent,
+      balanceNoticeSeen: suppBalanceNoticeSeen
+    },
+    updateCheck: {
+      versionJsonUrl: VERSION_JSON_URL,
+      run: performUpdateCheck
     },
     progress: {
       getMilestones: getMilestones,
