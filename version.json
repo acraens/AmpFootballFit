@@ -1,5 +1,5 @@
 {
   "version": "4.0",
-  "releaseNotes": "Adds a Supplementary techniques section (breathing, a reaction drill, sound-side mobility, balance and proprioception, and prosthesis/socket drills with a per-exercise care-team confirmation). Replaces the automatic launch-time update check with a manual, permission-gated \"Check for updates\" button in Settings.",
+  "releaseNotes": "Adds supplementary techniques to every phase of the program — breathing and recovery work, a first-step reaction drill, sound-side mobility, and balance / proprioception drills — mixed straight into your sessions. Two prosthesis/socket drills ask you to confirm once, per exercise, that you've discussed them with your care team. Also replaces the automatic launch-time update check with a manual, permission-gated \"Check for updates\" button in Settings.",
   "downloadUrl": "https://github.com/acraens/AmpFootballFit/releases/latest"
 }

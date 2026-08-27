@@ -1118,48 +1118,13 @@
     margin: 0;
   }
 
-  /* Supplementary techniques */
-  .supp-back-btn { margin-bottom: 12px; font-size: 0.82rem; }
+  /* Supplementary techniques — per-exercise "discussed with my care team"
+     confirmation, shown as a locked card in the Program tab. */
+  .exercise-emoji-icon { font-size: 1.9rem; line-height: 1; }
 
-  .supp-intro p { margin: 0; font-size: 0.85rem; color: var(--text-dim); }
+  .supp-locked-card .exercise-icon { font-size: 1.6rem; text-align: center; }
 
-  .supp-category { margin-bottom: 22px; }
-
-  .supp-category > h3 {
-    margin: 0 0 4px;
-    font-size: 0.9rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .supp-category-blurb { font-size: 0.82rem; color: var(--text-dim); margin: 0 0 10px; }
-
-  .supp-notice { border-color: var(--warn); }
-  .supp-notice p { margin: 0 0 10px; font-size: 0.85rem; }
-
-  .supp-ex-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 14px;
-    margin-bottom: 8px;
-  }
-
-  .supp-ex-head { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-  .supp-ex-head .supp-ex-icon { font-size: 1.3rem; line-height: 1; flex-shrink: 0; }
-  .supp-ex-head .supp-ex-name { flex: 1; font-weight: 600; font-size: 0.9rem; }
-  .supp-ex-head .supp-ex-chev { color: var(--text-dim); font-size: 0.8rem; flex-shrink: 0; }
-  .supp-ex-lock { font-size: 0.72rem; color: var(--warn); white-space: nowrap; flex-shrink: 0; }
-
-  .supp-ex-body { margin-top: 12px; font-size: 0.86rem; color: var(--text); line-height: 1.5; }
-  .supp-ex-body ol, .supp-ex-body ul { margin: 8px 0; padding-left: 20px; }
-  .supp-ex-body li { margin-bottom: 4px; }
-  .supp-ex-body p { margin: 0 0 8px; }
-  .supp-ex-body p:last-child { margin-bottom: 0; }
-  .supp-ex-body .field-note { color: var(--text-dim); }
-
-  .supp-consent { border: 1px solid var(--warn); border-radius: var(--radius); padding: 14px; margin-top: 12px; }
+  .supp-consent { border: 1px solid var(--warn); border-radius: var(--radius); padding: 14px; margin-top: 10px; }
   .supp-consent > p { margin: 0 0 4px; font-size: 0.86rem; }
   .supp-consent .supp-consent-check {
     display: flex; gap: 8px; align-items: flex-start;
@@ -1168,24 +1133,10 @@
   .supp-consent .supp-consent-check input { width: auto; margin-top: 2px; flex-shrink: 0; }
   .supp-consent .btn:disabled { opacity: 0.45; cursor: default; }
 
-  .supp-pacer {
-    text-align: center; padding: 18px;
-    border: 1px solid var(--border); border-radius: var(--radius);
-    background: var(--surface-alt); margin: 10px 0;
-  }
-  .supp-pacer-phase { font-size: 1.05rem; font-weight: 600; }
-  .supp-pacer-count { font-size: 2rem; font-weight: 700; color: var(--accent); }
-
-  .supp-reaction-target {
-    width: 100%; padding: 30px 16px; border-radius: var(--radius); border: none;
-    font-size: 1rem; font-weight: 600; font-family: inherit; cursor: pointer;
-    background: var(--surface-alt); color: var(--text); margin: 10px 0;
-  }
-  .supp-reaction-target.is-wait { background: var(--danger); color: #200; }
-  .supp-reaction-target.is-go { background: var(--accent); color: #04121c; }
-  .supp-reaction-result { font-size: 0.85rem; color: var(--text-dim); }
-
-  .supp-timer-display { font-size: 1.6rem; font-weight: 700; text-align: center; margin: 10px 0; }
+  #onboarding-supp-disclaimer p:first-child,
+  #settings-supp-disclaimer p:first-child { margin-top: 0; }
+  #onboarding-supp-disclaimer p:last-child,
+  #settings-supp-disclaimer p:last-child { margin-bottom: 0; }
 </style>
 </head>
 <body>
@@ -1245,6 +1196,11 @@
           <option value="varies">Varies by exercise</option>
         </select>
         <p class="field-note">Exercises here are written assuming typical prosthetic use unless noted. If that doesn't match how you train, adapt reps/setup with your physio or coach: we'll flag it as a reminder where relevant.</p>
+
+        <div class="card gate-warning" style="margin-top: 14px;">
+          <h3 style="margin: 0 0 8px; font-size: 0.9rem;">Supplementary techniques in your program</h3>
+          <div id="onboarding-supp-disclaimer"></div>
+        </div>
       </div>
 
       <div class="onboarding-step" data-step="2">
@@ -1465,12 +1421,6 @@
           <button type="button" class="btn" id="readiness-save-btn" style="width: 100%; margin-top: 10px;">Save check-in</button>
         </div>
         <div id="readiness-summary-wrap" class="hidden"></div>
-      </div>
-
-      <div class="card" id="supplementary-entry-card">
-        <h3>Supplementary techniques</h3>
-        <p class="field-note">Optional additions to your main program: breathing and reaction work, mobility for your non-amputated side, balance and proprioception, and a few prosthesis/socket-specific drills.</p>
-        <button type="button" class="btn secondary" id="supplementary-open-btn" style="width: 100%; margin-top: 6px;">Open supplementary techniques</button>
       </div>
 
       <div class="card">
@@ -1793,6 +1743,11 @@
       </div>
 
       <div class="card">
+        <h3>About your amputation &amp; supplementary techniques</h3>
+        <div id="settings-supp-disclaimer"></div>
+      </div>
+
+      <div class="card">
         <h3>Language</h3>
         <label for="settings-language">App language</label>
         <select id="settings-language">
@@ -1851,17 +1806,6 @@
         <img id="settings-visit-counter-img" alt="web visit count" style="vertical-align: middle;">
       </p>
     </section>
-
-    <section class="view" id="view-supplementary">
-      <button type="button" class="btn secondary supp-back-btn" id="supplementary-back-btn">&#8249; Back to Dashboard</button>
-      <h2>Supplementary techniques</h2>
-
-      <div class="card supp-intro">
-        <p>These are optional additions to your main conditioning program, not a replacement for it. Most are freely available. A few balance drills carry a one-time heads-up, and the prosthesis/socket drills ask you to confirm per exercise that you've discussed them with your care team.</p>
-      </div>
-
-      <div id="supplementary-categories"></div>
-    </section>
   </main>
 
   <nav class="tab-bar" id="tab-bar">
@@ -1914,8 +1858,7 @@
     benchmarks: STORAGE_PREFIX + "benchmarks",
     customExercises: STORAGE_PREFIX + "custom_exercises",
     strengthBannerDismissed: STORAGE_PREFIX + "strength_banner_dismissed",
-    exercisePhotos: STORAGE_PREFIX + "exercise_photos",
-    supplementaryBalanceNoticeSeen: STORAGE_PREFIX + "supp_balance_notice_seen"
+    exercisePhotos: STORAGE_PREFIX + "exercise_photos"
   };
 
   // Per-exercise "discussed with my care team" confirmations for the
@@ -1983,29 +1926,19 @@
   // Tab navigation
   // ---------------------------------------------------------------------
   function showView(name) {
-    // Leaving the Supplementary view (or re-entering it) must stop any
-    // running pacer / reaction / hold-timer widget.
-    if (typeof suppRunCleanup === "function") suppRunCleanup();
-    if (name !== "supplementary") suppBalanceNoticeActive = null;
     document.querySelectorAll(".view").forEach(function (el) {
       el.classList.toggle("active", el.id === "view-" + name);
     });
     document.querySelectorAll(".tab-btn").forEach(function (btn) {
       btn.classList.toggle("active", btn.getAttribute("data-view") === name);
     });
-    // "supplementary" is reached from a Dashboard card, not a tab, and has
-    // no tab-bar entry — don't persist it as last_view or a relaunch would
-    // land on a view with no active tab.
-    if (name !== "supplementary") {
-      try {
-        localStorage.setItem(STORAGE_PREFIX + "last_view", name);
-      } catch (e) { /* storage unavailable, non-critical */ }
-    }
+    try {
+      localStorage.setItem(STORAGE_PREFIX + "last_view", name);
+    } catch (e) { /* storage unavailable, non-critical */ }
     if (name === "program" && typeof renderProgramView === "function") renderProgramView();
     if (name === "log" && typeof renderSessionList === "function") renderSessionList();
     if (name === "skills" && typeof renderSkillsView === "function") renderSkillsView();
     if (name === "progress" && typeof renderProgressView === "function") renderProgressView();
-    if (name === "supplementary" && typeof renderSupplementaryView === "function") renderSupplementaryView();
     if (name === "dashboard" && typeof renderDashboardMilestoneList === "function") renderDashboardMilestoneList();
     if (name === "dashboard" && typeof renderProfilePhotoUi === "function") renderProfilePhotoUi();
     if (name === "dashboard" && typeof renderReadinessCard === "function") renderReadinessCard();
@@ -2182,7 +2115,12 @@
   function renderExerciseIcon(ex) {
     var photo = ex ? getExercisePhoto(ex.id) : null;
     if (photo) return '<img src="' + photo + '" class="exercise-illustration" alt="" aria-hidden="true"/>';
-    return renderPoseSvg(ex ? ex.pose : null);
+    var svg = renderPoseSvg(ex ? ex.pose : null);
+    if (svg) return svg;
+    // Fall back to the emoji icon when there's no pose illustration
+    // (supplementary techniques and most custom exercises).
+    if (ex && ex.icon) return '<span class="exercise-emoji-icon" aria-hidden="true">' + escapeHtml(ex.icon) + "</span>";
+    return "";
   }
 
   var exercisePhotoTargetId = null;
@@ -2839,6 +2777,10 @@
   function filterToPreferredTier(exercises) {
     return exercises.filter(function (ex) {
       if (ex.requiresAdvancedUnlock && !qualifiesForAdvancedContent()) return false;
+      // Prosthesis/socket supplementary exercises stay out of the Program
+      // list, the session plan and the Log checklist until their own
+      // "discussed with my care team" confirmation is given.
+      if (ex.requiresGuidedConsent && !hasGuidedConsent(ex.id)) return false;
       if (!ex.progressionGroup) return true;
       return ex.tier === getPreferredTier(ex.progressionGroup);
     });
@@ -2863,7 +2805,7 @@
   // data, so this is a deliberately simple fixed per-category estimate
   // for trimming order rather than an attempt to parse exact set/rep
   // counts — it only needs to be roughly right, not to the minute.
-  var CATEGORY_MINUTE_ESTIMATE = { singleLegStrength: 5, upperBody: 4, core: 3, mobility: 2 };
+  var CATEGORY_MINUTE_ESTIMATE = { singleLegStrength: 5, upperBody: 4, core: 3, mobility: 2, supplementary: 2 };
   var CARDIO_DEFAULT_MINUTES = 15;
 
   function estimateExerciseMinutes(ex, catKey) {
@@ -2876,10 +2818,10 @@
   }
 
   // Trim order when a session runs over the stated time budget — first
-  // entry is dropped first. Mobility/cardio can be done outside the
-  // dedicated session; single-leg strength is the program's core rehab
-  // content, so it's protected longest.
-  var SESSION_TRIM_PRIORITY = ["mobility", "cardio", "upperBody", "core", "singleLegStrength"];
+  // entry is dropped first. Supplementary techniques and mobility/cardio
+  // can be done outside the dedicated session; single-leg strength is the
+  // program's core rehab content, so it's protected longest.
+  var SESSION_TRIM_PRIORITY = ["supplementary", "mobility", "cardio", "upperBody", "core", "singleLegStrength"];
 
   function buildSessionPlanForPhase(phase) {
     var profile = getProfile();
@@ -2970,13 +2912,14 @@
   // ---------------------------------------------------------------------
   // Program tab UI (Section 4 display + soft phase-gate confirmation)
   // ---------------------------------------------------------------------
-  var CATEGORY_ORDER = ["singleLegStrength", "upperBody", "core", "cardio", "mobility"];
+  var CATEGORY_ORDER = ["singleLegStrength", "upperBody", "core", "cardio", "mobility", "supplementary"];
   var CATEGORY_LABELS = {
     singleLegStrength: "Single-Leg Strength",
     upperBody: "Upper Body",
     core: "Core",
     cardio: "Cardio",
-    mobility: "Mobility"
+    mobility: "Mobility",
+    supplementary: "Supplementary techniques"
   };
 
   // ---------------------------------------------------------------------
@@ -3142,7 +3085,7 @@
         "</div>";
       }).join("");
       return '<div class="exercise-group"><h3>' + escapeHtml(CATEGORY_LABELS[catKey]) + "</h3>" + cards + "</div>";
-    }).join("");
+    }).join("") + supplementaryLockedCardsHtml(phase);
   }
 
   function populateCustomExerciseForm() {
@@ -3312,6 +3255,18 @@
     var logBtn = e.target.closest(".log-this-btn");
     if (logBtn) {
       logExerciseFromProgram(logBtn.getAttribute("data-ex-id"), Number(logBtn.getAttribute("data-phase")));
+      return;
+    }
+    var consentBtn = e.target.closest("[data-supp-consent-confirm]");
+    if (consentBtn) {
+      if (consentBtn.disabled) return;
+      var box = consentBtn.closest(".supp-consent");
+      setGuidedConsent(box.getAttribute("data-supp-consent"));
+      renderProgramView(); // exercise now flows into the Program list and the workout
+      // The Log checklist is rendered once and cached — refresh it too so
+      // the newly-confirmed exercise shows there without a tab round-trip.
+      var logPhase = Number(el("log-phase").value) || ensureProgramState().currentPhase;
+      renderLogExerciseChecklist(logPhase);
       return;
     }
     handleExercisePhotoButtonClick(e);
@@ -4088,191 +4043,81 @@
   });
 
   // ---------------------------------------------------------------------
-  // Supplementary techniques — a standalone content area reached from a
-  // Dashboard card (not a tab). Three subcategories with different access
-  // levels:
-  //   free    (1a) — open, no gate, no notice
-  //   balance (1b) — open, but a one-time awareness notice the first time
-  //                  the section is opened
-  //   socket  (1c) — prosthesis/socket work; each exercise carries its own
-  //                  consentText and a per-exercise blocking confirmation,
-  //                  stored one key per exercise under the SUPP_CONSENT_PREFIX
-  //                  namespace. Content for an unconfirmed exercise is never
-  //                  put in the DOM, so there's nothing to reach by back
-  //                  navigation or routing.
-  // Consent text lives on the data objects (consentText), never hardcoded
-  // in the rendering code, so a new socket exercise only needs a data entry.
+  // Supplementary techniques — folded into the per-phase program.
+  //
+  // The exercises live in PROGRAM_DATA under a "supplementary" category in
+  // every phase, so they flow through the normal Program list, the Start
+  // Workout player and the Log checklist like any other exercise (no
+  // separate screen, no separate sessions).
+  //
+  // Two of them (prosthesis / socket work) carry requiresGuidedConsent +
+  // their own consentText. filterToPreferredTier() drops any unconfirmed
+  // guided-consent exercise everywhere it's used (Program cards, session
+  // plan, Log checklist), so the prescription is never rendered and the
+  // exercise never enters a workout until it's confirmed. The only place
+  // it shows before then is a locked card in the Program tab whose sole
+  // content is that exercise's consentText + a per-exercise checkbox.
+  // Confirmations are stored one key per exercise under SUPP_CONSENT_PREFIX.
+  //
+  // The general awareness text (balance caution, care-team confirmation,
+  // recovery note) is shown as static copy in the onboarding "About your
+  // amputation" step and, so existing users see it too, in a Settings card.
   // ---------------------------------------------------------------------
-  var SUPPLEMENTARY_DATA = [
-    {
-      key: "free",
-      label: "Foundations",
-      blurb: "Freely available. No sign-off needed.",
-      exercises: [
-        {
-          id: "supp-breath-box", icon: "🌬️", name: "Box breathing (4-4-4-4)", kind: "breathing-pacer",
-          intro: "Equal four-count breathing to settle the nervous system before training or sleep.",
-          steps: [
-            "Sit or lie somewhere comfortable.",
-            "Breathe in through the nose for 4 seconds.",
-            "Hold for 4 seconds.",
-            "Breathe out through the mouth for 4 seconds.",
-            "Hold for 4 seconds, then repeat for 5–10 rounds."
-          ],
-          notes: ["Stop and breathe normally if you feel light-headed."]
-        },
-        {
-          id: "supp-breath-diaphragm", icon: "🫁", name: "Diaphragmatic breathing", kind: "text",
-          intro: "Slow belly breathing that trains the diaphragm rather than the chest and shoulders.",
-          steps: [
-            "Lie on your back, knees bent, one hand on the chest and one on the belly.",
-            "Breathe in slowly through the nose so the belly hand rises while the chest hand stays still.",
-            "Breathe out slowly through pursed lips, letting the belly fall.",
-            "Aim for about 6 breaths per minute, 5 minutes at a time."
-          ]
-        },
-        {
-          id: "supp-reaction-tap", icon: "⚡", name: "Reaction tap", kind: "reaction",
-          intro: "A quick reaction-time check. Wait for the panel to turn green, then tap as fast as you can.",
-          notes: ["Tapping before it turns green resets the round."]
-        },
-        {
-          id: "supp-mob-hipflexor", icon: "🦵", name: "Hip flexor stretch — non-amputated side", kind: "text",
-          intro: "Static stretch for the front of the hip on the non-amputated side.",
-          steps: [
-            "Half-kneel with the non-amputated leg back, knee on a pad.",
-            "Tuck the pelvis under and shift weight gently forward until you feel a stretch at the front of the hip.",
-            "Hold 30 seconds, ribs down. 2–3 rounds."
-          ],
-          notes: ["Only the non-amputated side is covered here. Keep it slow and pain-free."]
-        },
-        {
-          id: "supp-mob-piriformis", icon: "🍑", name: "Piriformis stretch — non-amputated side", kind: "text",
-          intro: "Static stretch for the deep glute on the non-amputated side.",
-          steps: [
-            "Lie on your back. Cross the non-amputated ankle over the opposite thigh.",
-            "Reach through and gently draw the supporting thigh toward the chest until you feel a stretch deep in the glute.",
-            "Hold 30 seconds. 2–3 rounds."
-          ]
-        },
-        {
-          id: "supp-mob-lowerback", icon: "🧘", name: "Lower back stretch — non-amputated side", kind: "text",
-          intro: "Gentle rotational stretch for the lower back toward the non-amputated side.",
-          steps: [
-            "Lie on your back with both knees bent.",
-            "Let both knees drop slowly toward the non-amputated side, keeping both shoulders on the floor.",
-            "Hold 20–30 seconds, then return. 2–3 rounds as comfortable."
-          ]
-        },
-        {
-          id: "supp-sleep-info", icon: "😴", name: "Sleep & recovery", kind: "info",
-          intro: "Sleep is where most of the physical adaptation from training actually happens.",
-          steps: [
-            "Keep a consistent sleep and wake time, including non-training days.",
-            "Keep the room dark and cool; get daylight early in the day to anchor your body clock.",
-            "Avoid heavy training and screens in the last hour before bed — wind-down breathing can help.",
-            "Expect to need more sleep on heavy training days. That's normal, not a setback."
-          ],
-          notes: ["General information, not medical advice. Raise persistent sleep problems with your care team."]
-        }
-      ]
-    },
-    {
-      key: "balance",
-      label: "Balance & proprioception",
-      blurb: "Freely available. A one-time heads-up shows the first time you open this section.",
-      notice: "These exercises challenge your balance. Build up slowly and stop if you feel pain or instability.",
-      exercises: [
-        {
-          id: "supp-prop-sl-eyes", icon: "👁️", name: "Single-leg balance, eyes closed", kind: "hold-timer",
-          intro: "Balance on the non-amputated leg with eyes closed to train position sense without visual input.",
-          steps: [
-            "Stand next to a wall or sturdy chair you can grab.",
-            "Balance on the non-amputated leg, eyes open, until steady.",
-            "Close your eyes and hold with control. Use the timer to track it.",
-            "3–5 rounds, resting between."
-          ],
-          notes: ["Keep a hand hovering near support. Open your eyes and touch down the moment control goes."]
-        },
-        {
-          id: "supp-prop-foam", icon: "🧽", name: "Foam-pad balance", kind: "hold-timer",
-          intro: "Balancing on an unstable surface such as a foam pad or folded towel raises the proprioceptive demand.",
-          steps: [
-            "Place a foam pad or thick folded towel next to support.",
-            "Stand on it with the non-amputated leg, eyes open.",
-            "Hold with control; progress by widening the arms, then later closing the eyes.",
-            "3–5 rounds."
-          ],
-          notes: ["Do this near a wall. Skip the eyes-closed progression until eyes-open feels solid."]
-        }
-      ]
-    },
-    {
-      key: "socket",
-      label: "Prosthesis & socket work",
-      blurb: "Each exercise here asks you to confirm once, per exercise, that you've talked it through with your care team.",
-      exercises: [
-        {
-          id: "supp-socket-balance-load", icon: "⚖️", name: "Balance on your prosthesis", kind: "hold-timer",
-          requiresGuidedConsent: true,
-          consentText: "This exercise loads your prosthesis during balance work. Confirm you have discussed this with your prosthetist.",
-          intro: "Weight-bearing balance work through the prosthetic side.",
-          steps: [
-            "Stand between support on both sides (a counter, rails, or a chair each side).",
-            "Shift weight onto the prosthetic side and find a stable position.",
-            "Hold with as little hand support as is safe; use the timer to track control time.",
-            "3–5 rounds, resting fully between."
-          ],
-          notes: ["Stop for socket pain, pistoning, or skin pinching. Report any new discomfort to your prosthetist."]
-        },
-        {
-          id: "supp-socket-myofascial", icon: "💆", name: "Myofascial self-massage near the socket interface", kind: "text",
-          requiresGuidedConsent: true,
-          consentText: "This exercise involves pressure near your socket interface and scar tissue. Confirm you have discussed this with your prosthetist or physiotherapist.",
-          intro: "Gentle soft-tissue work around — not directly on — the socket interface and scar tissue.",
-          steps: [
-            "With the prosthesis off, use flat fingers or a soft ball.",
-            "Work the muscle around the residual limb with light, slow pressure, staying off open or fragile skin.",
-            "Spend 3–5 minutes, breathing slowly.",
-            "Finish by checking the skin for any new redness or breakdown."
-          ],
-          notes: ["Never work directly on unhealed scar, sores, or numb areas. Stop if pain increases."]
-        }
-      ]
-    }
+  var SUPPLEMENTARY_DISCLAIMER_PARAS = [
+    "Every phase mixes a few supplementary techniques into your sessions: breathing and recovery work, a first-step reaction drill, mobility for your non-amputated side, and balance / proprioception work.",
+    "The balance drills challenge your stability on purpose. Build up slowly, stay within reach of something you can hold, and stop if you feel pain or instability.",
+    "Two of them load or apply pressure around your prosthesis and socket. Each of those asks you to confirm, once, that you've discussed it with your prosthetist or physiotherapist before it joins your sessions.",
+    "For recovery: keep consistent sleep and wake times, and use the wind-down breathing before bed on heavier training days."
   ];
 
-  var SUPP_NON_ORDERED_KINDS = ["info"];
-  var suppExpandedId = null;
-  var suppCleanupFns = [];
-  // null = not yet decided this visit; true/false = show the 1b balance
-  // notice for the rest of this visit. Reset to null when the view is left
-  // (see showView), so a fresh visit re-checks the persisted "seen" flag.
-  var suppBalanceNoticeActive = null;
-
-  function suppRunCleanup() {
-    suppCleanupFns.forEach(function (fn) { try { fn(); } catch (e) { /* best effort */ } });
-    suppCleanupFns = [];
+  function renderSupplementaryDisclaimerInto(elm) {
+    if (!elm) return;
+    elm.innerHTML = SUPPLEMENTARY_DISCLAIMER_PARAS.map(function (p) {
+      return '<p class="field-note" style="margin: 8px 0;">' + escapeHtml(p) + "</p>";
+    }).join("");
   }
+
+  // Consent text lives on the exercise objects, never hardcoded in the UI,
+  // so a future socket exercise only needs a data entry (id + consentText).
+  var SUPPLEMENTARY_EXERCISES = [
+    { id: "supp-breath-box", name: "Box breathing (4-4-4-4)", icon: "🌬️", isSupplementary: true,
+      prescription: "5–10 rounds: breathe in 4s, hold 4s, out 4s, hold 4s. Sitting or lying, before training or sleep. Stop if light-headed." },
+    { id: "supp-breath-diaphragm", name: "Diaphragmatic breathing", icon: "🫁", isSupplementary: true,
+      prescription: "5 min at ~6 breaths/min. Hand on belly rises, hand on chest stays still; slow out through pursed lips." },
+    { id: "supp-reaction", name: "Reaction & first-step drill", icon: "⚡", isSupplementary: true,
+      prescription: "4–6 x: on a partner's call or a ball drop, explode 2–3 steps and reset. Focus on a fast first move, not distance." },
+    { id: "supp-mob-hipflexor", name: "Hip flexor stretch — non-amputated side", icon: "🦵", isSupplementary: true,
+      prescription: "Half-kneel, non-amputated leg back, pelvis tucked, ease forward. Hold 30s x 2–3. Slow and pain-free." },
+    { id: "supp-mob-piriformis", name: "Piriformis stretch — non-amputated side", icon: "🍑", isSupplementary: true,
+      prescription: "On your back, non-amputated ankle across the opposite thigh, draw the thigh in. Hold 30s x 2–3." },
+    { id: "supp-mob-lowerback", name: "Lower back stretch — non-amputated side", icon: "🧘", isSupplementary: true,
+      prescription: "On your back, knees bent, let both knees drop toward the non-amputated side, shoulders down. Hold 20–30s x 2–3." },
+    { id: "supp-prop-sl-eyes", name: "Single-leg balance, eyes closed", icon: "👁️", isSupplementary: true,
+      prescription: "Non-amputated leg, next to support. Steady with eyes open, then close them and hold with control. 3–5 rounds. Touch down the moment control goes." },
+    { id: "supp-prop-foam", name: "Foam-pad balance", icon: "🧽", isSupplementary: true,
+      prescription: "Stand on a foam pad or folded towel on the non-amputated leg, near support. Hold with control; progress to eyes closed later. 3–5 rounds." },
+    { id: "supp-socket-balance-load", name: "Balance on your prosthesis", icon: "⚖️", isSupplementary: true,
+      requiresGuidedConsent: true,
+      consentText: "This exercise loads your prosthesis during balance work. Confirm you have discussed this with your prosthetist.",
+      prescription: "Between support on both sides, shift weight onto the prosthetic side and hold with as little hand support as is safe. 3–5 rounds. Stop for socket pain, pistoning or pinching." },
+    { id: "supp-socket-myofascial", name: "Myofascial self-massage near the socket interface", icon: "💆", isSupplementary: true,
+      requiresGuidedConsent: true,
+      consentText: "This exercise involves pressure near your socket interface and scar tissue. Confirm you have discussed this with your prosthetist or physiotherapist.",
+      prescription: "Prosthesis off. Light, slow pressure on the muscle around the residual limb with flat fingers or a soft ball, 3–5 min. Stay off scar, sores and numb areas. Check the skin afterwards." }
+  ];
+
+  // "All in every phase for now" — give each phase its own array copy so a
+  // custom exercise added to the supplementary category of one phase, or a
+  // future per-phase mapping, doesn't leak across phases.
+  PROGRAM_DATA.phases.forEach(function (phase) {
+    phase.categories.supplementary = SUPPLEMENTARY_EXERCISES.slice();
+  });
 
   function hasGuidedConsent(exId) {
     try { return localStorage.getItem(SUPP_CONSENT_PREFIX + exId) === "true"; } catch (e) { return false; }
   }
   function setGuidedConsent(exId) {
     try { localStorage.setItem(SUPP_CONSENT_PREFIX + exId, "true"); } catch (e) { /* storage unavailable */ }
-  }
-  function suppBalanceNoticeSeen() {
-    try { return localStorage.getItem(STORAGE_KEYS.supplementaryBalanceNoticeSeen) === "true"; } catch (e) { return false; }
-  }
-  function markSuppBalanceNoticeSeen() {
-    try { localStorage.setItem(STORAGE_KEYS.supplementaryBalanceNoticeSeen, "true"); } catch (e) { /* storage unavailable */ }
-  }
-  function suppFindExercise(id) {
-    var found = null;
-    SUPPLEMENTARY_DATA.forEach(function (cat) {
-      cat.exercises.forEach(function (ex) { if (ex.id === id) found = ex; });
-    });
-    return found;
   }
   function getAllGuidedConsent() {
     var out = {};
@@ -4284,240 +4129,42 @@
     return out;
   }
 
-  function suppListHtml(items, ordered) {
-    if (!items || !items.length) return "";
-    var tag = ordered ? "ol" : "ul";
-    return "<" + tag + ">" + items.map(function (s) { return "<li>" + escapeHtml(s) + "</li>"; }).join("") + "</" + tag + ">";
+  // The unconfirmed guided-consent exercises for a phase, rendered as
+  // locked cards under the Program list. Their prescription is never put in
+  // the DOM — the card body is only the consentText + checkbox + Confirm.
+  function supplementaryLockedCardsHtml(phase) {
+    var locked = (phase.categories.supplementary || []).filter(function (ex) {
+      return ex.requiresGuidedConsent && !hasGuidedConsent(ex.id);
+    });
+    if (!locked.length) return "";
+    return '<div class="exercise-group">' +
+      "<h3>Supplementary — confirm first</h3>" +
+      '<p class="field-note" style="margin: 0 0 10px;">These load or apply pressure around your prosthesis and socket. Each one joins your sessions once you confirm you’ve discussed it with your care team.</p>' +
+      locked.map(function (ex) {
+        return '<div class="exercise-card supp-locked-card" data-ex-id="' + escapeHtml(ex.id) + '">' +
+          '<div class="exercise-icon" aria-hidden="true">🔒</div>' +
+          '<div class="exercise-card-body">' +
+            '<div class="exercise-name">' + escapeHtml(ex.name) + "</div>" +
+            '<div class="supp-consent" data-supp-consent="' + escapeHtml(ex.id) + '">' +
+              "<p>" + escapeHtml(ex.consentText) + "</p>" +
+              '<label class="supp-consent-check">' +
+                '<input type="checkbox" data-supp-consent-checkbox> I confirm I have discussed this with my care team.' +
+              "</label>" +
+              '<button type="button" class="btn" data-supp-consent-confirm disabled>Confirm</button>' +
+            "</div>" +
+          "</div>" +
+        "</div>";
+      }).join("") +
+    "</div>";
   }
 
-  function suppTextBodyHtml(ex) {
-    var html = "";
-    if (ex.intro) html += "<p>" + escapeHtml(ex.intro) + "</p>";
-    html += suppListHtml(ex.steps, SUPP_NON_ORDERED_KINDS.indexOf(ex.kind) === -1);
-    (ex.notes || []).forEach(function (n) { html += '<p class="field-note">' + escapeHtml(n) + "</p>"; });
-    return html;
-  }
-
-  function suppWidgetHtml(ex) {
-    if (ex.kind === "breathing-pacer") {
-      return '<div class="supp-pacer">' +
-        '<div class="supp-pacer-phase" data-supp-pacer-phase>Ready</div>' +
-        '<div class="supp-pacer-count" data-supp-pacer-count>4</div>' +
-        '</div>' +
-        '<button type="button" class="btn secondary" data-supp-pacer-toggle style="width:100%;">Start</button>';
-    }
-    if (ex.kind === "reaction") {
-      return '<button type="button" class="supp-reaction-target" data-supp-reaction>Tap to start</button>' +
-        '<p class="supp-reaction-result" data-supp-reaction-result>Last: — · Best: —</p>';
-    }
-    if (ex.kind === "hold-timer") {
-      return '<div class="supp-timer-display" data-supp-timer-display>00:00</div>' +
-        '<div class="gate-warning-actions">' +
-          '<button type="button" class="btn secondary" data-supp-timer-toggle>Start</button>' +
-          '<button type="button" class="btn secondary" data-supp-timer-reset>Reset</button>' +
-        '</div>';
-    }
-    return "";
-  }
-
-  function suppExerciseCardHtml(ex) {
-    var expanded = suppExpandedId === ex.id;
-    var locked = !!ex.requiresGuidedConsent && !hasGuidedConsent(ex.id);
-    var head = '<div class="supp-ex-head" data-supp-ex="' + escapeHtml(ex.id) + '">' +
-      '<span class="supp-ex-icon" aria-hidden="true">' + escapeHtml(ex.icon || "•") + '</span>' +
-      '<span class="supp-ex-name">' + escapeHtml(ex.name) + '</span>' +
-      (locked
-        ? '<span class="supp-ex-lock">🔒 Confirm first</span>'
-        : '<span class="supp-ex-chev" aria-hidden="true">' + (expanded ? "▲" : "▼") + '</span>') +
-      '</div>';
-    var body = "";
-    if (expanded && locked) {
-      body = '<div class="supp-consent" data-supp-consent="' + escapeHtml(ex.id) + '">' +
-        '<p>' + escapeHtml(ex.consentText) + '</p>' +
-        '<label class="supp-consent-check">' +
-          '<input type="checkbox" data-supp-consent-checkbox> I confirm I have discussed this with my care team.' +
-        '</label>' +
-        '<button type="button" class="btn" data-supp-consent-confirm disabled>Confirm</button>' +
-      '</div>';
-    } else if (expanded) {
-      body = '<div class="supp-ex-body">' + suppTextBodyHtml(ex) + suppWidgetHtml(ex) + '</div>';
-    }
-    return '<div class="supp-ex-card" data-supp-card="' + escapeHtml(ex.id) + '">' + head + body + '</div>';
-  }
-
-  function renderSupplementaryView() {
-    suppRunCleanup();
-    var host = el("supplementary-categories");
-    if (!host) return;
-    host.innerHTML = SUPPLEMENTARY_DATA.map(function (cat) {
-      var noticeHtml = "";
-      if (cat.notice) {
-        if (suppBalanceNoticeActive === null) {
-          // First render of this visit: decide from the persisted flag, then
-          // mark it seen straight away so it never returns in a later session
-          // (AC2), even if the user never taps "Got it".
-          suppBalanceNoticeActive = !suppBalanceNoticeSeen();
-          markSuppBalanceNoticeSeen();
-        }
-        if (suppBalanceNoticeActive) {
-          noticeHtml = '<div class="card supp-notice" data-supp-notice>' +
-            '<p>' + escapeHtml(cat.notice) + '</p>' +
-            '<button type="button" class="btn secondary" data-supp-notice-dismiss>Got it</button>' +
-          '</div>';
-        }
-      }
-      return '<div class="supp-category">' +
-        '<h3>' + escapeHtml(cat.label) + '</h3>' +
-        '<p class="supp-category-blurb">' + escapeHtml(cat.blurb) + '</p>' +
-        noticeHtml +
-        cat.exercises.map(suppExerciseCardHtml).join("") +
-      '</div>';
-    }).join("");
-
-    if (suppExpandedId) {
-      var ex = suppFindExercise(suppExpandedId);
-      var card = host.querySelector('[data-supp-card="' + suppExpandedId + '"]');
-      if (ex && card && !(ex.requiresGuidedConsent && !hasGuidedConsent(ex.id))) {
-        suppInitWidget(card, ex);
-      }
-    }
-  }
-
-  function suppInitWidget(card, ex) {
-    if (ex.kind === "breathing-pacer") {
-      var phases = [
-        { label: "Breathe in", secs: 4 },
-        { label: "Hold", secs: 4 },
-        { label: "Breathe out", secs: 4 },
-        { label: "Hold", secs: 4 }
-      ];
-      var phaseEl = card.querySelector("[data-supp-pacer-phase]");
-      var countEl = card.querySelector("[data-supp-pacer-count]");
-      var toggle = card.querySelector("[data-supp-pacer-toggle]");
-      var timer = null, pi = 0, remaining = phases[0].secs;
-      function stop() {
-        if (timer) { clearInterval(timer); timer = null; }
-        toggle.textContent = "Start";
-        phaseEl.textContent = "Ready";
-        countEl.textContent = "4";
-        pi = 0; remaining = phases[0].secs;
-      }
-      function tick() {
-        remaining -= 1;
-        if (remaining <= 0) { pi = (pi + 1) % phases.length; remaining = phases[pi].secs; }
-        phaseEl.textContent = phases[pi].label;
-        countEl.textContent = String(remaining);
-      }
-      toggle.addEventListener("click", function () {
-        if (timer) { stop(); return; }
-        pi = 0; remaining = phases[0].secs;
-        phaseEl.textContent = phases[0].label;
-        countEl.textContent = String(remaining);
-        toggle.textContent = "Stop";
-        timer = setInterval(tick, 1000);
-      });
-      suppCleanupFns.push(stop);
-    } else if (ex.kind === "reaction") {
-      var target = card.querySelector("[data-supp-reaction]");
-      var resultEl = card.querySelector("[data-supp-reaction-result]");
-      var state = "idle", waitTimer = null, goAt = 0, best = null;
-      function toIdle(msg) {
-        state = "idle";
-        target.classList.remove("is-wait", "is-go");
-        target.textContent = msg || "Tap to start";
-      }
-      target.addEventListener("click", function () {
-        if (state === "idle") {
-          state = "wait";
-          target.classList.add("is-wait");
-          target.classList.remove("is-go");
-          target.textContent = "Wait for green…";
-          waitTimer = setTimeout(function () {
-            state = "go";
-            target.classList.remove("is-wait");
-            target.classList.add("is-go");
-            target.textContent = "TAP!";
-            goAt = Date.now();
-          }, 1200 + Math.random() * 2300);
-        } else if (state === "wait") {
-          if (waitTimer) { clearTimeout(waitTimer); waitTimer = null; }
-          toIdle("Too soon — tap to try again");
-        } else if (state === "go") {
-          var ms = Date.now() - goAt;
-          if (best == null || ms < best) best = ms;
-          resultEl.textContent = "Last: " + ms + " ms · Best: " + best + " ms";
-          toIdle("Tap to go again");
-        }
-      });
-      suppCleanupFns.push(function () { if (waitTimer) clearTimeout(waitTimer); });
-    } else if (ex.kind === "hold-timer") {
-      var disp = card.querySelector("[data-supp-timer-display]");
-      var tToggle = card.querySelector("[data-supp-timer-toggle]");
-      var tReset = card.querySelector("[data-supp-timer-reset]");
-      var interval = null, startedAt = 0, accumulated = 0;
-      function fmt(ms) {
-        var s = Math.floor(ms / 1000);
-        return ("0" + Math.floor(s / 60)).slice(-2) + ":" + ("0" + (s % 60)).slice(-2);
-      }
-      function render() { disp.textContent = fmt(accumulated + (interval ? Date.now() - startedAt : 0)); }
-      function stopTimer() {
-        if (!interval) return;
-        accumulated += Date.now() - startedAt;
-        clearInterval(interval); interval = null;
-        tToggle.textContent = "Start";
-        render();
-      }
-      tToggle.addEventListener("click", function () {
-        if (interval) { stopTimer(); return; }
-        startedAt = Date.now();
-        interval = setInterval(render, 200);
-        tToggle.textContent = "Stop";
-      });
-      tReset.addEventListener("click", function () {
-        if (interval) { clearInterval(interval); interval = null; }
-        accumulated = 0;
-        tToggle.textContent = "Start";
-        disp.textContent = "00:00";
-      });
-      suppCleanupFns.push(function () { if (interval) clearInterval(interval); });
-    }
-  }
-
-  el("supplementary-categories").addEventListener("click", function (e) {
-    var head = e.target.closest(".supp-ex-head");
-    if (head) {
-      var id = head.getAttribute("data-supp-ex");
-      suppExpandedId = suppExpandedId === id ? null : id;
-      renderSupplementaryView();
-      return;
-    }
-    if (e.target.closest("[data-supp-notice-dismiss]")) {
-      suppBalanceNoticeActive = false; // flag already persisted; just close it for this visit
-      renderSupplementaryView();
-      return;
-    }
-    var confirmBtn = e.target.closest("[data-supp-consent-confirm]");
-    if (confirmBtn) {
-      if (confirmBtn.disabled) return;
-      var box = confirmBtn.closest(".supp-consent");
-      var exId = box.getAttribute("data-supp-consent");
-      setGuidedConsent(exId);
-      suppExpandedId = exId; // stay open so the now-unlocked content shows
-      renderSupplementaryView();
-    }
-  });
-
-  el("supplementary-categories").addEventListener("change", function (e) {
+  // Wired up against #program-exercise-groups, which is re-rendered by
+  // renderProgramView() whenever a phase changes or a confirmation lands.
+  el("program-exercise-groups").addEventListener("change", function (e) {
     var cb = e.target.closest("[data-supp-consent-checkbox]");
     if (!cb) return;
-    var confirmBtn = cb.closest(".supp-consent").querySelector("[data-supp-consent-confirm]");
-    confirmBtn.disabled = !cb.checked;
-  });
-
-  el("supplementary-open-btn").addEventListener("click", function () { showView("supplementary"); });
-  el("supplementary-back-btn").addEventListener("click", function () {
-    suppExpandedId = null;
-    showView("dashboard");
+    var box = cb.closest(".supp-consent");
+    if (box) box.querySelector("[data-supp-consent-confirm]").disabled = !cb.checked;
   });
 
   // ---------------------------------------------------------------------
@@ -5814,6 +5461,8 @@
   // ---------------------------------------------------------------------
   mergeCustomExercisesIntoProgramData();
   applyStrings();
+  renderSupplementaryDisclaimerInto(el("onboarding-supp-disclaimer"));
+  renderSupplementaryDisclaimerInto(el("settings-supp-disclaimer"));
   setupPwaManifestAndIcons();
   initLaunchSplash();
 
@@ -5843,8 +5492,6 @@
     el("app").classList.remove("hidden");
     var lastView = null;
     try { lastView = localStorage.getItem(STORAGE_PREFIX + "last_view"); } catch (e) {}
-    // "supplementary" is never persisted, but guard anyway — it isn't a tab.
-    if (lastView === "supplementary") lastView = null;
     showView(lastView || "dashboard");
   } else {
     startOnboarding();
@@ -5893,10 +5540,10 @@
       saveData: saveSkillsData
     },
     supplementary: {
-      DATA: SUPPLEMENTARY_DATA,
-      render: renderSupplementaryView,
+      EXERCISES: SUPPLEMENTARY_EXERCISES,
       hasGuidedConsent: hasGuidedConsent,
-      balanceNoticeSeen: suppBalanceNoticeSeen
+      setGuidedConsent: setGuidedConsent,
+      getAllGuidedConsent: getAllGuidedConsent
     },
     updateCheck: {
       versionJsonUrl: VERSION_JSON_URL,
