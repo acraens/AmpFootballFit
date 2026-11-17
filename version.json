@@ -1,5 +1,5 @@
 {
-  "version": "4.1",
-  "releaseNotes": "Tester-feedback update. After you finish a workout you now get a 'Session saved' confirmation and go back to the Program tab, instead of landing on the Log form (which looked like you had to re-enter everything). Each exercise now shows what equipment it needs, and you can add your own note per exercise for what you use. Clearer explanation on the Skills tab.",
+  "version": "4.2",
+  "releaseNotes": "Backup and restore. Settings > Export all data now works in the Android app (it opens the share menu, so you can save the backup to Google Drive, email or WhatsApp), and the new Settings > Restore from backup brings all your data back. The backup now also includes your exercise photos and equipment notes. Coming from v4.1 or older: this version has a new signing key, so uninstall the old app first. That deletes the data in the old app; if you want to keep your training logs, contact A. Craens before uninstalling.",
   "downloadUrl": "https://github.com/acraens/AmpFootballFit/releases/latest"
 }
