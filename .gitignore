@@ -22,3 +22,6 @@ android-app.zip
 
 # OS/editor cruft
 .DS_Store
+
+# APK signature side-files from apksigner (not needed for install)
+*.idsig

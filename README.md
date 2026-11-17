@@ -31,10 +31,13 @@ The entire app is one self-contained file: **`ampfootballfit.html`** (also publi
   cp ampfootballfit.html android-app/www/index.html
   cd android-app
   npx cap sync android
-  cd android/app && ../gradlew assembleDebug   # outputs app-debug.apk
+  cd android && ./gradlew assembleRelease   # outputs app/build/outputs/apk/release/app-release-unsigned.apk
+  apksigner sign --ks <your-release.jks> --ks-key-alias <alias> --out AmpFootballFit.apk app/build/outputs/apk/release/app-release-unsigned.apk
   ```
 
-  You'll need a JDK (21+) and the Android SDK command-line tools on your `PATH` (`JAVA_HOME`, `ANDROID_HOME`).
+  You'll need a JDK (21+) and the Android SDK command-line tools on your `PATH` (`JAVA_HOME`, `ANDROID_HOME`). Sign every release with the same keystore and keep a copy of it (and its password) somewhere safe: Android only installs an update signed with the same key as the installed app.
+
+  **Upgrading from v4.1 or earlier on Android:** v4.2 is signed with a new key, so Android will not install it over an older version. Uninstall the old app first. Uninstalling deletes the app's data on that phone, and the Export button did not work in the old Android app, so data logged in v4.1 or earlier cannot be carried over. From v4.2 on, use Settings > Export all data to keep a backup, and Restore from backup to bring it back.
 
 All data (sessions, benchmarks, readiness logs, milestones, profile) stays in local storage on the device. There is no server and nothing leaves the device except through the explicit Share/export buttons.
 
