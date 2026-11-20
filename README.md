@@ -10,7 +10,7 @@ Works on any phone or computer, Android or iPhone. Open the link, then use your 
 
 ## What it is
 
-- A strength & conditioning program in 3 phases of 4 weeks, 12 weeks in total (Base, Load Progression, Sport Transfer; after week 12 you keep training with the Phase 3 program), with exercises that adapt tier by tier based on how sessions actually go.
+- A strength & conditioning program in 3 phases of 4 weeks, 12 weeks in total (Base, Load Progression, Sport Transfer; after week 12 you keep training with the Phase 3 program; this structure is my own design and has not been reviewed by a physiotherapist), with exercises that adapt tier by tier based on how sessions actually go.
 - A daily readiness check-in, periodic objective benchmarks/retests, session logging, and a guided "Start Workout" mode.
 - A place to add your own exercises (from a physio or coach) alongside the built-in ones.
 - A "Share progress" button that hands a plain-text summary to your phone's share sheet, e.g. to send to a coach or physio.
