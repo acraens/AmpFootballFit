@@ -2,11 +2,11 @@
 
 A free, offline-first return-to-play conditioning app for amputee football (crutch-based, single-leg-support sport). Built for one athlete's own comeback, shared here so any amputee footballer or club can use it, adapt it, or build on it.
 
-**Try it now, no install:** [acraens.github.io/AmpFootballFit](https://acraens.github.io/AmpFootballFit/) (works on any phone, Android or iPhone: open the link and use your browser's "Add to Home Screen").
+**Use it now, no install:** [acraens.github.io/AmpFootballFit](https://acraens.github.io/AmpFootballFit/)
 
-**Android app (APK):** [Download the latest release](https://github.com/acraens/AmpFootballFit/releases/latest) (`AmpFootballFit.apk`). This is not signed for the Play Store, so Android will warn about an unrecognized app; you'll need to allow "install from unknown sources" for your browser/file manager to install it. The camera-based profile photo feature only works in this native version, not the browser/PWA version above.
+Works on any phone or computer, Android or iPhone. Open the link, then use your browser's "Add to Home Screen" to keep it like an app. This is the maintained version: you are always on the latest release, with nothing to download or update.
 
-**Get notified about new versions:** on GitHub, choose Watch > Custom > Releases on this repository. If you use the browser version above, you are always on the latest version already.
+**Android app (optional, can lag behind the browser version):** [download the APK from Releases](https://github.com/acraens/AmpFootballFit/releases/latest). It is not signed for the Play Store, so Android will warn about an unrecognized app, and you need to allow "install from unknown sources" for your browser or file manager. The camera-based profile photo feature only works in this native version. To hear about new APK versions, choose Watch > Custom > Releases on this repository.
 
 ## What it is
 
