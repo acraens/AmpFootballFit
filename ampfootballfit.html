@@ -510,8 +510,7 @@
   .wp-exercise-icon svg, .wp-exercise-icon img { width: 100%; height: 100%; }
 
   .wp-exercise-name {
-    font-family: Georgia, "Iowan Old Style", ui-serif, serif;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 1.15rem;
     text-align: center;
     margin: 0 0 6px;
@@ -541,13 +540,12 @@
   #wp-nav.hidden { display: none; }
 
   #wp-finish-screen h2 {
-    font-family: Georgia, "Iowan Old Style", ui-serif, serif;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 1.3rem;
     margin: 4px 0 6px;
   }
 
-  /* Launch splash — brief personal welcome shown at app start */
+  /* Launch splash: brief personal welcome shown at app start */
   .launch-splash {
     position: fixed;
     inset: 0;
@@ -1135,7 +1133,7 @@
     margin: 0;
   }
 
-  /* Supplementary techniques — per-exercise "discussed with my care team"
+  /* Supplementary techniques: per-exercise "discussed with my care team"
      confirmation, shown as a locked card in the Program tab. */
   .exercise-emoji-icon { font-size: 1.9rem; line-height: 1; }
 
@@ -1154,6 +1152,62 @@
   #settings-supp-disclaimer p:first-child { margin-top: 0; }
   #onboarding-supp-disclaimer p:last-child,
   #settings-supp-disclaimer p:last-child { margin-bottom: 0; }
+
+  /* ---- v4.3: player, effort, RPE scale, Today card, readiness ---- */
+  .ob-intro-list { padding-left: 18px; margin: 8px 0 12px; }
+  .ob-intro-list li { margin-bottom: 10px; line-height: 1.4; }
+  .week-note { text-align: center; margin: 6px 0 14px; }
+  .exercise-target, .wp-target { font-size: 0.85rem; font-weight: 600; color: var(--accent); margin: 4px 0; }
+  .wp-target { text-align: center; }
+  .wp-last { text-align: center; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; }
+  .card-more { flex-basis: 100%; }
+  .card-more > summary { cursor: pointer; color: var(--text-dim); font-size: 0.85rem; padding: 6px 0; list-style: none; }
+  .card-more > summary::-webkit-details-marker { display: none; }
+  .card-more > summary::before { content: "▸ "; }
+  .card-more[open] > summary::before { content: "▾ "; }
+  .card-more-body { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-top: 4px; }
+  .eq-edit-wrap { flex-basis: 100%; }
+  .wp-more { margin-top: 12px; text-align: center; }
+  .wp-more .card-more-body { justify-content: center; }
+  .effort-buttons { display: flex; gap: 6px; }
+  .effort-buttons .effort-btn { flex: 1; padding: 10px 4px; font-size: 0.85rem; }
+  .effort-btn.active { background: var(--accent); color: #04121c; border-color: var(--accent); }
+  .wp-effort-label { font-size: 0.85rem; color: var(--text-dim); margin: 14px 0 6px; text-align: center; }
+  .wp-tracker { text-align: center; margin: 12px 0; }
+  .wp-set-count { font-weight: 600; margin-bottom: 8px; }
+  .wp-tracker-buttons { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .wp-tracker-buttons .btn { min-width: 130px; padding: 12px 16px; }
+  .wp-timer-box, .wp-interval-display { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 12px; padding: 10px; background: var(--surface-alt); border-radius: var(--radius); }
+  .wp-timer-box.hidden { display: none; }
+  .wp-timer-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+  .wp-timer-big { font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .wp-timer-actions { display: flex; gap: 8px; }
+  .wp-int-work { color: var(--warn); font-weight: 700; }
+  .wp-interval { margin: 12px 0; }
+  .wp-interval .wp-tracker-buttons { margin-top: 10px; }
+  .wp-field { flex: 1; display: flex; flex-direction: column; gap: 2px; margin: 0; font-size: 0.75rem; color: var(--text-dim); min-width: 0; }
+  .wp-field input { width: 100%; }
+  .rpe-scale { margin-top: 4px; }
+  .rpe-buttons { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+  .rpe-btn, .readiness-btn {
+    background: var(--surface-alt); color: var(--text); border: 1px solid var(--border); border-radius: 6px;
+    padding: 10px 0; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; min-width: 0;
+  }
+  .rpe-btn.active, .readiness-btn.active { background: var(--accent); color: #04121c; border-color: var(--accent); }
+  .rpe-caption { font-size: 0.8rem; color: var(--text-dim); margin-top: 6px; }
+  .today-card h3 { margin-top: 0; }
+  .today-meta { font-weight: 600; margin-bottom: 4px; }
+  .today-done { color: var(--good); }
+  .readiness-question { margin-bottom: 12px; }
+  .readiness-question-label { font-size: 0.85rem; margin-bottom: 4px; }
+  .readiness-buttons { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .readiness-scale-ends { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-dim); margin-top: 3px; }
+  .readiness-question.unanswered .readiness-btn { border-color: var(--warn); }
+  .log-manual > summary { cursor: pointer; font-weight: 600; padding: 2px 0; }
+  .log-manual[open] > summary { margin-bottom: 10px; }
+  .log-exercise-fields { flex-wrap: wrap; }
+  .log-exercise-fields input { flex: 1; min-width: 0; }
+  .log-exercise-fields select { flex: 1 1 100%; }
 </style>
 </head>
 <body>
@@ -1177,13 +1231,21 @@
       <span class="dot" data-step="5"></span>
       <span class="dot" data-step="6"></span>
       <span class="dot" data-step="7"></span>
-      <span class="dot" data-step="8"></span>
-      <span class="dot" data-step="9"></span>
-      <span class="dot" data-step="10"></span>
     </div>
 
     <form id="onboarding-form" novalidate>
       <div class="onboarding-step active" data-step="1">
+        <h2>About AmpFootballFit</h2>
+        <ul class="ob-intro-list">
+          <li><strong>12 weeks, 3 phases:</strong> Base, Load, Sport. Each phase is 4 weeks, building up from week to week, with an easier 4th week to recover.</li>
+          <li><strong>Reps first, then a harder level:</strong> within a level you build up the reps (for example from 3 × 10 to 3 × 20). Reach the top of the range in 2 sessions in a row (3 for jumps) without it feeling too hard, and the app suggests the harder version, where you start again at the low end. Too hard suggests an easier one. You decide.</li>
+          <li><strong>Pain rule:</strong> tiredness and burning muscles are fine. Stop an exercise if pain goes above 6 out of 10. Full rules: Program tab, "Safety and match days".</li>
+          <li><strong>Your data stays on this phone.</strong> Make a backup now and then in Settings.</li>
+          <li><strong>No technique coaching:</strong> ball and crutch skills come from your coach. This app does conditioning only, and it does not replace your physio or prosthetist.</li>
+        </ul>
+        <p class="field-note">Next: a few questions so the program fits you (about 2 minutes).</p>
+      </div>
+      <div class="onboarding-step" data-step="2">
         <h2>About your amputation</h2>
 
         <label for="ob-amp-level">Amputation level</label>
@@ -1220,7 +1282,7 @@
         </div>
       </div>
 
-      <div class="onboarding-step" data-step="2">
+      <div class="onboarding-step" data-step="3">
         <h2>Activity background</h2>
 
         <label for="ob-activity-mode">Current activity level</label>
@@ -1264,7 +1326,7 @@
         </select>
       </div>
 
-      <div class="onboarding-step" data-step="3">
+      <div class="onboarding-step" data-step="4">
         <h2>Fitness &amp; health</h2>
 
         <label for="ob-fitness-baseline">Current fitness baseline</label>
@@ -1288,7 +1350,7 @@
         <p class="field-note">Flagged for your own awareness only, not a diagnosis. Discuss anything significant with a physio or doctor.</p>
       </div>
 
-      <div class="onboarding-step" data-step="4">
+      <div class="onboarding-step" data-step="5">
         <h2>Goals &amp; availability</h2>
 
         <label for="ob-target">Target</label>
@@ -1306,13 +1368,13 @@
         <input type="number" id="ob-session-length" min="10" max="180" step="5" placeholder="e.g. 45">
       </div>
 
-      <div class="onboarding-step" data-step="5">
+      <div class="onboarding-step" data-step="6">
         <h2>Review</h2>
         <div id="onboarding-summary" class="card"></div>
         <p class="field-note">You can change these later from Settings.</p>
       </div>
 
-      <div class="onboarding-step" data-step="6">
+      <div class="onboarding-step" data-step="7">
         <h2>Add a profile photo</h2>
         <p class="field-note">Optional, you can always add or change this later from Settings.</p>
         <div class="profile-photo-circle" id="ob-photo-preview" style="margin: 16px auto;">
@@ -1322,25 +1384,6 @@
         <p class="field-note" id="ob-photo-note">Photo capture is only available in the installed Android app, not the browser version.</p>
       </div>
 
-      <div class="onboarding-step" data-step="7">
-        <h2>Your 12-week program</h2>
-        <p>Three phases: Base, Load Progression, Sport Transfer. Each is four weeks. A phase unlocks once you've logged enough sessions in the one before it, so there's no rushing ahead on paper.</p>
-      </div>
-
-      <div class="onboarding-step" data-step="8">
-        <h2>Exercises adapt as you go</h2>
-        <p>Log how a session felt, and individual exercises will suggest an easier or harder version: not the whole week, just the ones that need it. You decide whether to take the suggestion.</p>
-      </div>
-
-      <div class="onboarding-step" data-step="9">
-        <h2>Everything you log, tracked</h2>
-        <p>Sessions, sets, reps, load, effort: all saved on this device only. Check Progress for charts and trends, and mark milestones (first full-pace crutch sprint, first club session) as you hit them.</p>
-      </div>
-
-      <div class="onboarding-step" data-step="10">
-        <h2>What this app is, and isn't</h2>
-        <p>The conditioning program is built on established strength &amp; conditioning principles. Sport-specific skills (ball control, crutch agility) are left for you to fill in from a real coach or club session. This app won't invent technique instruction it isn't qualified to give.</p>
-      </div>
     </form>
 
     <div class="onboarding-nav">
@@ -1355,7 +1398,7 @@
     <div id="advanced-disclaimer-form" style="padding: 20px;">
       <h2>Before this unlocks</h2>
       <p>These exercises are more advanced: added load, explosive/plyometric movement, or change-of-direction demand. They're intended for athletes already training at full capacity, not for return-to-play conditioning.</p>
-      <p>Reviewed by Bert Soogen, but you're responsible for judging your own readiness on any given day.</p>
+      <p>The exercise program was reviewed by a physiotherapist (November 2026). You're still responsible for judging your own readiness on any given day.</p>
       <div class="onboarding-nav">
         <button type="button" class="btn secondary" id="advanced-disclaimer-decline">Not yet</button>
         <button type="button" class="btn" id="advanced-disclaimer-accept">Continue</button>
@@ -1426,6 +1469,12 @@
         </div>
       </div>
 
+      <div class="card today-card" id="today-card">
+        <h3>Today</h3>
+        <div id="today-summary"></div>
+        <button type="button" class="btn" id="today-start-btn" style="width: 100%; margin-top: 10px;">&#9654; Start workout</button>
+      </div>
+
       <div class="card">
         <div class="readiness-card-header">
           <div class="exercise-icon" id="readiness-header-icon" aria-hidden="true"></div>
@@ -1474,6 +1523,7 @@
       <div class="phase-progress-track">
         <div class="phase-progress-bar" id="program-progress-bar"></div>
       </div>
+      <p class="field-note week-note" id="program-week-note"></p>
 
       <div class="card gate-warning hidden" id="program-gate-warning">
         <p id="program-gate-warning-text"></p>
@@ -1496,6 +1546,19 @@
       <p class="field-note hidden" id="program-session-info" style="text-align: center; margin: -8px 0 16px;"></p>
 
       <div id="program-exercise-groups"></div>
+
+      <details class="card" id="program-safety-card">
+        <summary><strong>Safety and match days</strong></summary>
+        <ul class="ob-intro-list">
+          <li><strong>Pain rule:</strong> tiredness and burning muscles are normal. Stop the exercise if pain goes above 6 out of 10. Take a rest day and try again; if the pain stays, see your physio or doctor.</li>
+          <li><strong>Check your residual limb:</strong> stop and contact your prosthetist or physio if you see red pressure marks that don't fade straight away, feel a local pain point that appears suddenly, or have swelling that doesn't go down with the leg raised or with ice.</li>
+          <li><strong>Jumps and hops</strong> have the highest impact. Check with your physio before you start them, and practise with crutches, a partner or a wall bar for support until your balance is safe.</li>
+          <li><strong>Day before a matchday:</strong> no hard training and no jumps. Light stretching and activation only.</li>
+          <li><strong>Day after a matchday:</strong> light or unloaded exercise, such as swimming.</li>
+          <li><strong>After week 12:</strong> keep doing the program to maintain your level, and keep building reps or weight where you can.</li>
+        </ul>
+        <p class="field-note">Based on a review by a physiotherapist (November 2026). It does not replace advice from your own physio, doctor or prosthetist.</p>
+      </details>
 
       <div class="card" id="custom-exercise-card">
         <h3>Add a custom exercise</h3>
@@ -1541,7 +1604,12 @@
     <section class="view" id="view-log" data-i18n-title="tab.log">
       <h2 data-i18n="tab.log">Log</h2>
 
-      <div class="card">
+      <p class="field-note">Sessions from the workout player are saved here automatically. Use the form below only for a session you did without the player.</p>
+
+      <div id="log-suggestions"></div>
+
+      <details class="card log-manual" id="log-manual">
+        <summary>Log a session without the player</summary>
         <label for="log-date">Date</label>
         <input type="date" id="log-date">
 
@@ -1555,8 +1623,8 @@
         <label for="log-duration">Session duration (minutes)</label>
         <input type="number" id="log-duration" min="0" max="300" step="5" placeholder="e.g. 45">
 
-        <label for="log-rpe">RPE (1–10)</label>
-        <input type="number" id="log-rpe" min="1" max="10" step="1" placeholder="e.g. 6">
+        <label>How hard was the whole session? (RPE)</label>
+        <div id="log-rpe-wrap"></div>
 
         <label>Exercises completed</label>
         <div id="log-exercise-checklist"></div>
@@ -1565,9 +1633,7 @@
         <textarea id="log-notes" placeholder="Optional notes about this session"></textarea>
 
         <button type="button" class="btn" id="log-save-btn" style="margin-top: 14px; width: 100%;">Save session</button>
-      </div>
-
-      <div id="log-suggestions"></div>
+      </details>
 
       <h3 class="section-subheading">Recent sessions</h3>
       <div id="log-session-list"></div>
@@ -1778,6 +1844,16 @@
       </div>
 
       <div class="card">
+        <h3>Pictures</h3>
+        <label for="settings-figure-style">Exercise pictures show</label>
+        <select id="settings-figure-style">
+          <option value="twoLegs">Two legs</option>
+          <option value="oneLeg">One leg (below-knee residual limb)</option>
+        </select>
+        <p class="field-note">Only changes the drawings, not the exercises.</p>
+      </div>
+
+      <div class="card">
         <h3>Units</h3>
         <label for="settings-units">Load units</label>
         <select id="settings-units">
@@ -1870,7 +1946,7 @@
   "use strict";
 
   // ---------------------------------------------------------------------
-  // Namespacing (per brief section 9/10) — all storage keys use this prefix
+  // Namespacing (per brief section 9/10): all storage keys use this prefix
   // ---------------------------------------------------------------------
   var STORAGE_PREFIX = "ampfootballfit_";
 
@@ -1888,7 +1964,8 @@
     customExercises: STORAGE_PREFIX + "custom_exercises",
     strengthBannerDismissed: STORAGE_PREFIX + "strength_banner_dismissed",
     exercisePhotos: STORAGE_PREFIX + "exercise_photos",
-    exerciseEquipmentNotes: STORAGE_PREFIX + "exercise_equipment_notes"
+    exerciseEquipmentNotes: STORAGE_PREFIX + "exercise_equipment_notes",
+    figureStyle: STORAGE_PREFIX + "figure_style"
   };
 
   // Per-exercise "discussed with my care team" confirmations for the
@@ -1904,7 +1981,7 @@
   var APP_VERSION = "4.2";
 
   // ---------------------------------------------------------------------
-  // String table — English now, structure ready for nl/fr (brief section 9)
+  // String table: English now, structure ready for nl/fr (brief section 9)
   // ---------------------------------------------------------------------
   var STRINGS = {
     en: {
@@ -1972,6 +2049,7 @@
     if (name === "dashboard" && typeof renderDashboardMilestoneList === "function") renderDashboardMilestoneList();
     if (name === "dashboard" && typeof renderProfilePhotoUi === "function") renderProfilePhotoUi();
     if (name === "dashboard" && typeof renderReadinessCard === "function") renderReadinessCard();
+    if (name === "dashboard" && typeof renderTodayCard === "function") renderTodayCard();
     if (name === "dashboard" && typeof renderStrengthBanner === "function") renderStrengthBanner();
     if (name === "settings" && typeof initSettingsTab === "function") initSettingsTab();
   }
@@ -2004,8 +2082,8 @@
   }
 
   // ---------------------------------------------------------------------
-  // Profile picture (Task 2) — Capacitor Camera + Filesystem only; this
-  // is a native-app-only feature (no bundler/import needed — Capacitor's
+  // Profile picture (Task 2): Capacitor Camera + Filesystem only; this
+  // is a native-app-only feature (no bundler/import needed; Capacitor's
   // native runtime auto-injects window.Capacitor.Plugins.* into the
   // WebView). Plain browser/PWA/iOS builds simply don't get this feature.
   // Only the file path is ever stored in localStorage, never base64.
@@ -2078,11 +2156,11 @@
   }
 
   // ---------------------------------------------------------------------
-  // Per-exercise photos — lets an athlete swap in their own reference
+  // Per-exercise photos: lets an athlete swap in their own reference
   // photo (of themselves, or from a coach) for any exercise, built-in or
   // custom. Unlike the profile photo, this uses a plain <input type=file>
   // + canvas downscale rather than the native Camera/Filesystem plugins,
-  // so it works identically in the browser/PWA build and the native app —
+  // so it works identically in the browser/PWA build and the native app;
   // most athletes are expected to use this in a browser, not the APK.
   // Stored as downscaled JPEG data URLs directly in localStorage, keyed
   // by exercise id, since there's no native filesystem to fall back to
@@ -2117,7 +2195,7 @@
   }
 
   // ---------------------------------------------------------------------
-  // Equipment — an app-defined tag per exercise (what the prescription
+  // Equipment: an app-defined tag per exercise (what the prescription
   // assumes) plus a free-text per-exercise note the athlete can set for
   // what they actually use. The note is stored per exercise id, same
   // shape as exercise photos. Display only for now: nothing filters or
@@ -2125,17 +2203,23 @@
   // ---------------------------------------------------------------------
   var EXERCISE_EQUIPMENT = {
     // Phase 1
-    "sls-squat-t1": ["support (rail/counter)"], "p1-sls-squat": ["support (as needed)"],
+    "sls-squat-t1": ["chair"], "p1-sls-squat": ["chair"],
+    "sls-eccsquat-t1": ["chair"], "sls-eccsquat-t2": ["high box / chair", "support"], "sls-eccsquat-t3": ["box / chair"], "sls-eccsquat-t4": ["box / chair", "dumbbell / vest"],
+    "sls-calf-t1": ["support (rail/wall)"], "p1-sls-calf": ["step", "support (rail)"], "sls-calf-t3": ["step", "dumbbell / vest"],
+    "sls-calfbent-t1": ["chair", "bag / dumbbell"], "sls-calfbent-t2": ["step", "support (rail)"], "sls-calfbent-t3": ["step", "dumbbell / vest"],
+    "sls-wallsit-t1": ["wall"], "sls-wallsit-t2": ["wall"], "sls-wallsit-t3": ["wall"], "sls-hambridge-t3": ["weight (optional)"],
+    "ub-dips-t1": ["stable chair"], "ub-dips-t2": ["stable chair"], "ub-dips-t3": ["two stable chairs or bars"], "ub-scap-t3": ["two dumbbells (optional)"],
+    "ub-cuff-ext": ["light resistance band"], "p2-core-sidebend": ["dumbbell"], "sls-stairs-slow": ["stairs with a rail"],
     "sls-squat-t3": ["dumbbell / vest"], "p1-sls-stepup": ["step / box"],
-    "sls-bridge-t1": ["low step (feet elevated)"], "sls-bridge-t4": ["bench", "dumbbell / vest"],
-    "sls-calf-t1": ["support (rail)"], "sls-calf-t3": ["dumbbell / vest"],
-    "p1-ub-pushup": ["bench / chair / step"], "ub-row-t1": ["resistance band"],
+    "sls-bridge-t4": ["bench", "dumbbell / vest"],
+    
+    "ub-row-t1": ["resistance band"],
     "p1-ub-row": ["resistance band"], "ub-row-t3": ["heavy band or cable"],
     "p1-ub-press": ["dumbbells"], "core-deadbug-t3": ["ankle weight (optional)"],
     "core-antirot-t1": ["resistance band"], "p1-core-antirot": ["resistance band"],
     "core-antirot-t3": ["resistance band"],
     // Phase 2
-    "p2-sls-stepup": ["step / box", "dumbbells / vest"], "sls-rdl-t1": ["support (two hands)"],
+    "p2-sls-stepup": ["high step / box"], "sls-stepup-t1": ["low step", "support (rail/wall)"], "sls-rdl-t1": ["support (two hands)"],
     "p2-sls-rdl": ["support (as needed)"], "sls-rdl-t3": ["dumbbells"], "sls-rdl-t4": ["dumbbells"],
     "sls-lunge-t1": ["support"], "sls-lunge-t3": ["dumbbells"],
     "sls-boxjump-t1": ["low step"], "p2-sls-boxjump": ["box"], "sls-boxjump-t3": ["box"], "sls-boxjump-t4": ["box"],
@@ -2144,9 +2228,10 @@
     "core-rot-t3": ["heavy band or cable"],
     // Phase 3
     "sls-decel-t1": ["step / box"], "sls-decel-t3": ["open space"], "sls-decel-t4": ["open space"],
-    "sls-broadjump-adv": ["open space"], "cond-agility-adv": ["cones", "open space"],
+    "sls-broadjump-t1": ["open space", "support (rail/wall)"], "sls-broadjump-t2": ["open space", "support (rail/wall)"], "sls-broadjump-adv": ["open space"],
+    "cond-agility-t1": ["cones", "open space"], "cond-agility-t2": ["cones", "open space"], "cond-agility-adv": ["cones", "open space"],
     "p3-ub-max": ["dumbbells / barbell"], "p3-ub-endurance": ["dumbbells", "band"],
-    "p3-cardio-rsa": ["open space"], "cond-sprint-adv": ["open space"]
+    "p3-cardio-rsa": ["open space"], "cond-sprint-t1": ["open space"], "cond-sprint-t2": ["open space"], "cond-sprint-adv": ["open space"]
   };
 
   function exerciseEquipmentTags(ex) {
@@ -2178,19 +2263,22 @@
     try { localStorage.setItem(STORAGE_KEYS.exerciseEquipmentNotes, JSON.stringify(notes)); } catch (e) { /* storage unavailable */ }
   }
 
-  // Shared equipment block. `editable` adds the note button + inline editor
-  // (Program cards); read-only elsewhere (workout player, Log checklist).
-  function equipmentBlockHtml(ex, editable) {
+  // Shared equipment block (read-only): what the exercise needs and the
+  // player's own note. The note editor lives in the Program card's "More"
+  // section (equipmentEditorHtml).
+  function equipmentBlockHtml(ex) {
     var tags = exerciseEquipmentTags(ex);
     var note = getExerciseEquipmentNote(ex.id);
     var tagLine = tags.length
       ? '<span class="eq-needs">Equipment: ' + escapeHtml(tags.join(" · ")) + "</span>"
       : '<span class="eq-needs eq-none">No equipment needed</span>';
     var noteLine = note ? '<span class="eq-mine">Yours: ' + escapeHtml(note) + "</span>" : "";
-    if (!editable) {
-      return '<div class="exercise-equipment">' + tagLine + noteLine + "</div>";
-    }
-    return '<div class="exercise-equipment">' + tagLine + noteLine +
+    return '<div class="exercise-equipment">' + tagLine + noteLine + "</div>";
+  }
+
+  function equipmentEditorHtml(ex) {
+    var note = getExerciseEquipmentNote(ex.id);
+    return '<div class="eq-edit-wrap">' +
       '<button type="button" class="btn secondary eq-note-btn" data-ex-id="' + escapeHtml(ex.id) + '">' +
         (note ? "Edit equipment note" : "Add equipment note") +
       "</button>" +
@@ -2259,7 +2347,7 @@
   // ---------------------------------------------------------------------
   // Onboarding wizard
   // ---------------------------------------------------------------------
-  var ONBOARDING_TOTAL_STEPS = 10;
+  var ONBOARDING_TOTAL_STEPS = 7;
   var onboardingStep = 1;
 
   var ONBOARDING_LABELS = {
@@ -2291,8 +2379,11 @@
 
   function el(id) { return document.getElementById(id); }
 
-  var ONBOARDING_REVIEW_STEP = 5;
-  var ONBOARDING_PHOTO_STEP = 6;
+  var ONBOARDING_INTRO_STEP = 1;
+  var ONBOARDING_REVIEW_STEP = 6;
+  var ONBOARDING_PHOTO_STEP = 7;
+  var ONBOARDING_STRENGTH_STEP = 4;
+  var ONBOARDING_ACTIVITY_STEP = 3;
 
   function showOnboardingStep(n) {
     onboardingStep = n;
@@ -2305,10 +2396,11 @@
       dot.classList.toggle("done", dotStep < n);
     });
     el("ob-back").style.visibility = n === 1 ? "hidden" : "visible";
-    if (n === ONBOARDING_TOTAL_STEPS) {
-      el("ob-next").textContent = "Get started";
-    } else if (n === ONBOARDING_PHOTO_STEP) {
-      el("ob-next").textContent = hasProfilePhoto() ? "Continue" : "Skip for now";
+    if (n === ONBOARDING_PHOTO_STEP) {
+      // The photo step is also the last step.
+      el("ob-next").textContent = hasProfilePhoto() ? "Get started" : "Skip and get started";
+    } else if (n === ONBOARDING_INTRO_STEP) {
+      el("ob-next").textContent = "Got it";
     } else {
       el("ob-next").textContent = "Next";
     }
@@ -2317,11 +2409,10 @@
   }
 
   var ONBOARDING_REQUIRED_BY_STEP = {
-    1: ["ob-amp-level", "ob-amp-side", "ob-prosthetic-use"],
-    2: ["ob-activity-mode", "ob-crutch-exp", "ob-last-competitive"],
-    3: ["ob-fitness-baseline", "ob-strength-starting-point"],
-    4: ["ob-target", "ob-days-per-week", "ob-session-length"],
-    5: []
+    2: ["ob-amp-level", "ob-amp-side", "ob-prosthetic-use"],
+    3: ["ob-activity-mode", "ob-crutch-exp", "ob-last-competitive"],
+    4: ["ob-fitness-baseline", "ob-strength-starting-point"],
+    5: ["ob-target", "ob-days-per-week", "ob-session-length"]
   };
 
   function validateOnboardingStep(n) {
@@ -2336,7 +2427,7 @@
         field.classList.remove("invalid");
       }
     });
-    if (n === 2 && el("ob-activity-mode").value === "unsure") {
+    if (n === ONBOARDING_ACTIVITY_STEP && el("ob-activity-mode").value === "unsure") {
       var plain = el("ob-activity-plain");
       if (!plain.value) {
         valid = false;
@@ -2350,7 +2441,7 @@
 
   // Set true only via the disclaimer being accepted mid-onboarding (see
   // the ob-next handler). Kept as a plain variable, not written to the
-  // profile, until finishOnboarding() does the one real save — the
+  // profile, until finishOnboarding() does the one real save; the
   // profile doesn't exist yet to safely mutate before that point.
   var onboardingAdvancedAccepted = false;
 
@@ -2443,12 +2534,12 @@
 
   el("ob-next").addEventListener("click", function () {
     if (!validateOnboardingStep(onboardingStep)) return;
-    if (onboardingStep === 3 && el("ob-strength-starting-point").value === "full" && !onboardingAdvancedAccepted) {
+    if (onboardingStep === ONBOARDING_STRENGTH_STEP && el("ob-strength-starting-point").value === "full" && !onboardingAdvancedAccepted) {
       showAdvancedDisclaimer(function () {
         onboardingAdvancedAccepted = true;
         advanceOnboardingPastValidatedStep();
       }, function () {
-        // Declined — stay on this step so they can reconsider the answer.
+        // Declined: stay on this step so they can reconsider the answer.
       });
       return;
     }
@@ -2475,6 +2566,111 @@
 
   var CARDIO_ESTIMATE_NOTE = "Estimated: adjust based on actual match observation. Real amputee football match-demand data (sprint counts, distances, work:rest ratios) has not been reliably sourced; treat this as a conservative starting structure, not verified match statistics.";
 
+  // Exercise families shared between phases (v4.4, after the first
+  // physiotherapist review, Nov 2026). Shared objects keep the same id
+  // and tier preference in every phase they appear in.
+  var FAM_SQUAT = [
+    { id: "sls-squat-t1", name: "Sit to stand from a chair", prescription: "3 sets x 10–20 reps. Sit down fully on a chair, then stand up again. Use the armrests or a support as needed, and less hand support as it gets easier.", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 1, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "p1-sls-squat", name: "Squat to chair touch", prescription: "3 sets x 10–20 reps. From standing, bend down until your buttocks just touch the chair seat, then stand up straight away. The chair sets a fixed depth. Support nearby as needed.", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 2, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "sls-squat-t3", name: "Loaded single-leg-biased squat", prescription: "3 sets x 8–12 reps, add external load (dumbbell/vest) as tolerated, minimal hand support", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+    { id: "sls-squat-t4", name: "Explosive/jump squat", prescription: "3 sets x 6–8 reps, jump squat with controlled landing, single-leg-biased", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 4, targetSetsMin: 3, targetRepsMin: 6, requiresAdvancedUnlock: true }
+  ];
+  var FAM_ECC_SQUAT = [
+    { id: "sls-eccsquat-t1", name: "Slow lowering to a chair", prescription: "3 sets x 8–15 reps. Lower yourself onto a chair in 3–4 seconds, then stand up at normal speed. The slow lowering trains the thigh muscles (quadriceps).", icon: "🪑", pose: "squat", progressionGroup: "eccentricBoxSquat", tier: 1, targetSetsMin: 3, targetRepsMin: 8 },
+    { id: "sls-eccsquat-t2", name: "Single-leg box squat, slow lowering (high box)", prescription: "3 sets x 8–15 reps on the sound leg. Lower in 3–4 seconds to a high box or a chair with a cushion, touch, stand up. Support within reach.", icon: "🪑", pose: "squat", progressionGroup: "eccentricBoxSquat", tier: 2, targetSetsMin: 3, targetRepsMin: 8 },
+    { id: "sls-eccsquat-t3", name: "Single-leg box squat, slow lowering (low box)", prescription: "3 sets x 8–20 reps on the sound leg, same slow lowering to a lower box or a normal chair. Go a little deeper as it gets easier.", icon: "🪑", pose: "squat", progressionGroup: "eccentricBoxSquat", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+    { id: "sls-eccsquat-t4", name: "Single-leg box squat, slow lowering, loaded", prescription: "3 sets x 8–20 reps, slow lowering with a dumbbell or weight vest.", icon: "🪑", pose: "squat", progressionGroup: "eccentricBoxSquat", tier: 4, targetSetsMin: 3, targetRepsMin: 8, requiresAdvancedUnlock: true }
+  ];
+  var FAM_STEPUP = [
+    { id: "sls-stepup-t1", name: "Step-up, low step with hand support", prescription: "3 sets x 10–20 reps on the sound leg. Low step (10–15 cm), hand on a rail or wall.", icon: "🪜", pose: "stepUp", progressionGroup: "stepUp", tier: 1, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "p1-sls-stepup", name: "Step-up, medium step", prescription: "3 sets x 10–20 reps on the sound leg. Step of 20–25 cm (a stair or a box). Use as little hand support as you can.", icon: "🪜", pose: "stepUp", progressionGroup: "stepUp", tier: 2, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "p2-sls-stepup", name: "Step-up, high step, no support", prescription: "3 sets x 8–15 reps on the sound leg. Step of 30–40 cm, no hand support. Make the step higher before you add weight.", icon: "🪜", pose: "stepUp", progressionGroup: "stepUp", tier: 3, targetSetsMin: 3, targetRepsMin: 8 }
+  ];
+  var FAM_GLUTE_BRIDGE = [
+    { id: "sls-bridge-t1", name: "Glute bridge, feet close, short range", prescription: "3 sets x 10–20 reps. Feet close to your buttocks: this works the glutes. Small lift to start.", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 1, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "p1-sls-bridge", name: "Glute bridge, feet close", prescription: "3 sets x 10–20 reps, feet close to your buttocks. Harder: at the top, lower the pelvis a little and lift back to a flat bridge, without resting on the floor.", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 2, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "sls-bridge-t3", name: "Single-leg glute bridge", prescription: "3 sets x 8–12 reps, sound leg only, opposite leg lifted", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
+    { id: "sls-bridge-t4", name: "Single-leg hip thrust (loaded)", prescription: "3 sets x 8–10 reps, elevated shoulders, external load", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 4, targetSetsMin: 3, targetRepsMin: 8, requiresAdvancedUnlock: true }
+  ];
+  var FAM_HAM_BRIDGE = [
+    { id: "sls-hambridge-t1", name: "Hamstring bridge, feet further away", prescription: "3 sets x 10–20 reps. Feet further from your buttocks, knees less bent: this works the hamstrings.", icon: "🌉", pose: "gluteBridge", progressionGroup: "hamstringBridge", tier: 1, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "sls-hambridge-t2", name: "Hamstring bridge with pelvis dips", prescription: "3 sets x 10–20 reps, feet further away. Hold the bridge, lower the pelvis a little and lift back to flat, without resting on the floor.", icon: "🌉", pose: "gluteBridge", progressionGroup: "hamstringBridge", tier: 2, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "sls-hambridge-t3", name: "Single-leg hamstring bridge", prescription: "3 sets x 8–15 reps, sound leg, foot further away, other leg lifted. Harder: a weight on your hips.", icon: "🌉", pose: "gluteBridge", progressionGroup: "hamstringBridge", tier: 3, targetSetsMin: 3, targetRepsMin: 8 }
+  ];
+  var FAM_CALF = [
+    { id: "sls-calf-t1", name: "Calf raise on flat floor, with support", prescription: "3 sets x 10–20 reps on the sound leg, knee straight, hands on a rail or wall. Full range.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 1, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "p1-sls-calf", name: "Calf raise on a step, with support", prescription: "3 sets x 10–20 reps on the sound leg, knee straight. Ball of the foot on a step, heel over the edge: rise up, then lower the heel below the step for a stretch. Trains the long calf muscle.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 2, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "sls-calf-t3", name: "Calf raise on a step, loaded", prescription: "3 sets x 10–20 reps on the sound leg, knee straight. Ball of the foot on a step, heel over the edge, with a dumbbell or weight vest for load: rise up, then lower the heel below the step each rep.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 3, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "sls-calf-t4", name: "Single-leg pogo/rebound hop", prescription: "3 sets x 8–10 reps, quick ground-contact rebounding", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 4, targetSetsMin: 3, targetRepsMin: 8, requiresAdvancedUnlock: true }
+  ];
+  var FAM_CALF_BENT = [
+    { id: "sls-calfbent-t1", name: "Seated calf raise", prescription: "3 sets x 10–20 reps. Sit with the knee bent at 90°, a weight (bag or dumbbell) on the thigh. Rise onto the toes, lower slowly. Trains the short calf muscle (soleus).", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaiseBent", tier: 1, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "sls-calfbent-t2", name: "Bent-knee calf raise on a step, with support", prescription: "3 sets x 10–20 reps on the sound leg, knee slightly bent, heel over the edge of a step. Rise up, then lower the heel below the step. Hands on a rail.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaiseBent", tier: 2, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "sls-calfbent-t3", name: "Bent-knee calf raise on a step, loaded", prescription: "3 sets x 10–20 reps on the sound leg, knee slightly bent, heel over the edge of a step, with a dumbbell or weight vest for load. Rise up, then lower the heel below the step. Keep a hand on a rail.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaiseBent", tier: 3, targetSetsMin: 3, targetRepsMin: 10 }
+  ];
+  var FAM_WALL_SIT = [
+    { id: "sls-wallsit-t1", name: "Wall sit", prescription: "3 sets x 20–60 s. Back flat against the wall, knees at 90°. Without your prosthesis this is a single-leg hold: start at 20 s.", icon: "🧱", pose: "wallSit", progressionGroup: "wallSit", tier: 1, targetSetsMin: 3, targetRepsMin: 20 },
+    { id: "sls-wallsit-t2", name: "Wall sit, long hold", prescription: "3 sets x 40–120 s, back flat against the wall, knees at 90°.", icon: "🧱", pose: "wallSit", progressionGroup: "wallSit", tier: 2, targetSetsMin: 3, targetRepsMin: 40 },
+    { id: "sls-wallsit-t3", name: "Single-leg wall sit", prescription: "3 sets x 20–45 s on the sound leg, other leg off the floor, back flat against the wall.", icon: "🧱", pose: "wallSit", progressionGroup: "wallSit", tier: 3, targetSetsMin: 3, targetRepsMin: 20 }
+  ];
+  var FAM_RDL = [
+    { id: "sls-rdl-t1", name: "Assisted hip hinge (two-hand support)", prescription: "2–3 sets x 8–10 reps, both hands on support, focus on hinge pattern", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
+    { id: "p2-sls-rdl", name: "Single-leg RDL (support as needed)", prescription: "3 sets x 6–10 reps", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 2, targetSetsMin: 3, targetRepsMin: 6 },
+    { id: "sls-rdl-t3", name: "Single-leg RDL (loaded, unsupported)", prescription: "3 sets x 6–8 reps, light load, no hand support", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 3, targetSetsMin: 3, targetRepsMin: 6 },
+    { id: "sls-rdl-t4", name: "Heavy eccentric-focus RDL", prescription: "3 sets x 5–6 reps, slow 3–4s lowering phase, heavier load", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 4, targetSetsMin: 3, targetRepsMin: 5, requiresAdvancedUnlock: true }
+  ];
+  var FAM_PUSHUP = [
+    { id: "p1-ub-pushup", name: "Push-up on the knees", prescription: "3 sets x 10–20 reps. Knees on the floor, body in one straight line from knees to head.", icon: "💪", pose: "pushUp", progressionGroup: "pushUp", tier: 1, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "ub-pushup-t2", name: "Push-up on the toes", prescription: "3 sets x 10–20 reps, body in one straight line. Alternate sets: hands close to the body, then hands wider.", icon: "💪", pose: "pushUp", progressionGroup: "pushUp", tier: 2, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "ub-pushup-t3", name: "Push-up with rotation", prescription: "3 sets x 8–15 reps. After each push-up, turn the body open to one side with that arm reaching up; alternate sides.", icon: "💪", pose: "pushUp", progressionGroup: "pushUp", tier: 3, targetSetsMin: 3, targetRepsMin: 8 }
+  ];
+  var FAM_DIPS = [
+    { id: "ub-dips-t1", name: "Chair dip, knees bent", prescription: "3 sets x 5–20 reps. Hands on the edge of a stable chair behind you, knees bent. Lower until the elbows are at about 90°, push back up. Shoulders down, away from the ears. Trains the downward push you need on crutches.", icon: "💪", pose: "dips", progressionGroup: "dips", tier: 1, targetSetsMin: 3, targetRepsMin: 5 },
+    { id: "ub-dips-t2", name: "Chair dip, leg straight", prescription: "3 sets x 5–20 reps. Hands on the edge of a stable chair behind you, leg straight in front of you. Lower until the elbows are at about 90°, push back up. Shoulders down, away from the ears.", icon: "💪", pose: "dips", progressionGroup: "dips", tier: 2, targetSetsMin: 3, targetRepsMin: 5 },
+    { id: "ub-dips-t3", name: "Dip with feet raised", prescription: "3 sets x 5–15 reps, feet on a second chair; or full body weight between two stable chairs or bars.", icon: "💪", pose: "dips", progressionGroup: "dips", tier: 3, targetSetsMin: 3, targetRepsMin: 5 }
+  ];
+  var FAM_SCAP = [
+    { id: "ub-scap-t1", name: "Shoulder blade squeeze in plank, on the knees", prescription: "3 sets x 10–20 reps. Plank on the knees, arms straight. Squeeze the shoulder blades together, then spread them apart. Your elbows stay straight and only the shoulder blades move, so your body goes up and down a few centimetres. Keep the shoulders away from the ears.", icon: "🧘", pose: "plank", progressionGroup: "scapRetraction", tier: 1, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "ub-scap-t2", name: "Shoulder blade squeeze in plank, on the toes", prescription: "3 sets x 10–20 reps. Plank on the toes, arms straight. Squeeze the shoulder blades together, then spread them apart. Your elbows stay straight and only the shoulder blades move, so your body goes up and down a few centimetres. Keep the shoulders away from the ears.", icon: "🧘", pose: "plank", progressionGroup: "scapRetraction", tier: 2, targetSetsMin: 3, targetRepsMin: 10 },
+    { id: "ub-scap-t3", name: "Shoulder blade squeeze on fists or dumbbells", prescription: "3 sets x 10–20 reps. Plank on the toes with your hands on two dumbbells or on your fists: this imitates the pressure of a crutch grip. Arms straight. Squeeze the shoulder blades together, then spread them apart. Only the shoulder blades move, so your body goes up and down a few centimetres. Keep the shoulders away from the ears.", icon: "🧘", pose: "plank", progressionGroup: "scapRetraction", tier: 3, targetSetsMin: 3, targetRepsMin: 10 }
+  ];
+  var FAM_CUFF = [
+    { id: "ub-cuff-ext", name: "Band external rotation (rotator cuff)", prescription: "3 sets x 10–20 reps per arm. Elbow at your side, bent at 90°. Rotate the forearm outward against a light band, return slowly.", icon: "🚣", pose: "row" }
+  ];
+  var FAM_PLANK = [
+    { id: "core-plank-t1", name: "Plank on the knees", prescription: "3 sets x 20–40 s, body in one straight line from knees to head.", icon: "🧘", pose: "plank", progressionGroup: "plank", tier: 1, targetSetsMin: 3, targetRepsMin: 20 },
+    { id: "p1-core-plank", name: "Plank on the toes", prescription: "3 sets x 20–60 s, body in one straight line.", icon: "🧘", pose: "plank", progressionGroup: "plank", tier: 2, targetSetsMin: 3, targetRepsMin: 20 },
+    { id: "core-plank-t3", name: "Plank on the toes, long hold", prescription: "3 sets x 45–90 s.", icon: "🧘", pose: "plank", progressionGroup: "plank", tier: 3, targetSetsMin: 3, targetRepsMin: 45 }
+  ];
+  var FAM_DEADBUG = [
+    { id: "core-deadbug-t1", name: "Dead bug (bent-knee, small range)", prescription: "3 sets x 8–12 reps/side. Lower back stays flat on the floor the whole time: a small movement with a flat back is better than a big one with an arched back.", icon: "🐛", pose: "deadBug", progressionGroup: "deadBug", tier: 1, targetSetsMin: 3, targetRepsMin: 8 },
+    { id: "p1-core-deadbug", name: "Dead bugs", prescription: "3 sets x 8–12 reps/side. Lower back flat on the floor: make the movement smaller as soon as the back starts to lift.", icon: "🐛", pose: "deadBug", progressionGroup: "deadBug", tier: 2, targetSetsMin: 3, targetRepsMin: 8 },
+    { id: "core-deadbug-t3", name: "Dead bug (extended limb, added resistance/tempo)", prescription: "3 sets x 10–15 reps/side, full extension, slower tempo or light ankle weight. Only as far as the lower back stays flat on the floor.", icon: "🐛", pose: "deadBug", progressionGroup: "deadBug", tier: 3, targetSetsMin: 3, targetRepsMin: 10 }
+  ];
+  var FAM_SQUAT_P3 = [
+    { id: "sls-squat-t1-p3", name: "Sit to stand from a chair", prescription: "3 sets x 15–30 reps. Sit down fully on a chair, then stand up again. Use the armrests or a support as needed, and less hand support as it gets easier. Phase 3: higher reps for muscular endurance.", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 1, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "p1-sls-squat-p3", name: "Squat to chair touch", prescription: "3 sets x 15–30 reps. From standing, bend down until your buttocks just touch the chair seat, then stand up straight away. The chair sets a fixed depth. Support nearby as needed. Phase 3: higher reps for muscular endurance.", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 2, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "sls-squat-t3-p3", name: "Loaded single-leg-biased squat", prescription: "3 sets x 15–30 reps, add external load (dumbbell/vest) as tolerated, minimal hand support. Phase 3: higher reps for muscular endurance.", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 3, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "sls-squat-t4", name: "Explosive/jump squat", prescription: "3 sets x 6–8 reps, jump squat with controlled landing, single-leg-biased", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 4, targetSetsMin: 3, targetRepsMin: 6, requiresAdvancedUnlock: true }
+  ];
+  var FAM_RDL_P3 = [
+    { id: "sls-rdl-t1-p3", name: "Assisted hip hinge (two-hand support)", prescription: "3 sets x 15–30 reps, both hands on support, focus on hinge pattern. Phase 3: higher reps for muscular endurance.", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 1, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "p2-sls-rdl-p3", name: "Single-leg RDL (support as needed)", prescription: "3 sets x 15–30 reps. Phase 3: higher reps for muscular endurance.", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 2, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "sls-rdl-t3-p3", name: "Single-leg RDL (loaded, unsupported)", prescription: "3 sets x 15–30 reps, light load, no hand support. Phase 3: higher reps for muscular endurance.", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 3, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "sls-rdl-t4", name: "Heavy eccentric-focus RDL", prescription: "3 sets x 5–6 reps, slow 3–4s lowering phase, heavier load", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 4, targetSetsMin: 3, targetRepsMin: 5, requiresAdvancedUnlock: true }
+  ];
+  var FAM_CALF_P3 = [
+    { id: "sls-calf-t1-p3", name: "Calf raise on flat floor, with support", prescription: "3 sets x 15–30 reps on the sound leg, knee straight, hands on a rail or wall. Full range. Phase 3: higher reps for muscular endurance.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 1, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "p1-sls-calf-p3", name: "Calf raise on a step, with support", prescription: "3 sets x 15–30 reps on the sound leg, knee straight. Ball of the foot on a step, heel over the edge: rise up, then lower the heel below the step for a stretch. Trains the long calf muscle. Phase 3: higher reps for muscular endurance.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 2, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "sls-calf-t3-p3", name: "Calf raise on a step, loaded", prescription: "3 sets x 15–30 reps on the sound leg, knee straight. Ball of the foot on a step, heel over the edge, with a dumbbell or weight vest for load: rise up, then lower the heel below the step each rep. Phase 3: higher reps for muscular endurance.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 3, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "sls-calf-t4", name: "Single-leg pogo/rebound hop", prescription: "3 sets x 8–10 reps, quick ground-contact rebounding", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 4, targetSetsMin: 3, targetRepsMin: 8, requiresAdvancedUnlock: true }
+  ];
+  var FAM_CALF_BENT_P3 = [
+    { id: "sls-calfbent-t1-p3", name: "Seated calf raise", prescription: "3 sets x 15–30 reps. Sit with the knee bent at 90°, a weight (bag or dumbbell) on the thigh. Rise onto the toes, lower slowly. Trains the short calf muscle (soleus). Phase 3: higher reps for muscular endurance.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaiseBent", tier: 1, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "sls-calfbent-t2-p3", name: "Bent-knee calf raise on a step, with support", prescription: "3 sets x 15–30 reps on the sound leg, knee slightly bent, heel over the edge of a step. Rise up, then lower the heel below the step. Hands on a rail. Phase 3: higher reps for muscular endurance.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaiseBent", tier: 2, targetSetsMin: 3, targetRepsMin: 15 },
+    { id: "sls-calfbent-t3-p3", name: "Bent-knee calf raise on a step, loaded", prescription: "3 sets x 15–30 reps on the sound leg, knee slightly bent, heel over the edge of a step, with a dumbbell or weight vest for load. Rise up, then lower the heel below the step. Keep a hand on a rail. Phase 3: higher reps for muscular endurance.", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaiseBent", tier: 3, targetSetsMin: 3, targetRepsMin: 15 }
+  ];
+
   var PROGRAM_DATA = {
     phases: [
       {
@@ -2484,47 +2680,29 @@
         weekRange: [1, 4],
         focus: "Foundation",
         categories: {
-          singleLegStrength: [
-            { id: "sls-squat-t1", name: "Assisted box squat", prescription: "2–3 sets x 10–15 reps, sit to a raised surface, full hand support on rail/counter", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 1, targetSetsMin: 2, targetRepsMin: 10 },
-            { id: "p1-sls-squat", name: "Bodyweight squat (assisted)", prescription: "2–3 sets x 10–15 reps, use support as needed for balance", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 2, targetSetsMin: 2, targetRepsMin: 10 },
-            { id: "sls-squat-t3", name: "Loaded single-leg-biased squat", prescription: "3 sets x 8–12 reps, add external load (dumbbell/vest) as tolerated, minimal hand support", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
-            { id: "sls-squat-t4", name: "Explosive/jump squat", prescription: "3 sets x 6–8 reps, jump squat with controlled landing, single-leg-biased", icon: "🏋️", pose: "squat", progressionGroup: "squat", tier: 4, targetSetsMin: 3, targetRepsMin: 6, requiresAdvancedUnlock: true },
-            { id: "p1-sls-stepup", name: "Step-ups", prescription: "2–3 sets x 8–12 reps (sound leg loaded)", icon: "🪜", pose: "stepUp" },
-            { id: "sls-bridge-t1", name: "Glute bridge (feet elevated close, short lever)", prescription: "2–3 sets x 12–15 reps", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 1, targetSetsMin: 2, targetRepsMin: 12 },
-            { id: "p1-sls-bridge", name: "Glute bridges", prescription: "2–3 sets x 12–15 reps", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 2, targetSetsMin: 2, targetRepsMin: 12 },
-            { id: "sls-bridge-t3", name: "Single-leg glute bridge", prescription: "3 sets x 8–12 reps, sound leg only, opposite leg lifted", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
-            { id: "sls-bridge-t4", name: "Single-leg hip thrust (loaded)", prescription: "3 sets x 8–10 reps, elevated shoulders, external load", icon: "🌉", pose: "gluteBridge", progressionGroup: "gluteBridge", tier: 4, targetSetsMin: 3, targetRepsMin: 8, requiresAdvancedUnlock: true },
-            { id: "sls-calf-t1", name: "Calf raise (supported, partial range)", prescription: "2–3 sets x 15–20 reps, hands on rail, comfortable range only", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 1, targetSetsMin: 2, targetRepsMin: 15 },
-            { id: "p1-sls-calf", name: "Calf raises (sound leg)", prescription: "2–3 sets x 15–20 reps", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 2, targetSetsMin: 2, targetRepsMin: 15 },
-            { id: "sls-calf-t3", name: "Single-leg calf raise (loaded)", prescription: "3 sets x 10–15 reps, add load as tolerated, full range", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 3, targetSetsMin: 3, targetRepsMin: 10 },
-            { id: "sls-calf-t4", name: "Single-leg pogo/rebound hop", prescription: "3 sets x 8–10 reps, quick ground-contact rebounding", icon: "🦶", pose: "calfRaise", progressionGroup: "calfRaise", tier: 4, targetSetsMin: 3, targetRepsMin: 8, requiresAdvancedUnlock: true }
-          ],
-          upperBody: [
-            { id: "p1-ub-pushup", name: "Seated/incline push-ups", prescription: "2–3 sets x 12–20 reps, light-to-moderate effort (endurance focus)", icon: "💪", pose: "pushUp" },
+          singleLegStrength: [].concat(FAM_SQUAT, FAM_ECC_SQUAT, FAM_STEPUP, FAM_GLUTE_BRIDGE, FAM_HAM_BRIDGE, FAM_CALF, FAM_CALF_BENT, FAM_WALL_SIT, []),
+          upperBody: [].concat(FAM_PUSHUP, FAM_DIPS, FAM_SCAP, FAM_CUFF, [
             { id: "ub-row-t1", name: "Band row (light resistance, short range)", prescription: "2–3 sets x 12–20 reps, light band, control through full range", icon: "🚣", pose: "row", progressionGroup: "row", tier: 1, targetSetsMin: 2, targetRepsMin: 12 },
             { id: "p1-ub-row", name: "Resistance band rows", prescription: "2–3 sets x 12–20 reps", icon: "🚣", pose: "row", progressionGroup: "row", tier: 2, targetSetsMin: 2, targetRepsMin: 12 },
             { id: "ub-row-t3", name: "Row (heavy band or cable/free-weight equivalent)", prescription: "3–4 sets x 8–12 reps, increased resistance", icon: "🚣", pose: "row", progressionGroup: "row", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
             { id: "p1-ub-press", name: "Shoulder press", prescription: "2–3 sets x 12–20 reps, light load", icon: "🙌", pose: "press" }
-          ],
-          core: [
-            { id: "p1-core-plank", name: "Plank", prescription: "2–3 sets x 20–40s hold", icon: "🧘", pose: "plank" },
-            { id: "core-deadbug-t1", name: "Dead bug (bent-knee, small range)", prescription: "2–3 sets x 8–12 reps/side, keep lower back flat, small limb movement", icon: "🐛", pose: "deadBug", progressionGroup: "deadBug", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
-            { id: "p1-core-deadbug", name: "Dead bugs", prescription: "2–3 sets x 8–12 reps/side", icon: "🐛", pose: "deadBug", progressionGroup: "deadBug", tier: 2, targetSetsMin: 2, targetRepsMin: 8 },
-            { id: "core-deadbug-t3", name: "Dead bug (extended limb, added resistance/tempo)", prescription: "3 sets x 10–15 reps/side, full extension, slower tempo or light ankle weight", icon: "🐛", pose: "deadBug", progressionGroup: "deadBug", tier: 3, targetSetsMin: 3, targetRepsMin: 10 },
+          ]),
+          core: [].concat(FAM_PLANK, FAM_DEADBUG, [
             { id: "core-sideplank-t1", name: "Side plank (knee-supported)", prescription: "2–3 sets x 15–20s/side, bottom knee bent for support", icon: "🤸", pose: "sidePlank", progressionGroup: "sidePlank", tier: 1, targetSetsMin: 2, targetRepsMin: 15 },
             { id: "p1-core-sideplank", name: "Side plank", prescription: "2–3 sets x 15–30s/side", icon: "🤸", pose: "sidePlank", progressionGroup: "sidePlank", tier: 2, targetSetsMin: 2, targetRepsMin: 15 },
             { id: "core-sideplank-t3", name: "Side plank (full, with top-leg lift or reach-through)", prescription: "3 sets x 25–40s/side, add top-leg lift or rotate-and-reach", icon: "🤸", pose: "sidePlank", progressionGroup: "sidePlank", tier: 3, targetSetsMin: 3, targetRepsMin: 25 },
             { id: "core-antirot-t1", name: "Anti-rotation hold (light band, close to body)", prescription: "2–3 sets x 15–20s/side, minimal band tension", icon: "🔄", pose: "antiRotation", progressionGroup: "antiRotation", tier: 1, targetSetsMin: 2, targetRepsMin: 15 },
             { id: "p1-core-antirot", name: "Anti-rotation hold", prescription: "2–3 sets x 20–30s/side", icon: "🔄", pose: "antiRotation", progressionGroup: "antiRotation", tier: 2, targetSetsMin: 2, targetRepsMin: 20 },
             { id: "core-antirot-t3", name: "Anti-rotation press-out (extended arms, increased tension)", prescription: "3 sets x 20–30s/side, arms extended further from body, heavier band", icon: "🔄", pose: "antiRotation", progressionGroup: "antiRotation", tier: 3, targetSetsMin: 3, targetRepsMin: 20 }
-          ],
+          ]),
           cardio: [
-            { id: "p1-cardio-steady", name: "Low-intensity steady-state", prescription: "15–25 min continuous at an easy, conversational effort (RPE 3–4/10, you should be able to speak in full sentences throughout). Use whatever you have access to: rowing machine, arm/upper-body ergometer, stationary bike, brisk crutch-walk, swimming, or wheelchair/handcycle. Any continuous activity you can sustain at that effort works.", icon: "🏃", pose: "cardioMachine" }
+            { id: "p1-cardio-steady", name: "Low-intensity steady-state", prescription: "15–25 min continuous at an easy, conversational effort (RPE 3–4/10, you should be able to speak in full sentences throughout). Use whatever you have access to: rowing machine, arm/upper-body ergometer, stationary bike, brisk crutch-walk, swimming, or wheelchair/handcycle. Any continuous activity you can sustain at that effort works. Rowing is the best choice: it trains the upper and lower body together, as in a match. Longer walks on crutches, including stairs, also count.", icon: "🏃", pose: "cardioMachine" }
           ],
           mobility: [
             { id: "p1-mob-hipflexor", name: "Hip flexor mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🧘‍♂️", pose: "mobilityLunge" },
             { id: "p1-mob-hamstring", name: "Hamstring mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🦵", pose: "mobilityHamstring" },
-            { id: "p1-mob-shoulder", name: "Shoulder/thoracic mobility", prescription: "Daily, 2–3 x 30s/side or 8–10 reps", icon: "🙆‍♂️", pose: "mobilityShoulder" }
+            { id: "p1-mob-shoulder", name: "Shoulder/thoracic mobility", prescription: "Daily, 2–3 x 30s/side or 8–10 reps", icon: "🙆‍♂️", pose: "mobilityShoulder" },
+            { id: "p1-mob-calf", name: "Calf stretch (sound leg)", prescription: "Daily, 2–3 x 30s, once with a straight knee and once with a bent knee.", icon: "🦶", pose: "mobilityHamstring" }
           ]
         }
       },
@@ -2535,12 +2713,7 @@
         weekRange: [5, 8],
         focus: "Load Progression",
         categories: {
-          singleLegStrength: [
-            { id: "p2-sls-stepup", name: "Loaded step-ups", prescription: "3–4 sets x 6–10 reps, add external load as tolerated", icon: "🪜", pose: "stepUp" },
-            { id: "sls-rdl-t1", name: "Assisted hip hinge (two-hand support)", prescription: "2–3 sets x 8–10 reps, both hands on support, focus on hinge pattern", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
-            { id: "p2-sls-rdl", name: "Single-leg RDL (support as needed)", prescription: "3 sets x 6–10 reps", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 2, targetSetsMin: 3, targetRepsMin: 6 },
-            { id: "sls-rdl-t3", name: "Single-leg RDL (loaded, unsupported)", prescription: "3 sets x 6–8 reps, light load, no hand support", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 3, targetSetsMin: 3, targetRepsMin: 6 },
-            { id: "sls-rdl-t4", name: "Heavy eccentric-focus RDL", prescription: "3 sets x 5–6 reps, slow 3–4s lowering phase, heavier load", icon: "🦩", pose: "singleLegRDL", progressionGroup: "singleLegRDL", tier: 4, targetSetsMin: 3, targetRepsMin: 5, requiresAdvancedUnlock: true },
+          singleLegStrength: [].concat(FAM_ECC_SQUAT, FAM_STEPUP, FAM_RDL, FAM_CALF, FAM_CALF_BENT, FAM_WALL_SIT, [
             { id: "sls-lunge-t1", name: "Lateral step + return (supported)", prescription: "2–3 sets x 8–10 reps, hand support, small range", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
             { id: "p2-sls-lunge", name: "Lateral lunges (sound leg)", prescription: "3 sets x 8–10 reps", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 2, targetSetsMin: 3, targetRepsMin: 8 },
             { id: "sls-lunge-t3", name: "Lateral lunge (loaded)", prescription: "3 sets x 8–10 reps, add load, increase range", icon: "🤺", pose: "lateralLunge", progressionGroup: "lateralLunge", tier: 3, targetSetsMin: 3, targetRepsMin: 8 },
@@ -2548,19 +2721,22 @@
             { id: "sls-boxjump-t1", name: "Step-down practice (controlled landing only)", prescription: "2–3 sets x 6–8 reps, low step, no jump (landing mechanics only)", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 1, targetSetsMin: 2, targetRepsMin: 6 },
             { id: "p2-sls-boxjump", name: "Box jumps (low height, controlled landing)", prescription: "3 sets x 4–6 reps, focus on soft landing mechanics", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 2, targetSetsMin: 3, targetRepsMin: 4 },
             { id: "sls-boxjump-t3", name: "Box jump (increased height, single-leg landing focus)", prescription: "3 sets x 4–6 reps, progress height only after landing mechanics confirmed solid", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 3, targetSetsMin: 3, targetRepsMin: 4 },
-            { id: "sls-boxjump-t4", name: "Increased height, single-leg takeoff/landing", prescription: "3 sets x 4–5 reps", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 4, targetSetsMin: 3, targetRepsMin: 4, requiresAdvancedUnlock: true }
-          ],
-          upperBody: [
+            { id: "sls-boxjump-t4", name: "Increased height, single-leg takeoff/landing", prescription: "3 sets x 4–5 reps", icon: "📦", pose: "boxJump", progressionGroup: "boxJump", tier: 4, targetSetsMin: 3, targetRepsMin: 4, requiresAdvancedUnlock: true },
+            { id: "p2-sls-hipabd", name: "Side-lying hip abduction", prescription: "3 sets x 10–20 reps per side. Lie on your side, lift the top leg up and slightly back, lower slowly.", icon: "🦵", pose: "hipAbduction" },
+            { id: "sls-stairs-slow", name: "Slow stair descent", prescription: "2–3 sets x 1 flight of stairs. Go down one step at a time, lowering yourself slowly on the sound leg (2–3 seconds per step), hand on the rail. Use crutches or prosthesis as you normally do on stairs.", icon: "🪜", pose: "stairDescent" }
+          ]),
+          upperBody: [].concat(FAM_DIPS, FAM_SCAP, FAM_CUFF, [
             { id: "p2-ub-press", name: "Presses/rows/pulls (increased load)", prescription: "3–4 sets x 8–12 reps", icon: "🏋️‍♀️", pose: "press" },
             { id: "p2-ub-plyo", name: "Explosive push variation (e.g. plyo push-ups, if cleared)", prescription: "3 sets x 4–6 reps", icon: "💥", pose: "pushUp" }
-          ],
+          ]),
           core: [
             { id: "core-carry-t1", name: "Short carry, light load", prescription: "2–3 sets x 10–15m, light load, focus on posture and crutch control", icon: "🧳", pose: "loadedCarry", progressionGroup: "loadedCarry", tier: 1, targetSetsMin: 2, targetRepsMin: 10 },
             { id: "p2-core-carry", name: "Loaded carries (crutch farmer's-walk equivalent, if safe)", prescription: "3 sets x 20–30m or 20–30s", icon: "🧳", pose: "loadedCarry", progressionGroup: "loadedCarry", tier: 2, targetSetsMin: 3, targetRepsMin: 20 },
             { id: "core-carry-t3", name: "Loaded carry (increased load or distance)", prescription: "3 sets x 30–40m, heavier load", icon: "🧳", pose: "loadedCarry", progressionGroup: "loadedCarry", tier: 3, targetSetsMin: 3, targetRepsMin: 30 },
             { id: "core-rot-t1", name: "Rotational core (seated, light band, small range)", prescription: "2–3 sets x 8–10 reps/side, seated for stability, small range", icon: "🌀", pose: "rotationalCore", progressionGroup: "rotationalCore", tier: 1, targetSetsMin: 2, targetRepsMin: 8 },
             { id: "p2-core-rotational", name: "Rotational core work", prescription: "3 sets x 8–12 reps/side", icon: "🌀", pose: "rotationalCore", progressionGroup: "rotationalCore", tier: 2, targetSetsMin: 3, targetRepsMin: 8 },
-            { id: "core-rot-t3", name: "Rotational core (standing, increased resistance/range)", prescription: "3 sets x 10–12 reps/side, standing, heavier band or cable", icon: "🌀", pose: "rotationalCore", progressionGroup: "rotationalCore", tier: 3, targetSetsMin: 3, targetRepsMin: 10 }
+            { id: "core-rot-t3", name: "Rotational core (standing, increased resistance/range)", prescription: "3 sets x 10–12 reps/side, standing, heavier band or cable", icon: "🌀", pose: "rotationalCore", progressionGroup: "rotationalCore", tier: 3, targetSetsMin: 3, targetRepsMin: 10 },
+            { id: "p2-core-sidebend", name: "Standing side bend with a weight", prescription: "3 sets x 10–20 reps per side. Stand tall (prosthesis and sound leg, or next to a support), a dumbbell in one hand. Let the weight slide down the side of the leg, come back up using the side of the trunk.", icon: "🏋️", pose: "sideBend" }
           ],
           cardio: [
             { id: "p2-cardio-interval", name: "Interval work", prescription: "30s work / 30s rest or 20s work / 40s rest, 6–10 rounds, building toward match-intensity bursts. \"Work\" = whichever hard-effort mode you train with (crutch sprints, bike, rowing/arm ergometer, or shuttle runs) at a hard effort (RPE 7–8/10).", icon: "⏱️", pose: "cardioMachine" }
@@ -2569,7 +2745,8 @@
             { id: "p2-mob-dynamic", name: "Dynamic warm-up sequence", prescription: "5–8 min before each session", icon: "🔥", pose: "mobilityShoulder" },
             { id: "p2-mob-hipflexor", name: "Hip flexor mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🧘‍♂️", pose: "mobilityLunge" },
             { id: "p2-mob-hamstring", name: "Hamstring mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🦵", pose: "mobilityHamstring" },
-            { id: "p2-mob-shoulder", name: "Shoulder/thoracic mobility", prescription: "Daily, 2–3 x 30s/side or 8–10 reps", icon: "🙆‍♂️", pose: "mobilityShoulder" }
+            { id: "p2-mob-shoulder", name: "Shoulder/thoracic mobility", prescription: "Daily, 2–3 x 30s/side or 8–10 reps", icon: "🙆‍♂️", pose: "mobilityShoulder" },
+            { id: "p2-mob-calf", name: "Calf stretch (sound leg)", prescription: "Daily, 2–3 x 30s, once with a straight knee and once with a bent knee.", icon: "🦶", pose: "mobilityHamstring" }
           ]
         }
       },
@@ -2580,7 +2757,7 @@
         weekRange: [9, 12],
         focus: "Sport Transfer",
         categories: {
-          singleLegStrength: [
+          singleLegStrength: [].concat(FAM_SQUAT_P3, FAM_ECC_SQUAT, FAM_RDL_P3, FAM_CALF_P3, FAM_CALF_BENT_P3, FAM_WALL_SIT, [
             { id: "sls-hop-t1", name: "Small hop-in-place (soft landing)", prescription: "2–3 sets x 4–6 reps, minimal height, focus on stick-the-landing", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 1, targetSetsMin: 2, targetRepsMin: 4 },
             { id: "p3-sls-hop", name: "Single-leg hops/bounds", prescription: "3–4 sets x 4–6 reps, progress distance/height gradually", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 2, targetSetsMin: 3, targetRepsMin: 4 },
             { id: "sls-hop-t3", name: "Single-leg bounds (distance/height progression)", prescription: "3–4 sets x 4–6 reps, progressive distance or height", icon: "🦘", pose: "singleLegHop", progressionGroup: "singleLegHop", tier: 3, targetSetsMin: 3, targetRepsMin: 4 },
@@ -2589,13 +2766,17 @@
             { id: "p3-sls-decel", name: "Deceleration/landing mechanics", prescription: "3–4 sets x 4–6 reps, focus on control not max output", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 2, targetSetsMin: 3, targetRepsMin: 4 },
             { id: "sls-decel-t3", name: "Deceleration from approach/light sprint", prescription: "3–4 sets x 4–6 reps, add short approach run before landing", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 3, targetSetsMin: 3, targetRepsMin: 4 },
             { id: "sls-decel-t4", name: "Decel from sprint approach + cut", prescription: "3–4 sets x 4–6 reps, add directional change on landing", icon: "🛑", pose: "decelLanding", progressionGroup: "decelLanding", tier: 4, targetSetsMin: 3, targetRepsMin: 4, requiresAdvancedUnlock: true },
-            { id: "sls-broadjump-adv", name: "Broad jump / horizontal bound", prescription: "3 sets x 4–6 reps, standing broad jump on sound leg, controlled landing, progressive distance", icon: "📏", pose: "broadJump", requiresAdvancedUnlock: true },
-            { id: "cond-agility-adv", name: "Reactive agility (cone touches / cutting)", prescription: "3–4 sets x 20–30s, sound-leg cone-touch reactive pattern or single-leg cutting drill", icon: "🚧", pose: "reactiveAgility", requiresAdvancedUnlock: true }
-          ],
-          upperBody: [
+            { id: "sls-broadjump-t1", name: "Short forward hop, stick the landing", prescription: "2–3 sets x 4–6 reps. Hop forward about 30 cm on the sound leg and hold the landing for 2 seconds. Practise next to support or with a partner until your balance is safe.", icon: "📏", pose: "broadJump", progressionGroup: "broadJump", tier: 1, targetSetsMin: 2, targetRepsMin: 4, requiresAdvancedUnlock: true },
+            { id: "sls-broadjump-t2", name: "Broad jump, short distance", prescription: "3 sets x 4–6 reps. Hop forward about 60 cm on the sound leg and hold the landing for 2 seconds. Practise next to support or with a partner until your balance is safe.", icon: "📏", pose: "broadJump", progressionGroup: "broadJump", tier: 2, targetSetsMin: 3, targetRepsMin: 4, requiresAdvancedUnlock: true },
+            { id: "sls-broadjump-adv", name: "Broad jump / horizontal bound", prescription: "3 sets x 4–6 reps, standing broad jump on sound leg, controlled landing. Without crutches, build height before distance; with crutches you can train stride length. Practise next to support or with a partner until your balance is safe", icon: "📏", pose: "broadJump", progressionGroup: "broadJump", tier: 3, targetSetsMin: 3, targetRepsMin: 4, requiresAdvancedUnlock: true },
+            { id: "cond-agility-t1", name: "Cone touches, fixed order, walking pace", prescription: "2–3 sets x 20–30s. Touch the cones in a fixed order at walking pace, with your usual walking aids or prosthesis. Stay next to support.", icon: "🚧", pose: "reactiveAgility", progressionGroup: "reactiveAgility", tier: 1, targetSetsMin: 2, targetRepsMin: 20, requiresAdvancedUnlock: true },
+            { id: "cond-agility-t2", name: "Cone touches, fixed order, quick pace", prescription: "3 sets x 20–30s. Touch the cones in a fixed order at a quick pace, with your usual walking aids or prosthesis.", icon: "🚧", pose: "reactiveAgility", progressionGroup: "reactiveAgility", tier: 2, targetSetsMin: 3, targetRepsMin: 20, requiresAdvancedUnlock: true },
+            { id: "cond-agility-adv", name: "Reactive agility (cone touches / cutting)", prescription: "3–4 sets x 20–30s, sound-leg cone-touch reactive pattern or single-leg cutting drill", icon: "🚧", pose: "reactiveAgility", progressionGroup: "reactiveAgility", tier: 3, targetSetsMin: 3, targetRepsMin: 20, requiresAdvancedUnlock: true }
+          ]),
+          upperBody: [].concat(FAM_DIPS, FAM_CUFF, [
             { id: "p3-ub-max", name: "Maximal strength block", prescription: "3–5 sets x 3–6 reps, higher load", icon: "🏋️‍♂️", pose: "press" },
             { id: "p3-ub-endurance", name: "Muscular endurance maintenance", prescription: "2–3 sets x 15–20 reps", icon: "🔁", pose: "pushUp" }
-          ],
+          ]),
           core: [
             { id: "p3-core-fatigue", name: "Dynamic stability under fatigue", prescription: "e.g. plank variations performed immediately after interval cardio, 2–3 sets x 20–30s", icon: "🥵", pose: "plank" }
           ],
@@ -2610,11 +2791,39 @@
               estimateNote: CARDIO_ESTIMATE_NOTE
             },
             {
-              id: "cond-sprint-adv",
-              name: "Sprint mechanics / acceleration",
-              prescription: "4–6 reps x 10–20m, upright sprint acceleration from standing start, full recovery between reps",
+              id: "cond-sprint-t1",
+              name: "Acceleration over 10 m, controlled effort",
+              prescription: "3–4 sets x 10 m. Each set is one acceleration over 10 m at about 70% effort. Walk back to recover before the next set.",
               icon: "🏃‍♂️",
               pose: "sprintMechanics",
+              progressionGroup: "sprintMechanics",
+              tier: 1,
+              targetSetsMin: 3,
+              targetRepsMin: 10,
+              requiresAdvancedUnlock: true
+            },
+            {
+              id: "cond-sprint-t2",
+              name: "Acceleration over 10–20 m, hard effort",
+              prescription: "4–5 sets x 10–20 m. Each set is one acceleration from a standing start at about 85% effort. Walk back to recover before the next set.",
+              icon: "🏃‍♂️",
+              pose: "sprintMechanics",
+              progressionGroup: "sprintMechanics",
+              tier: 2,
+              targetSetsMin: 4,
+              targetRepsMin: 10,
+              requiresAdvancedUnlock: true
+            },
+            {
+              id: "cond-sprint-adv",
+              name: "Sprint mechanics / acceleration",
+              prescription: "4–6 sets x 10–20 m. Each set is one upright sprint acceleration from a standing start. Take a full recovery between sets.",
+              icon: "🏃‍♂️",
+              pose: "sprintMechanics",
+              progressionGroup: "sprintMechanics",
+              tier: 3,
+              targetSetsMin: 4,
+              targetRepsMin: 10,
               requiresAdvancedUnlock: true
             }
           ],
@@ -2622,7 +2831,8 @@
             { id: "p3-mob-dynamic", name: "Dynamic warm-up sequence", prescription: "5–8 min before each session", icon: "🔥", pose: "mobilityShoulder" },
             { id: "p3-mob-hipflexor", name: "Hip flexor mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🧘‍♂️", pose: "mobilityLunge" },
             { id: "p3-mob-hamstring", name: "Hamstring mobility", prescription: "Daily, 2–3 x 30s/side", icon: "🦵", pose: "mobilityHamstring" },
-            { id: "p3-mob-shoulder", name: "Shoulder/thoracic mobility", prescription: "Daily, 2–3 x 30s/side or 8–10 reps", icon: "🙆‍♂️", pose: "mobilityShoulder" }
+            { id: "p3-mob-shoulder", name: "Shoulder/thoracic mobility", prescription: "Daily, 2–3 x 30s/side or 8–10 reps", icon: "🙆‍♂️", pose: "mobilityShoulder" },
+            { id: "p3-mob-calf", name: "Calf stretch (sound leg)", prescription: "Daily, 2–3 x 30s, once with a straight knee and once with a bent knee.", icon: "🦶", pose: "mobilityHamstring" }
           ]
         }
       }
@@ -2641,7 +2851,7 @@
   }
 
   // ---------------------------------------------------------------------
-  // Exercise illustrations — simple inline SVG stick-figure pictograms.
+  // Exercise illustrations: simple inline SVG stick-figure pictograms.
   // Schematic, not photographic: this app ships offline with no external
   // image assets, so poses are hand-drawn line figures depicting body
   // position, not real photos.
@@ -2796,16 +3006,42 @@
     // These three are new advanced-content-only families (see
     // requiresAdvancedUnlock). Joint-coordinate data is unused now
     // (renderPoseSvg just checks existence and loads a static image at
-    // exercise-images/<poseId>.png) — kept as empty placeholders for
+    // exercise-images/<poseId>.png), kept as empty placeholders for
     // structural consistency with the rest of this table.
     broadJump: {},
     sprintMechanics: {},
-    reactiveAgility: {}
+    reactiveAgility: {},
+    // v4.4 additions (images only, same drawing family as the rest)
+    wallSit: {},
+    dips: {},
+    hipAbduction: {},
+    sideBend: {},
+    stairDescent: {},
+    floorGetup: {},
+    falling: {}
   };
+
+  // Picture style (v4.4): "twoLegs" (exercise-images/) or "oneLeg"
+  // (exercise-images/one-leg/, same drawings with a below-knee residual
+  // limb). Not set yet: one leg for athletes who train without their
+  // prosthesis, two legs otherwise. Changed in Settings > Pictures.
+  function getFigureStyle() {
+    try {
+      var v = localStorage.getItem(STORAGE_KEYS.figureStyle);
+      if (v === "oneLeg" || v === "twoLegs") return v;
+    } catch (e) { /* storage unavailable */ }
+    var profile = getProfile();
+    return profile && profile.prostheticUse === "never" ? "oneLeg" : "twoLegs";
+  }
+
+  function setFigureStyle(v) {
+    try { localStorage.setItem(STORAGE_KEYS.figureStyle, v); } catch (e) { /* storage unavailable */ }
+  }
 
   function renderPoseSvg(poseId) {
     if (!POSE_LIBRARY[poseId]) return "";
-    return '<img src="exercise-images/' + poseId + '.png" class="exercise-illustration" alt="" aria-hidden="true"/>';
+    var folder = getFigureStyle() === "oneLeg" ? "exercise-images/one-leg/" : "exercise-images/";
+    return '<img src="' + folder + poseId + '.png" class="exercise-illustration" alt="" aria-hidden="true"/>';
   }
 
   function youtubeSearchUrl(exerciseName) {
@@ -2902,7 +3138,169 @@
   }
 
   // ---------------------------------------------------------------------
-  // Session planning — splits the phase's exercises across the athlete's
+  // Exercise measurement helpers (v4.3). Prescriptions are free text, so
+  // these read the unit (reps, seconds, metres, rounds) and the set and
+  // amount ranges out of it, then turn the ranges into a target for the
+  // current week of the phase:
+  //   week 1: low end; week 2: more reps/time; week 3: one more set;
+  //   week 4: recovery week, one set fewer than week 3, low end again.
+  // ---------------------------------------------------------------------
+  var UNIT_LABELS = { reps: "reps", s: "s", m: "m", rounds: "rounds" };
+  var UNIT_FIELD_LABELS = { reps: "Reps", s: "Seconds", m: "Metres", rounds: "Rounds" };
+
+  function exerciseUnit(ex, catKey) {
+    if (catKey === "cardio" && !(ex && ex.progressionGroup)) return "none";
+    var p = (ex && ex.prescription) || "";
+    if (/\d\s*m(?![a-z])/.test(p)) return "m";
+    if (/\d\s*min\b/.test(p)) return "none";
+    if (/\brounds?\b/.test(p)) return "rounds";
+    if (/\d\s*s(?![a-z])/.test(p)) return "s";
+    return "reps";
+  }
+
+  function rangeFrom(match) {
+    if (!match) return null;
+    var lo = parseInt(match[1], 10);
+    var hi = match[2] ? parseInt(match[2], 10) : lo;
+    return [Math.min(lo, hi), Math.max(lo, hi)];
+  }
+
+  function parseSetsRange(p) {
+    return rangeFrom(/(\d+)\s*(?:[–-]\s*(\d+))?\s*sets?\b/.exec(p)) ||
+      rangeFrom(/(\d+)\s*(?:[–-]\s*(\d+))?\s*x\s*\d/.exec(p)) ||
+      rangeFrom(/\d+\s*s?\s*x\s*(\d+)(?:\s*[–-]\s*(\d+))?/.exec(p));
+  }
+
+  function parseAmountRange(p, unit) {
+    var re = {
+      reps: /(\d+)\s*(?:[–-]\s*(\d+))?\s*reps?\b/,
+      s: /(\d+)\s*(?:[–-]\s*(\d+))?\s*s(?![a-z])/,
+      m: /(\d+)\s*(?:[–-]\s*(\d+))?\s*m(?![a-z])/,
+      rounds: /(\d+)\s*(?:[–-]\s*(\d+))?\s*rounds?\b/
+    }[unit];
+    return re ? rangeFrom(re.exec(p)) : null;
+  }
+
+  function weekInPhase(state, phase) {
+    if (!state || !phase) return 1;
+    return Math.max(1, Math.min(PROGRAM_META.phaseLengthWeeks, state.currentWeek - phase.weekRange[0] + 1));
+  }
+
+  function pickByWeek(range, week, isSets) {
+    if (!range) return null;
+    var lo = range[0], hi = range[1], mid = Math.round((lo + hi) / 2);
+    if (isSets) {
+      if (week === 1 || week === 2) return lo;
+      if (week === 3) return hi;
+      return Math.max(1, hi - 1); // recovery week: one set fewer than week 3
+    }
+    if (week === 1 || week === 4) return lo;
+    if (week === 2) return mid;
+    return lo === hi ? hi : mid; // week 3 adds a set, not more reps
+  }
+
+  // { sets, amount, unit, week, recovery } or null when nothing to count.
+  function weekTarget(ex, catKey, week) {
+    var unit = exerciseUnit(ex, catKey);
+    if (unit === "none") return null;
+    var p = ex.prescription || "";
+    var setsRange = parseSetsRange(p);
+    var amountRange = parseAmountRange(p, unit);
+    if (!setsRange && !amountRange) return null;
+    // If a family has only one set count (e.g. "3 sets"), week 3 adds reps
+    // instead of a set.
+    var sets = pickByWeek(setsRange, week, true);
+    var amount = pickByWeek(amountRange, week, false);
+    if (setsRange && setsRange[0] === setsRange[1] && amountRange && week === 3) amount = amountRange[1];
+    return { sets: sets, amount: amount, unit: unit, week: week, recovery: week === PROGRAM_META.phaseLengthWeeks };
+  }
+
+  function formatTarget(t) {
+    if (!t) return "";
+    var amount = t.amount != null ? t.amount + " " + UNIT_LABELS[t.unit] : "";
+    if (t.sets != null && amount) return t.sets + " × " + amount;
+    if (t.sets != null) return t.sets + " sets";
+    return amount;
+  }
+
+  function weekNote(week) {
+    return {
+      1: "Build-up week 1 of 4: the low end of each range.",
+      2: "Build-up week 2 of 4: a few more reps or seconds than last week.",
+      3: "Build-up week 3 of 4: one more set where the range allows.",
+      4: "Recovery week (4 of 4): one set fewer, so your body can adapt."
+    }[week] || "";
+  }
+
+  // Load box and load tips only for exercises that use weight you can
+  // count in kg/lb. Bands and bodyweight have no number to log.
+  function isLoadable(ex) {
+    if (!ex) return false;
+    var tags = exerciseEquipmentTags(ex).join(" ").toLowerCase();
+    if (/dumbbell|vest|barbell|kettlebell|weight|cable/.test(tags)) return true;
+    var text = ((ex.name || "") + " " + (ex.prescription || "")).toLowerCase();
+    return /\bload|weighted|external weight/.test(text);
+  }
+
+  function getLastExerciseEntry(exerciseId) {
+    var latest = null;
+    getSessions().forEach(function (s) {
+      (s.exercises || []).forEach(function (ex) {
+        if (ex.id !== exerciseId) return;
+        var key = (s.date || "") + "|" + (s.createdAt || "");
+        if (!latest || key > latest.key) latest = { key: key, entry: ex, rpe: s.rpe, date: s.date };
+      });
+    });
+    return latest ? Object.assign({ date: latest.date, sessionRpe: latest.rpe }, latest.entry) : null;
+  }
+
+  var EFFORT_OPTIONS = [
+    { value: "easy", label: "Easy" },
+    { value: "right", label: "About right" },
+    { value: "hard", label: "Too hard" }
+  ];
+  var EFFORT_LABELS = { easy: "felt easy", right: "about right", hard: "too hard" };
+
+  function effortButtonsHtml(current) {
+    return '<div class="effort-buttons" role="group" aria-label="How did this feel?">' +
+      EFFORT_OPTIONS.map(function (o) {
+        return '<button type="button" class="btn secondary effort-btn' + (current === o.value ? " active" : "") +
+          '" data-effort="' + o.value + '" aria-pressed="' + (current === o.value) + '">' + o.label + "</button>";
+      }).join("") +
+    "</div>";
+  }
+
+  var RPE_WORDS = {
+    1: "Very easy", 2: "Easy", 3: "Easy", 4: "Moderate", 5: "Moderate",
+    6: "Hard but sustainable", 7: "Very hard", 8: "Very hard", 9: "Near max", 10: "Max effort"
+  };
+
+  // Tap scale 1-10 with words. The value lives in a hidden input with the
+  // given id, so code that reads el(id).value keeps working.
+  function rpeScaleHtml(inputId, current) {
+    var buttons = "";
+    for (var v = 1; v <= 10; v++) {
+      buttons += '<button type="button" class="rpe-btn' + (Number(current) === v ? " active" : "") + '" data-rpe="' + v + '">' + v + "</button>";
+    }
+    return '<div class="rpe-scale" data-rpe-input="' + inputId + '">' +
+      '<div class="rpe-buttons">' + buttons + "</div>" +
+      '<div class="rpe-caption">' + (current ? current + " = " + RPE_WORDS[current] : "1 = very easy · 3 = easy · 6 = hard but sustainable · 9 = near max") + "</div>" +
+      '<input type="hidden" id="' + inputId + '" value="' + (current || "") + '">' +
+    "</div>";
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest(".rpe-btn");
+    if (!btn) return;
+    var scale = btn.closest(".rpe-scale");
+    var v = Number(btn.getAttribute("data-rpe"));
+    scale.querySelectorAll(".rpe-btn").forEach(function (b) { b.classList.toggle("active", b === btn); });
+    scale.querySelector(".rpe-caption").textContent = v + " = " + RPE_WORDS[v];
+    el(scale.getAttribute("data-rpe-input")).value = v;
+  });
+
+  // ---------------------------------------------------------------------
+  // Session planning: splits the phase's exercises across the athlete's
   // stated training days/week and trims to fit their stated session
   // length, so someone training 15 min x 2/week doesn't see the exact
   // same list as someone training 60 min x 3/week. Mobility and cardio
@@ -2919,7 +3317,7 @@
   // Prescriptions are free text ("3 sets x 8-12 reps"), not structured
   // data, so this is a deliberately simple fixed per-category estimate
   // for trimming order rather than an attempt to parse exact set/rep
-  // counts — it only needs to be roughly right, not to the minute.
+  // counts; it only needs to be roughly right, not to the minute.
   var CATEGORY_MINUTE_ESTIMATE = { singleLegStrength: 5, upperBody: 4, core: 3, mobility: 2, supplementary: 2 };
   var CARDIO_DEFAULT_MINUTES = 15;
 
@@ -2932,7 +3330,7 @@
     return CATEGORY_MINUTE_ESTIMATE[catKey] || 4;
   }
 
-  // Trim order when a session runs over the stated time budget — first
+  // Trim order when a session runs over the stated time budget: first
   // entry is dropped first. Supplementary techniques and mobility/cardio
   // can be done outside the dedicated session; single-leg strength is the
   // program's core rehab content, so it's protected longest.
@@ -3038,11 +3436,11 @@
   };
 
   // ---------------------------------------------------------------------
-  // Custom exercises — lets an athlete add something their physio/coach
+  // Custom exercises: lets an athlete add something their physio/coach
   // prescribed that isn't in the built-in program, e.g. a specific rehab
   // drill. Stored separately from PROGRAM_DATA and merged into it at
-  // render time (flagged isCustom) so every existing view — Program, Log,
-  // the exercise picker, the workout player — picks them up for free.
+  // render time (flagged isCustom) so every existing view (Program, Log,
+  // the exercise picker, the workout player) picks them up for free.
   // ---------------------------------------------------------------------
   var POSE_PICKER_OPTIONS = [
     { value: "squat", label: "Squat" },
@@ -3067,7 +3465,14 @@
     { value: "sprintCrutches", label: "Sprint on crutches" },
     { value: "mobilityHamstring", label: "Mobility: hamstring" },
     { value: "mobilityShoulder", label: "Mobility: shoulder" },
-    { value: "mobilityLunge", label: "Mobility: lunge" }
+    { value: "mobilityLunge", label: "Mobility: lunge" },
+    { value: "wallSit", label: "Wall sit" },
+    { value: "dips", label: "Dips" },
+    { value: "hipAbduction", label: "Side-lying leg lift" },
+    { value: "sideBend", label: "Side bend" },
+    { value: "stairDescent", label: "Stairs" },
+    { value: "floorGetup", label: "Getting up from the floor" },
+    { value: "falling", label: "Falling / rolling" }
   ];
 
   function getCustomExercises() {
@@ -3133,12 +3538,15 @@
 
   var programPendingTransition = null;
 
+  // Short labels so all three phase pills fit on a phone screen.
+  var PHASE_SHORT_NAMES = { 1: "Base", 2: "Load", 3: "Sport" };
+
   function renderPhasePills(state) {
     el("program-phase-pills").innerHTML = PROGRAM_DATA.phases.map(function (phase) {
       var isActive = phase.number === state.currentPhase;
       var isUnlocked = state.unlockedPhases.indexOf(phase.number) !== -1;
       return '<button type="button" class="phase-pill' + (isActive ? " active" : "") + '" data-phase="' + phase.number + '">' +
-        escapeHtml("Phase " + phase.number + ": " + phase.name) +
+        escapeHtml(phase.number + " " + PHASE_SHORT_NAMES[phase.number]) +
         (isUnlocked ? "" : '<span class="lock-icon">&#128274;</span>') +
         "</button>";
     }).join("");
@@ -3162,6 +3570,8 @@
       (byCategory[item.category] = byCategory[item.category] || []).push(item.ex);
     });
 
+    var week = weekInPhase(ensureProgramState(), phase);
+
     el("program-exercise-groups").innerHTML = CATEGORY_ORDER.filter(function (catKey) {
       return byCategory[catKey] && byCategory[catKey].length;
     }).map(function (catKey) {
@@ -3171,14 +3581,16 @@
           ? '<span class="estimate-badge">Estimate</span><div class="estimate-note">' + escapeHtml(ex.estimateNote || "") + "</div>"
           : "";
         var customBadge = ex.isCustom ? '<span class="custom-badge">Custom</span>' : "";
+        var target = weekTarget(ex, catKey, week);
+        var targetHtml = target
+          ? '<div class="exercise-target">' + (target.recovery ? "Recovery week: " : "This week: ") + escapeHtml(formatTarget(target)) + "</div>"
+          : "";
         var loadSuggestion = computeSuggestedLoad(ex.id);
         var loadSuggestionHtml = "";
         if (loadSuggestion) {
-          loadSuggestionHtml = loadSuggestion.holding
-            ? '<div class="load-suggestion">Last: ' + loadSuggestion.lastLoad + " " + loadSuggestion.unit + " at high effort. Repeat " + loadSuggestion.lastLoad + " " + loadSuggestion.unit + " and focus on form</div>"
-            : '<div class="load-suggestion">Last: ' + loadSuggestion.lastLoad + " " + loadSuggestion.unit + " → try " + loadSuggestion.suggestedLoad + " " + loadSuggestion.unit + " this week</div>";
-        } else if (isLikelyLoadable(ex)) {
-          loadSuggestionHtml = '<div class="load-suggestion load-suggestion-muted">Log a load next time you do this one: you\'ll get a suggested progression here.</div>';
+          loadSuggestionHtml = '<div class="load-suggestion">' + escapeHtml(loadSuggestionText(loadSuggestion)) + "</div>";
+        } else if (isLoadable(ex)) {
+          loadSuggestionHtml = '<div class="load-suggestion load-suggestion-muted">Log the weight you use: next time you get a suggestion here.</div>';
         }
         var photoBtnLabel = getExercisePhoto(ex.id) ? "🖼️ Replace photo" : "📷 Add your photo";
         var removePhotoBtn = getExercisePhoto(ex.id)
@@ -3189,13 +3601,19 @@
           '<div class="exercise-card-body">' +
             '<div class="exercise-name">' + escapeHtml(ex.name) + customBadge + estimateBits + "</div>" +
             '<div class="exercise-prescription">' + escapeHtml(ex.prescription) + "</div>" +
+            targetHtml +
             loadSuggestionHtml +
-            equipmentBlockHtml(ex, true) +
+            equipmentBlockHtml(ex, false) +
             '<div class="exercise-card-actions">' +
-              '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
               '<button type="button" class="btn secondary log-this-btn" data-ex-id="' + ex.id + '" data-phase="' + phase.number + '">+ Log this</button>' +
-              '<button type="button" class="btn secondary exercise-photo-btn" data-ex-id="' + ex.id + '">' + photoBtnLabel + "</button>" +
-              removePhotoBtn +
+              '<details class="card-more"><summary>More</summary>' +
+                '<div class="card-more-body">' +
+                  '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
+                  '<button type="button" class="btn secondary exercise-photo-btn" data-ex-id="' + ex.id + '">' + photoBtnLabel + "</button>" +
+                  removePhotoBtn +
+                  equipmentEditorHtml(ex) +
+                "</div>" +
+              "</details>" +
             "</div>" +
           "</div>" +
         "</div>";
@@ -3282,6 +3700,7 @@
 
     renderPhasePills(state);
     el("program-week-label").textContent = "Week " + state.currentWeek + " of " + PROGRAM_META.totalWeeks;
+    el("program-week-note").textContent = weekNote(weekInPhase(state, phase));
     el("program-progress-bar").style.width = Math.round((state.currentWeek / PROGRAM_META.totalWeeks) * 100) + "%";
     renderGateWarning();
     renderProgramReadinessBanner();
@@ -3350,6 +3769,7 @@
   // as context instead of the user having to re-find the exercise by name.
   function logExerciseFromProgram(exerciseId, phaseNumber) {
     showView("log");
+    el("log-manual").open = true;
     var phaseSelect = el("log-phase");
     if (Number(phaseSelect.value) !== phaseNumber) {
       phaseSelect.value = String(phaseNumber);
@@ -3379,7 +3799,7 @@
       var box = consentBtn.closest(".supp-consent");
       setGuidedConsent(box.getAttribute("data-supp-consent"));
       renderProgramView(); // exercise now flows into the Program list and the workout
-      // The Log checklist is rendered once and cached — refresh it too so
+      // The Log checklist is rendered once and cached; refresh it too so
       // the newly-confirmed exercise shows there without a tab round-trip.
       var logPhase = Number(el("log-phase").value) || ensureProgramState().currentPhase;
       renderLogExerciseChecklist(logPhase);
@@ -3436,7 +3856,7 @@
   });
 
   // ---------------------------------------------------------------------
-  // Session Tracker (Section 7) — logging UI, writes to ampfootballfit_sessions
+  // Session Tracker (Section 7): logging UI, writes to ampfootballfit_sessions
   // ---------------------------------------------------------------------
   function todayISODate() {
     var d = new Date();
@@ -3461,12 +3881,17 @@
       var exercises = filterToPreferredTier(phase.categories[catKey] || []);
       var rows = exercises.map(function (ex) {
         var iconHtml = renderExerciseIcon(ex) || (ex.icon || "🏃");
-        var fieldsHtml = catKey === "cardio"
+        var unit = exerciseUnit(ex, catKey);
+        var fieldsHtml = unit === "none"
           ? '<div class="log-exercise-fields hidden"><p class="field-note">Use the session Duration and RPE fields above (no sets/reps/load needed for this one).</p></div>'
           : '<div class="log-exercise-fields hidden">' +
-              '<input type="number" class="log-ex-sets" placeholder="Sets" min="0" step="1">' +
-              '<input type="number" class="log-ex-reps" placeholder="Reps" min="0" step="1">' +
-              '<input type="number" class="log-ex-load" placeholder="Load" min="0" step="0.5">' +
+              '<input type="number" class="log-ex-sets" placeholder="Sets" aria-label="Sets" min="0" step="1">' +
+              '<input type="number" class="log-ex-reps" placeholder="' + UNIT_FIELD_LABELS[unit] + '" aria-label="' + UNIT_FIELD_LABELS[unit] + '" min="0" step="1">' +
+              (isLoadable(ex) ? '<input type="number" class="log-ex-load" placeholder="Load (' + getSettings().units + ')" aria-label="Load" min="0" step="0.5">' : "") +
+              '<select class="log-ex-effort" aria-label="How did it feel?">' +
+                '<option value="">How did it feel?</option>' +
+                EFFORT_OPTIONS.map(function (o) { return '<option value="' + o.value + '">' + o.label + "</option>"; }).join("") +
+              "</select>" +
             "</div>";
         return '<div class="log-exercise-row" data-ex-id="' + ex.id + '">' +
           '<label class="checkbox-label"><input type="checkbox" class="log-ex-check" data-ex-id="' + ex.id + '" data-ex-name="' + escapeHtml(ex.name) + '" data-ex-category="' + catKey + '">' +
@@ -3474,7 +3899,7 @@
             "<span>" + escapeHtml(ex.name) + "</span>" +
           "</label>" +
           '<div class="log-ex-prescription">' + escapeHtml(ex.prescription) + "</div>" +
-          equipmentBlockHtml(ex, false) +
+          equipmentBlockHtml(ex) +
           fieldsHtml +
         "</div>";
       }).join("");
@@ -3495,18 +3920,18 @@
   function resetLogForm() {
     el("log-date").value = todayISODate();
     el("log-duration").value = "";
-    el("log-rpe").value = "";
+    el("log-rpe-wrap").innerHTML = rpeScaleHtml("log-rpe");
     el("log-notes").value = "";
     document.querySelectorAll("#log-exercise-checklist .log-ex-check").forEach(function (cb) {
       cb.checked = false;
       var row = cb.closest(".log-exercise-row");
       row.querySelector(".log-exercise-fields").classList.add("hidden");
-      row.querySelectorAll("input[type=number]").forEach(function (input) { input.value = ""; });
+      row.querySelectorAll("input[type=number], select").forEach(function (input) { input.value = ""; });
     });
   }
 
   // ---------------------------------------------------------------------
-  // Strength starting-point calibration — lets a profile that's already
+  // Strength starting-point calibration: lets a profile that's already
   // training at full load start above the universal Tier 2 default,
   // without disturbing anyone who has already earned/lost tiers through
   // real logged sessions. Only ever WRITES tiers at the moment a starting
@@ -3515,7 +3940,10 @@
   var ALL_TIERED_GROUPS = [
     "squat", "gluteBridge", "calfRaise", "row", "deadBug", "sidePlank",
     "antiRotation", "singleLegRDL", "lateralLunge", "boxJump",
-    "loadedCarry", "rotationalCore", "singleLegHop", "decelLanding"
+    "loadedCarry", "rotationalCore", "singleLegHop", "decelLanding",
+    "eccentricBoxSquat", "stepUp", "hamstringBridge", "calfRaiseBent",
+    "wallSit", "pushUp", "dips", "scapRetraction", "plank",
+    "broadJump", "reactiveAgility", "sprintMechanics"
   ];
   var STRENGTH_STARTING_TIER = { full: 3, rebuilding: 2, new: 1 };
 
@@ -3523,7 +3951,7 @@
   // only). Dead bug / side plank / anti-rotation stay capped at Tier 3
   // (isometric/hold work); loaded carry, rotational core, and row also
   // have no Tier 4 defined.
-  var TIER4_ELIGIBLE_GROUPS = ["squat", "gluteBridge", "calfRaise", "singleLegRDL", "lateralLunge", "boxJump", "singleLegHop", "decelLanding"];
+  var TIER4_ELIGIBLE_GROUPS = ["squat", "gluteBridge", "calfRaise", "singleLegRDL", "lateralLunge", "boxJump", "singleLegHop", "decelLanding", "eccentricBoxSquat"];
 
   function applyStrengthTierPlacement(startingPoint) {
     var tier = STRENGTH_STARTING_TIER[startingPoint];
@@ -3538,12 +3966,12 @@
 
   // Shows the disclaimer overlay (stacks over onboarding or the main app
   // alike, see its z-index) and only proceeds down onAccept once the
-  // athlete has actively agreed. Declining never saves "full" — the
+  // athlete has actively agreed. Declining never saves "full"; the
   // caller is expected to leave the prior selection in place instead.
-  // Pure UI primitive — shows/hides the overlay and reports the choice.
+  // Pure UI primitive: shows/hides the overlay and reports the choice.
   // Deliberately has no side effects of its own (no profile save), since
   // it's used both mid-onboarding (before any profile exists to mutate)
-  // and post-onboarding (Settings, Dashboard banner) — each caller knows
+  // and post-onboarding (Settings, Dashboard banner); each caller knows
   // how to persist the outcome correctly for its own context.
   function showAdvancedDisclaimer(onAccept, onDecline) {
     var overlay = el("advanced-content-disclaimer-overlay");
@@ -3583,7 +4011,7 @@
     saveProfile(profile);
   }
 
-  // Dashboard banner — only ever shown for profiles migrated onto the
+  // Dashboard banner: only ever shown for profiles migrated onto the
   // silent "rebuilding" default, never for profiles that answered this
   // during onboarding. Disappears the moment the user actively engages
   // (answers or dismisses); reachable again afterward from Settings.
@@ -3615,7 +4043,7 @@
     if (!btn) return;
     var value = btn.getAttribute("data-value");
     commitStrengthStartingPoint(value, function (committed) {
-      if (!committed) return; // "full" disclaimer declined — leave the banner up to reconsider
+      if (!committed) return; // "full" disclaimer declined: leave the banner up to reconsider
       var p = getProfile();
       delete p.strengthStartingPointMigratedDefault;
       saveProfile(p);
@@ -3626,12 +4054,12 @@
   });
 
   // ---------------------------------------------------------------------
-  // Update check — manual only, and asks first every single time.
+  // Update check: manual only, and asks first every single time.
   //
   // The APK isn't distributed through a store, so there's no automatic
   // update path. Rather than check silently on launch, the app does
   // nothing until the user taps "Check for updates" in Settings; then it
-  // asks permission before making any network request, every time — no
+  // asks permission before making any network request, every time: no
   // "remember my choice", no cached result, no background check. On a
   // yes, it reads one small JSON file from the repo and compares its
   // `version` field against APP_VERSION. Disclosed in the README, since
@@ -3680,7 +4108,7 @@
         renderUpdateResult(function (out) {
           if (isVersionNewer(latest, APP_VERSION)) {
             var head = document.createElement("p");
-            head.textContent = "Version " + latest + " available — you're on v" + APP_VERSION + ".";
+            head.textContent = "Version " + latest + " available; you're on v" + APP_VERSION + ".";
             out.appendChild(head);
             if (data.releaseNotes) {
               var notes = document.createElement("p");
@@ -3720,7 +4148,7 @@
   });
 
   el("settings-update-confirm-no").addEventListener("click", function () {
-    // Explicit "No" — the confirm card just closes. No fetch, no storage write.
+    // Explicit "No": the confirm card just closes. No fetch, no storage write.
     el("settings-update-confirm").classList.add("hidden");
   });
 
@@ -3730,7 +4158,7 @@
   });
 
   // Central entry point for setting strengthStartingPoint from a context
-  // where a profile already exists (Settings, the Dashboard banner) —
+  // where a profile already exists (Settings, the Dashboard banner);
   // NOT onboarding, which handles its own pre-profile acceptance state
   // (see onboardingAdvancedAccepted below). Handles the "full" disclaimer
   // gate uniformly so no call site can bypass it.
@@ -3757,10 +4185,10 @@
   }
 
   // ---------------------------------------------------------------------
-  // Tier suggestion engine (Task 1) — non-destructive prompts only; never
+  // Tier suggestion engine (Task 1): non-destructive prompts only; never
   // auto-swaps the prescribed exercise without explicit user acceptance.
   // ---------------------------------------------------------------------
-  var ELEVATED_RISK_GROUPS = ["boxJump", "singleLegHop", "decelLanding"];
+  var ELEVATED_RISK_GROUPS = ["boxJump", "singleLegHop", "decelLanding", "broadJump"];
   var pendingSuggestions = [];
 
   function findExerciseDefById(id) {
@@ -3796,15 +4224,58 @@
     var occurrences = [];
     sessions.forEach(function (s) {
       (s.exercises || []).forEach(function (ex) {
-        if (ex.id === exerciseId) occurrences.push({ rpe: s.rpe, sets: ex.sets, reps: ex.reps });
+        if (ex.id === exerciseId) occurrences.push({ rpe: s.rpe, sets: ex.sets, reps: ex.reps, effort: ex.effort || null, target: ex.target || null });
       });
     });
     return occurrences; // most-recent-first
   }
 
+  // Compares against the target that applied that week (stored with the
+  // entry since v4.3), so a recovery week with one set fewer doesn't read
+  // as "incomplete". Older entries fall back to the family minimum.
   function meetsPrescription(occurrence, def) {
     if (occurrence.sets == null || occurrence.reps == null) return null;
+    var t = occurrence.target;
+    if (t && t.sets != null && t.amount != null) {
+      return occurrence.sets >= t.sets && occurrence.reps >= t.amount;
+    }
     return occurrence.sets >= def.targetSetsMin && occurrence.reps >= def.targetRepsMin;
+  }
+
+  // Per-exercise effort (v4.3) drives tier and load tips. Entries logged
+  // before v4.3 have no effort, so they fall back to the session RPE.
+  function occurrenceFeltEasy(occ) {
+    if (occ.effort) return occ.effort === "easy";
+    return occ.rpe != null && occ.rpe <= 4;
+  }
+
+  function occurrenceFeltTooHard(occ) {
+    if (occ.effort) return occ.effort === "hard";
+    return occ.rpe != null && occ.rpe >= 8;
+  }
+
+  // Physio rule (v4.4): build reps within a level first. A level up is
+  // only suggested once the top of the family's range is reached (for
+  // example 3 x 20 in "3 sets x 10-20 reps"), then the athlete starts
+  // the next level at the low end again. Families whose prescription has
+  // no readable range fall back to the old "met the prescription" check.
+  function reachedTopOfRange(occ, def) {
+    if (occ.sets == null || occ.reps == null) return null;
+    var p = def.prescription || "";
+    var unit = exerciseUnit(def, null);
+    var amountRange = unit === "none" ? null : parseAmountRange(p, unit);
+    if (!amountRange) return meetsPrescription(occ, def);
+    var setsRange = parseSetsRange(p);
+    return occ.reps >= amountRange[1] && (!setsRange || occ.sets >= setsRange[1]);
+  }
+
+  function topOfRangeLabel(def) {
+    var p = def.prescription || "";
+    var unit = exerciseUnit(def, null);
+    var amountRange = unit === "none" ? null : parseAmountRange(p, unit);
+    if (!amountRange) return "";
+    var setsRange = parseSetsRange(p);
+    return (setsRange ? setsRange[1] + " × " : "") + amountRange[1] + " " + UNIT_LABELS[unit];
   }
 
   function computeSuggestionForExerciseId(exerciseId) {
@@ -3818,9 +4289,9 @@
     var requiredStreak = ELEVATED_RISK_GROUPS.indexOf(def.progressionGroup) !== -1 ? 3 : 2;
 
     var latestMeets = meetsPrescription(latest, def);
-    var highRpe = latest.rpe != null && latest.rpe >= 8;
+    var tooHard = occurrenceFeltTooHard(latest);
     var incomplete = latestMeets === false;
-    if ((highRpe || incomplete) && def.tier > 1) {
+    if ((tooHard || incomplete) && def.tier > 1) {
       var downDef = findExerciseByGroupAndTier(def.progressionGroup, def.tier - 1);
       if (downDef) {
         return { progressionGroup: def.progressionGroup, direction: "down", fromTier: def.tier, toTier: def.tier - 1, fromName: def.name, toName: downDef.name };
@@ -3839,12 +4310,12 @@
     if (def.tier < tierCeiling && occurrences.length >= requiredStreak) {
       var streak = occurrences.slice(0, requiredStreak);
       var allClean = streak.every(function (occ) {
-        return occ.rpe != null && occ.rpe <= 4 && meetsPrescription(occ, def) === true;
+        return !occurrenceFeltTooHard(occ) && reachedTopOfRange(occ, def) === true;
       });
       if (allClean) {
         var upDef = findExerciseByGroupAndTier(def.progressionGroup, def.tier + 1);
         if (upDef) {
-          return { progressionGroup: def.progressionGroup, direction: "up", fromTier: def.tier, toTier: def.tier + 1, fromName: def.name, toName: upDef.name };
+          return { progressionGroup: def.progressionGroup, direction: "up", fromTier: def.tier, toTier: def.tier + 1, fromName: def.name, toName: upDef.name, topLabel: topOfRangeLabel(def), streak: requiredStreak };
         }
       }
     }
@@ -3870,7 +4341,7 @@
     }
     container.innerHTML = pendingSuggestions.map(function (s, i) {
       var message = s.direction === "up"
-        ? "You've been solid on " + escapeHtml(s.fromName) + ". Try " + escapeHtml(s.toName) + " next time?"
+        ? "You reached the top of the range on " + escapeHtml(s.fromName) + (s.topLabel ? " (" + escapeHtml(s.topLabel) + ")" : "") + " " + (s.streak || 2) + " sessions in a row. Try " + escapeHtml(s.toName) + " next time, starting again at the low end of its range?"
         : "Recent session on " + escapeHtml(s.fromName) + " looked tough. Try " + escapeHtml(s.toName) + " next time?";
       return '<div class="card suggestion-card">' +
         "<p>" + message + "</p>" +
@@ -3909,14 +4380,24 @@
       var setsInput = row.querySelector(".log-ex-sets");
       var repsInput = row.querySelector(".log-ex-reps");
       var loadInput = row.querySelector(".log-ex-load");
-      exercises.push({
+      var effortInput = row.querySelector(".log-ex-effort");
+      var entry = {
         id: cb.getAttribute("data-ex-id"),
         name: cb.getAttribute("data-ex-name"),
         category: cb.getAttribute("data-ex-category"),
         sets: setsInput ? numOrNull(setsInput.value) : null,
         reps: repsInput ? numOrNull(repsInput.value) : null,
         load: loadInput ? numOrNull(loadInput.value) : null
-      });
+      };
+      if (effortInput && effortInput.value) entry.effort = effortInput.value;
+      // The week target applies only when logging the phase you are in.
+      var def = findExerciseDefById(entry.id);
+      var progState = ensureProgramState();
+      if (def && phase === progState.currentPhase) {
+        var t = weekTarget(def, entry.category, weekInPhase(progState, getPhaseByNumber(phase)));
+        if (t) entry.target = { sets: t.sets, amount: t.amount, unit: t.unit, week: t.week };
+      }
+      exercises.push(entry);
     });
 
     var session = {
@@ -3939,11 +4420,9 @@
   }
 
   function formatExerciseSummary(ex) {
-    var parts = [];
-    if (ex.sets != null) parts.push(ex.sets + " sets");
-    if (ex.reps != null) parts.push(ex.reps + " reps");
-    if (ex.load != null) parts.push(ex.load + " load");
-    return ex.name + (parts.length ? " (" + parts.join(", ") + ")" : "");
+    var def = findExerciseDefById(ex.id);
+    var details = entryDetailText(ex, def ? exerciseUnit(def, ex.category) : "reps");
+    return ex.name + (details ? " (" + details + ")" : "");
   }
 
   function renderSessionList() {
@@ -3991,18 +4470,19 @@
   function initLogTab() {
     var state = ensureProgramState();
     el("log-date").value = todayISODate();
+    el("log-rpe-wrap").innerHTML = rpeScaleHtml("log-rpe");
     el("log-phase").value = String(state.currentPhase);
     renderLogExerciseChecklist(state.currentPhase);
     renderSessionList();
   }
 
   // ---------------------------------------------------------------------
-  // Sport Skills module (Section 5) — empty/user-editable framework.
+  // Sport Skills module (Section 5): empty/user-editable framework.
   // No invented drill technique content: seeded slots carry only the
   // structural names from the brief and a placeholder marker requiring
   // the user to supply real, source-attributed content.
   // ---------------------------------------------------------------------
-  var SKILLS_PLACEHOLDER_NOTE = "Not filled in yet. After a coach or physio shows you this drill, write what it is in your own words here (e.g. \"on crutches, shift weight fully onto the left crutch, hold 3s, return — 10 reps each side\"), then add the video link and who showed it to you.";
+  var SKILLS_PLACEHOLDER_NOTE = "Not filled in yet. After a coach or physio shows you this drill, write what it is in your own words here (e.g. \"on crutches, shift weight fully onto the left crutch, hold 3s, return; 10 reps each side\"), then add the video link and who showed it to you.";
 
   var SKILLS_CATEGORY_ORDER = ["crutchMobility", "ballSkills", "agility"];
   var SKILLS_CATEGORY_LABELS = {
@@ -4179,7 +4659,7 @@
   });
 
   // ---------------------------------------------------------------------
-  // Supplementary techniques — folded into the per-phase program.
+  // Supplementary techniques: folded into the per-phase program.
   //
   // The exercises live in PROGRAM_DATA under a "supplementary" category in
   // every phase, so they flow through the normal Program list, the Start
@@ -4222,16 +4702,20 @@
       prescription: "5 min at ~6 breaths/min. Hand on belly rises, hand on chest stays still; slow out through pursed lips." },
     { id: "supp-reaction", name: "Reaction & first-step drill", icon: "⚡", isSupplementary: true, equipment: ["open space", "partner or ball (optional)"],
       prescription: "4–6 x: on a partner's call or a ball drop, explode 2–3 steps and reset. Focus on a fast first move, not distance." },
-    { id: "supp-mob-hipflexor", name: "Hip flexor stretch — non-amputated side", icon: "🦵", isSupplementary: true,
+    { id: "supp-mob-hipflexor", name: "Hip flexor stretch (non-amputated side)", icon: "🦵", isSupplementary: true,
       prescription: "Half-kneel, non-amputated leg back, pelvis tucked, ease forward. Hold 30s x 2–3. Slow and pain-free." },
-    { id: "supp-mob-piriformis", name: "Piriformis stretch — non-amputated side", icon: "🍑", isSupplementary: true,
+    { id: "supp-mob-piriformis", name: "Piriformis stretch (non-amputated side)", icon: "🍑", isSupplementary: true,
       prescription: "On your back, non-amputated ankle across the opposite thigh, draw the thigh in. Hold 30s x 2–3." },
-    { id: "supp-mob-lowerback", name: "Lower back stretch — non-amputated side", icon: "🧘", isSupplementary: true,
+    { id: "supp-mob-lowerback", name: "Lower back stretch (non-amputated side)", icon: "🧘", isSupplementary: true,
       prescription: "On your back, knees bent, let both knees drop toward the non-amputated side, shoulders down. Hold 20–30s x 2–3." },
     { id: "supp-prop-sl-eyes", name: "Single-leg balance, eyes closed", icon: "👁️", isSupplementary: true, equipment: ["support (wall/chair)"],
       prescription: "Non-amputated leg, next to support. Steady with eyes open, then close them and hold with control. 3–5 rounds. Touch down the moment control goes." },
     { id: "supp-prop-foam", name: "Foam-pad balance", icon: "🧽", isSupplementary: true, equipment: ["foam pad or folded towel", "support (wall/chair)"],
-      prescription: "Stand on a foam pad or folded towel on the non-amputated leg, near support. Hold with control; progress to eyes closed later. 3–5 rounds." },
+      prescription: "Stand on a foam pad, half balance ball (BOSU) or folded towel, near support. Start with crutches or with your prosthesis on, then build up to the non-amputated leg alone; eyes closed later. 3–5 rounds. Trains general single-leg balance and helps prevent ankle sprains." },
+    { id: "supp-floor-getup", name: "Getting up from the floor", icon: "🪑", pose: "floorGetup", isSupplementary: true, equipment: ["chair", "mat"],
+      prescription: "2 x 3–5 reps. From lying on a mat, roll to sitting on one side, come to kneeling and stand up with your hands on a chair. With and without your prosthesis. Stop for pain in the residual limb or dizziness." },
+    { id: "supp-falling", name: "Learning to fall", icon: "🤸", pose: "falling", isSupplementary: true, equipment: ["soft mat"],
+      prescription: "Learn how to fall from your physio or coach first: this app does not teach the technique. Then practise only what they showed you, on a soft mat, starting from kneeling." },
     { id: "supp-socket-balance-load", name: "Balance on your prosthesis", icon: "⚖️", isSupplementary: true, equipment: ["support on both sides (rails/counters)"],
       requiresGuidedConsent: true,
       consentText: "This exercise loads your prosthesis during balance work. Confirm you have discussed this with your prosthetist.",
@@ -4242,7 +4726,7 @@
       prescription: "Prosthesis off. Light, slow pressure on the muscle around the residual limb with flat fingers or a soft ball, 3–5 min. Stay off scar, sores and numb areas. Check the skin afterwards." }
   ];
 
-  // "All in every phase for now" — give each phase its own array copy so a
+  // "All in every phase for now": give each phase its own array copy so a
   // custom exercise added to the supplementary category of one phase, or a
   // future per-phase mapping, doesn't leak across phases.
   PROGRAM_DATA.phases.forEach(function (phase) {
@@ -4267,14 +4751,14 @@
 
   // The unconfirmed guided-consent exercises for a phase, rendered as
   // locked cards under the Program list. Their prescription is never put in
-  // the DOM — the card body is only the consentText + checkbox + Confirm.
+  // the DOM; the card body is only the consentText + checkbox + Confirm.
   function supplementaryLockedCardsHtml(phase) {
     var locked = (phase.categories.supplementary || []).filter(function (ex) {
       return ex.requiresGuidedConsent && !hasGuidedConsent(ex.id);
     });
     if (!locked.length) return "";
     return '<div class="exercise-group">' +
-      "<h3>Supplementary — confirm first</h3>" +
+      "<h3>Supplementary: confirm first</h3>" +
       '<p class="field-note" style="margin: 0 0 10px;">These load or apply pressure around your prosthesis and socket. Each one joins your sessions once you confirm you’ve discussed it with your care team.</p>' +
       locked.map(function (ex) {
         return '<div class="exercise-card supp-locked-card" data-ex-id="' + escapeHtml(ex.id) + '">' +
@@ -4311,7 +4795,7 @@
   });
 
   // ---------------------------------------------------------------------
-  // Progress Dashboard (Section 8) — inline SVG charts, no CDN dependency
+  // Progress Dashboard (Section 8): inline SVG charts, no CDN dependency
   // ---------------------------------------------------------------------
   function getMilestones() {
     try {
@@ -4380,37 +4864,36 @@
     var history = [];
     sessions.forEach(function (s) {
       (s.exercises || []).forEach(function (ex) {
-        if (ex.id === exerciseId) history.push({ date: s.date, sets: ex.sets, reps: ex.reps, load: ex.load, rpe: s.rpe });
+        if (ex.id === exerciseId) history.push({ date: s.date, sets: ex.sets, reps: ex.reps, load: ex.load, rpe: s.rpe, effort: ex.effort || null });
       });
     });
     return history;
   }
 
-  // Suggests a small load bump for the next session, based on the last
-  // time this exercise was logged with a load value. No per-exercise RPE
-  // exists, so the session's overall RPE is used as the effort proxy — if
-  // that session was very hard (RPE 8+), hold the load instead of adding.
+  // Suggests the load for next time from the last logged load and how that
+  // exercise felt: easy → a small step up; about right → same load; too
+  // hard → same load, focus on form. Entries from before v4.3 have no
+  // per-exercise effort and use the session RPE (8+ holds, else step up).
   function computeSuggestedLoad(exerciseId) {
     var loadHistory = getExerciseHistory(exerciseId).filter(function (h) { return h.load != null; });
     if (!loadHistory.length) return null;
     var last = loadHistory[loadHistory.length - 1];
     var unit = getSettings().units;
-    var highRpe = last.rpe != null && last.rpe >= 8;
-    if (highRpe) {
-      return { lastLoad: last.load, lastDate: last.date, suggestedLoad: last.load, unit: unit, holding: true };
+    var reason = last.effort === "hard" ? "hard" : (last.effort === "right" ? "right" : null);
+    if (!last.effort && last.rpe != null && last.rpe >= 8) reason = "hard";
+    if (reason) {
+      return { lastLoad: last.load, lastDate: last.date, suggestedLoad: last.load, unit: unit, holding: true, reason: reason };
     }
     var increment = unit === "lb" ? 5 : (last.load < 20 ? 2.5 : Math.round(last.load * 0.05 * 2) / 2);
     var suggested = Math.round((last.load + increment) * 2) / 2;
-    return { lastLoad: last.load, lastDate: last.date, suggestedLoad: suggested, unit: unit, holding: false };
+    return { lastLoad: last.load, lastDate: last.date, suggestedLoad: suggested, unit: unit, holding: false, reason: "easy" };
   }
 
-  // Heuristic for "this exercise is the kind where adding load is part of
-  // the plan" — used only to decide whether to show a "log a load to get
-  // a suggestion" nudge before any history exists. Matches prescriptions
-  // that mention load, resistance, or loadable equipment by name.
-  function isLikelyLoadable(def) {
-    var text = ((def.name || "") + " " + (def.prescription || "")).toLowerCase();
-    return /load|weight|resistance|carry|band|cable|dumbbell|kettlebell|barbell/.test(text);
+  function loadSuggestionText(s) {
+    if (!s) return "";
+    if (!s.holding) return "Last: " + s.lastLoad + " " + s.unit + " → try " + s.suggestedLoad + " " + s.unit;
+    if (s.reason === "right") return "Last: " + s.lastLoad + " " + s.unit + ", about right. Stay at " + s.lastLoad + " " + s.unit + " until it feels easy";
+    return "Last: " + s.lastLoad + " " + s.unit + " felt too hard. Repeat " + s.lastLoad + " " + s.unit + " and focus on form";
   }
 
   function populateExerciseSelect() {
@@ -4646,7 +5129,7 @@
   el("progress-share-btn").addEventListener("click", shareProgressSummary);
 
   // ---------------------------------------------------------------------
-  // Benchmarks & retests — periodic objective tests, distinct from daily
+  // Benchmarks & retests: periodic objective tests, distinct from daily
   // session logs. Each def scores "higher" or "lower" as improvement so the
   // baseline-vs-latest delta can be shown with a consistent up/down arrow.
   // ---------------------------------------------------------------------
@@ -4808,7 +5291,7 @@
   }
 
   // ---------------------------------------------------------------------
-  // Milestone tracking UI (Section 7) — user-triggered, timestamped
+  // Milestone tracking UI (Section 7): user-triggered, timestamped
   // ---------------------------------------------------------------------
   function generateMilestoneId() {
     return "mile_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
@@ -4898,7 +5381,7 @@
   });
 
   // ---------------------------------------------------------------------
-  // Daily readiness check-in — quick sleep/energy/soreness/limb-comfort
+  // Daily readiness check-in: quick sleep/energy/soreness/limb-comfort
   // self-rating. Informational and soft-advisory only (same "warn, don't
   // block" philosophy as phase gating): a low score surfaces a caution
   // note on the Program tab, it never prevents logging or training.
@@ -4906,6 +5389,33 @@
   // average is meaningful, even though that inverts the usual "soreness"
   // framing (5 = no soreness here, not "very sore").
   // ---------------------------------------------------------------------
+  // "Today" card on the Dashboard: what today's session is and a Start
+  // button, so the main action is one tap from the first screen.
+  function renderTodayCard() {
+    var state = ensureProgramState();
+    var phase = getPhaseByNumber(state.currentPhase);
+    if (!phase) return;
+    var plan = buildSessionPlanForPhase(phase);
+    var minutes = Math.round(plan.items.reduce(function (sum, item) { return sum + estimateExerciseMinutes(item.ex, item.category); }, 0));
+    var week = weekInPhase(state, phase);
+    var bits = [
+      "Phase " + phase.number + " " + PHASE_SHORT_NAMES[phase.number],
+      "Week " + state.currentWeek + " of " + PROGRAM_META.totalWeeks + (week === PROGRAM_META.phaseLengthWeeks ? " (recovery week)" : ""),
+      "Day " + (plan.dayIndex + 1) + " of " + plan.daysPerWeek,
+      "about " + minutes + " min"
+    ];
+    var names = plan.items.map(function (item) { return item.ex.name; });
+    var shown = names.slice(0, 5).join(", ") + (names.length > 5 ? " and " + (names.length - 5) + " more" : "");
+    var doneToday = getSessions().some(function (s) { return s.date === todayISODate(); });
+    el("today-summary").innerHTML =
+      '<div class="today-meta">' + escapeHtml(bits.join(" · ")) + "</div>" +
+      '<div class="field-note">' + plan.items.length + " exercises: " + escapeHtml(shown) + "</div>" +
+      (doneToday ? '<div class="field-note today-done">✓ You already logged a session today.</div>' : "");
+    el("today-start-btn").disabled = !plan.items.length;
+  }
+
+  el("today-start-btn").addEventListener("click", function () { startWorkoutPlayer("dashboard"); });
+
   var READINESS_DIMENSIONS = [
     { id: "sleep", label: "Sleep quality", low: "Poor", high: "Great" },
     { id: "energy", label: "Energy level", low: "Very low", high: "Very high" },
@@ -4958,22 +5468,35 @@
     saveReadinessLogs(logs);
   }
 
+  // Five tap buttons per question, nothing chosen in advance, so a quick
+  // "Save" can't store answers the athlete never gave. The value sits in
+  // a hidden input per question (prefix-<dimension>).
   function renderReadinessDimensionSelects(container, prefix, entry) {
     container.innerHTML = READINESS_DIMENSIONS.map(function (d) {
-      var options = [1, 2, 3, 4, 5].map(function (v) {
-        var descriptor = v === 1 ? d.low : (v === 5 ? d.high : "");
-        var text = descriptor ? v + ": " + descriptor : String(v);
-        return '<option value="' + v + '">' + escapeHtml(text) + "</option>";
+      var current = entry ? entry[d.id] : null;
+      var buttons = [1, 2, 3, 4, 5].map(function (v) {
+        return '<button type="button" class="readiness-btn' + (current === v ? " active" : "") + '" data-value="' + v + '" aria-pressed="' + (current === v) + '">' + v + "</button>";
       }).join("");
-      var current = entry ? entry[d.id] : 4;
-      return '<label for="' + prefix + "-" + d.id + '">' + escapeHtml(d.label) + "</label>" +
-        '<select id="' + prefix + "-" + d.id + '" data-dimension="' + d.id + '">' + options + "</select>";
-    }).join("");
-    READINESS_DIMENSIONS.forEach(function (d) {
-      var sel = el(prefix + "-" + d.id);
-      if (sel) sel.value = entry ? entry[d.id] : 4;
-    });
+      return '<div class="readiness-question" data-dimension="' + d.id + '">' +
+        '<div class="readiness-question-label">' + escapeHtml(d.label) + "</div>" +
+        '<div class="readiness-buttons">' + buttons + "</div>" +
+        '<div class="readiness-scale-ends"><span>1 = ' + escapeHtml(d.low) + "</span><span>5 = " + escapeHtml(d.high) + "</span></div>" +
+        '<input type="hidden" id="' + prefix + "-" + d.id + '" value="' + (current || "") + '">' +
+      "</div>";
+    }).join("") + '<p class="field-note hidden" id="' + prefix + '-missing" role="alert">Answer all four questions first.</p>';
   }
+
+  el("readiness-selects").addEventListener("click", function (e) {
+    var btn = e.target.closest(".readiness-btn");
+    if (!btn) return;
+    var q = btn.closest(".readiness-question");
+    q.querySelectorAll(".readiness-btn").forEach(function (b) {
+      b.classList.toggle("active", b === btn);
+      b.setAttribute("aria-pressed", String(b === btn));
+    });
+    el("readiness-" + q.getAttribute("data-dimension")).value = btn.getAttribute("data-value");
+    q.classList.remove("unanswered");
+  });
 
   function renderReadinessCard() {
     el("readiness-header-icon").innerHTML = renderPoseSvg("mobilityHamstring");
@@ -5003,9 +5526,17 @@
 
   el("readiness-save-btn").addEventListener("click", function () {
     var values = { note: el("readiness-note").value.trim() };
+    var missing = false;
     READINESS_DIMENSIONS.forEach(function (d) {
-      values[d.id] = Number(el("readiness-" + d.id).value);
+      var v = Number(el("readiness-" + d.id).value);
+      if (!v) {
+        missing = true;
+        document.querySelector('.readiness-question[data-dimension="' + d.id + '"]').classList.add("unanswered");
+      }
+      values[d.id] = v;
     });
+    el("readiness-missing").classList.toggle("hidden", !missing);
+    if (missing) return;
     saveReadinessCheckIn(values);
     readinessEditing = false;
     renderReadinessCard();
@@ -5018,7 +5549,7 @@
     renderReadinessCard();
   });
 
-  // Soft-advisory caution banner on the Program tab — never blocks training,
+  // Soft-advisory caution banner on the Program tab: never blocks training,
   // mirrors the phase-gate warning's "warn, don't block" tone.
   function renderProgramReadinessBanner() {
     var banner = el("program-readiness-warning");
@@ -5041,7 +5572,7 @@
   }
 
   // Reminder note for athletes who don't train with their prosthetic for
-  // every exercise — the program's prescriptions assume typical prosthetic
+  // every exercise; the program's prescriptions assume typical prosthetic
   // use unless stated otherwise, so this is a soft flag, not an attempt to
   // rewrite specific exercises (that adaptation needs a physio/coach's eyes).
   function renderProstheticNote() {
@@ -5059,7 +5590,7 @@
   }
 
   // ---------------------------------------------------------------------
-  // Settings tab (Section 9) — language, units, data export/reset
+  // Settings tab (Section 9): language, units, data export/reset
   // ---------------------------------------------------------------------
   var SETTINGS_DEFAULTS = { language: "en", units: "kg" };
 
@@ -5090,8 +5621,9 @@
     var settings = getSettings();
     el("settings-language").value = settings.language;
     el("settings-units").value = settings.units;
+    el("settings-figure-style").value = getFigureStyle();
     el("settings-reset-warning").classList.add("hidden");
-    // Update check is for the installed app only — the web/PWA build is
+    // Update check is for the installed app only: the web/PWA build is
     // always served fresh from GitHub Pages, so there's nothing to check.
     el("settings-update-card").classList.toggle("hidden", !isNativeApp());
     el("settings-update-current").textContent = APP_VERSION;
@@ -5102,8 +5634,8 @@
     populateSettingsProfileForm();
   }
 
-  // Lets an athlete update their profile after onboarding — activity level,
-  // amputation details, prosthetic use, etc. — since these genuinely change
+  // Lets an athlete update their profile after onboarding: activity level,
+  // amputation details, prosthetic use, etc.; since these genuinely change
   // over time (e.g. K4 to K3 after a setback) and onboarding only ran once.
   function populateSettingsProfileForm() {
     var profile = getProfile() || {};
@@ -5217,7 +5749,7 @@
         if (obAddBtn) obAddBtn.textContent = uri ? "Change photo" : "Add a photo";
       }
       if (onboardingStep === ONBOARDING_PHOTO_STEP) {
-        el("ob-next").textContent = uri ? "Continue" : "Skip for now";
+        el("ob-next").textContent = uri ? "Get started" : "Skip and get started";
       }
     });
   }
@@ -5226,7 +5758,7 @@
     captureProfilePhoto().then(function () {
       renderProfilePhotoUi();
     }).catch(function () {
-      // User cancelled the picker, or capture unavailable — leave state unchanged, never block the app on this.
+      // User cancelled the picker, or capture unavailable: leave state unchanged, never block the app on this.
     });
   });
 
@@ -5234,7 +5766,7 @@
     captureProfilePhoto().then(function () {
       renderProfilePhotoUi();
     }).catch(function () {
-      // User cancelled the picker — stays on this step, "Skip for now" label remains available.
+      // User cancelled the picker; stays on this step, "Skip for now" label remains available.
     });
   });
 
@@ -5249,6 +5781,11 @@
     settings.language = this.value;
     saveSettings(settings);
     applyStrings();
+  });
+
+  el("settings-figure-style").addEventListener("change", function () {
+    setFigureStyle(this.value);
+    try { renderProgramView(); } catch (e) { /* program view not built yet */ }
   });
 
   el("settings-units").addEventListener("change", function () {
@@ -5469,12 +6006,12 @@
   });
 
   function resetAllData() {
-    removeProfilePhoto().catch(function () { /* ignore — file may already be gone */ }).then(function () {
+    removeProfilePhoto().catch(function () { /* ignore: file may already be gone */ }).then(function () {
       Object.keys(STORAGE_KEYS).forEach(function (key) {
         try { localStorage.removeItem(STORAGE_KEYS[key]); } catch (e) { /* storage unavailable */ }
       });
       // Per-exercise guided-consent flags live in their own consent: namespace,
-      // outside STORAGE_KEYS — sweep them by prefix so a reset clears them too.
+      // outside STORAGE_KEYS; sweep them by prefix so a reset clears them too.
       try {
         Object.keys(localStorage)
           .filter(function (k) { return k.indexOf(SUPP_CONSENT_PREFIX) === 0; })
@@ -5500,7 +6037,7 @@
   });
 
   // ---------------------------------------------------------------------
-  // PWA installability — manifest + icons generated at runtime via canvas
+  // PWA installability: manifest + icons generated at runtime via canvas
   // (no external image assets, stays a single offline file). Lets Android
   // Chrome / iOS Safari "Add to Home Screen" with a real icon and a
   // standalone (no browser chrome) launch.
@@ -5557,11 +6094,11 @@
       el("pwa-manifest-link").setAttribute("href", URL.createObjectURL(manifestBlob));
       el("pwa-favicon").setAttribute("href", icon192);
       el("pwa-apple-touch-icon").setAttribute("href", icon180);
-    } catch (e) { /* canvas unavailable — app still works, just without a generated icon */ }
+    } catch (e) { /* canvas unavailable: app still works, just without a generated icon */ }
   }
 
   // ---------------------------------------------------------------------
-  // Guided workout player — "Start Workout" walks through today's
+  // Guided workout player: "Start Workout" walks through today's
   // preferred-tier exercises one at a time, then saves the whole session
   // through the same saveSessions()/computeSuggestionsForSession() path
   // the manual Log tab form already uses.
@@ -5569,11 +6106,18 @@
   var workoutPlayerState = null;
   var workoutPlayerTimerInterval = null;
 
+  // Rest / hold / interval countdown inside the player. One at a time.
+  var wpTimer = null;
+  var wpTimerInterval = null;
+  var wpAudioCtx = null;
+
+  var REST_SECONDS_BY_CATEGORY = { singleLegStrength: 90, upperBody: 90, core: 60, mobility: 30, supplementary: 30 };
+
   function getFlattenedPreferredExercises(phase) {
     return buildSessionPlanForPhase(phase).items;
   }
 
-  function startWorkoutPlayer() {
+  function startWorkoutPlayer(returnView) {
     var state = ensureProgramState();
     var phase = getPhaseByNumber(state.currentPhase);
     if (!phase) return;
@@ -5582,10 +6126,15 @@
 
     workoutPlayerState = {
       phase: state.currentPhase,
+      week: weekInPhase(state, phase),
       items: items,
       entries: new Array(items.length).fill(null),
+      setTaps: new Array(items.length).fill(0),
+      efforts: new Array(items.length).fill(null),
+      roundsDone: new Array(items.length).fill(0),
       index: 0,
-      startedAt: Date.now()
+      startedAt: Date.now(),
+      returnView: returnView === "dashboard" ? "dashboard" : "program"
     };
 
     el("wp-discard-warning").classList.add("hidden");
@@ -5603,15 +6152,69 @@
   function updateWorkoutPlayerTimer() {
     if (!workoutPlayerState) return;
     var elapsedSec = Math.floor((Date.now() - workoutPlayerState.startedAt) / 1000);
-    var mm = String(Math.floor(elapsedSec / 60)).padStart(2, "0");
-    var ss = String(elapsedSec % 60).padStart(2, "0");
-    el("wp-timer").textContent = mm + ":" + ss;
+    el("wp-timer").textContent = formatClock(elapsedSec);
+  }
+
+  function formatClock(totalSec) {
+    totalSec = Math.max(0, totalSec);
+    return String(Math.floor(totalSec / 60)).padStart(2, "0") + ":" + String(totalSec % 60).padStart(2, "0");
+  }
+
+  function wpItemInfo(index) {
+    var state = workoutPlayerState;
+    var item = state.items[index];
+    var ex = item.ex;
+    var last = getLastExerciseEntry(ex.id);
+    return {
+      item: item,
+      ex: ex,
+      unit: exerciseUnit(ex, item.category),
+      target: weekTarget(ex, item.category, state.week),
+      last: last,
+      loadable: isLoadable(ex) || !!(last && last.load != null),
+      interval: item.category === "cardio" ? intervalDefaults(ex, state.week) : null
+    };
+  }
+
+  // Work/rest/rounds for the cardio blocks that are intervals. Rounds
+  // follow the same week pattern as sets (low, mid, high, low).
+  function intervalDefaults(ex, week) {
+    var p = ex.prescription || "";
+    var roundsRange = rangeFrom(/(\d+)\s*(?:[–-]\s*(\d+))?\s*(?:rounds|reps)\b/.exec(p)) || [6, 6];
+    var rounds = pickByWeek(roundsRange, week, false);
+    if (week === 3) rounds = roundsRange[1];
+    var wr = /(\d+)\s*s\s*work\s*\/\s*(\d+)\s*s\s*rest/.exec(p);
+    if (wr) return { work: parseInt(wr[1], 10), rest: parseInt(wr[2], 10), rounds: rounds };
+    var burst = rangeFrom(/(\d+)\s*(?:[–-]\s*(\d+))?\s*s\s*max-effort/.exec(p));
+    var recovery = rangeFrom(/(\d+)\s*(?:[–-]\s*(\d+))?\s*s\s*recovery/.exec(p));
+    if (burst && recovery) return { work: Math.round((burst[0] + burst[1]) / 2), rest: recovery[1], rounds: rounds };
+    return null;
+  }
+
+  function entryDetailText(entry, unit) {
+    var parts = [];
+    if (entry.sets != null) parts.push(entry.sets + " sets");
+    if (entry.reps != null) parts.push(entry.reps + " " + (UNIT_LABELS[unit] || "reps"));
+    if (entry.load != null) parts.push(entry.load + " " + getSettings().units);
+    if (entry.rounds) parts.push(entry.rounds + " rounds");
+    if (entry.effort) parts.push(EFFORT_LABELS[entry.effort]);
+    return parts.join(", ");
+  }
+
+  function wpField(id, label, step) {
+    return '<label class="wp-field"><span>' + escapeHtml(label) + "</span>" +
+      '<input type="number" id="' + id + '" min="0" step="' + step + '" inputmode="decimal"></label>';
+  }
+
+  function setCountText(taps, sets) {
+    return "Sets done: " + taps + (sets ? " of " + sets : "");
   }
 
   function renderWorkoutPlayerExercise() {
+    stopWpTimer();
     var state = workoutPlayerState;
-    var item = state.items[state.index];
-    var ex = item.ex;
+    var info = wpItemInfo(state.index);
+    var ex = info.ex;
 
     el("wp-progress-label").textContent = "Exercise " + (state.index + 1) + " of " + state.items.length;
 
@@ -5624,40 +6227,310 @@
       ? '<button type="button" class="btn secondary exercise-photo-remove-btn" data-ex-id="' + ex.id + '">Remove photo</button>'
       : "";
 
+    // Values to start from: what was entered here before (Back), else this
+    // week's target, else last time. Load: the suggested load, else last.
+    var entry = state.entries[state.index];
+    var sets, amount, load;
+    if (entry) {
+      sets = entry.sets; amount = entry.reps; load = entry.load;
+    } else {
+      sets = info.target && info.target.sets != null ? info.target.sets : (info.last ? info.last.sets : null);
+      amount = info.target && info.target.amount != null ? info.target.amount : (info.last ? info.last.reps : null);
+      var suggestedLoad = computeSuggestedLoad(ex.id);
+      load = suggestedLoad ? suggestedLoad.suggestedLoad : (info.last ? info.last.load : null);
+    }
+    var effort = entry ? entry.effort : state.efforts[state.index];
+    var counts = info.unit !== "none";
+
+    var targetLine = info.target
+      ? '<div class="wp-target">' + (info.target.recovery ? "Recovery week: " : "This week: ") + escapeHtml(formatTarget(info.target)) + "</div>"
+      : "";
+    var lastLine = info.last && entryDetailText(info.last, info.unit)
+      ? '<div class="wp-last">Last time (' + escapeHtml(info.last.date || "") + "): " + escapeHtml(entryDetailText(info.last, info.unit)) + "</div>"
+      : "";
+
+    var trackerHtml = "";
+    if (counts) {
+      trackerHtml = '<div class="wp-tracker">' +
+        '<div class="wp-set-count" id="wp-set-count">' + setCountText(state.setTaps[state.index], sets) + "</div>" +
+        '<div class="wp-tracker-buttons">' +
+          (info.unit === "s" && amount ? '<button type="button" class="btn secondary" id="wp-hold-btn">▶ Hold ' + amount + " s</button>" : "") +
+          '<button type="button" class="btn" id="wp-set-done-btn">✓ Set done</button>' +
+        "</div>" +
+        '<div class="wp-timer-box hidden" id="wp-timer-box"></div>' +
+      "</div>";
+    }
+
+    var intervalHtml = "";
+    if (info.interval) {
+      intervalHtml = '<div class="wp-interval">' +
+        '<div class="wp-fields">' +
+          wpField("wp-int-work", "Work (s)", 1) + wpField("wp-int-rest", "Rest (s)", 1) + wpField("wp-int-rounds", "Rounds", 1) +
+        "</div>" +
+        '<div class="wp-interval-display">' +
+          '<span id="wp-int-phase" class="wp-timer-label">Ready</span>' +
+          '<span id="wp-int-time" class="wp-timer-big">' + formatClock(info.interval.work) + "</span>" +
+          '<span id="wp-int-round" class="wp-timer-label">Round 0 of ' + info.interval.rounds + "</span>" +
+        "</div>" +
+        '<div class="wp-tracker-buttons">' +
+          '<button type="button" class="btn" id="wp-int-start">▶ Start intervals</button>' +
+          '<button type="button" class="btn secondary" id="wp-int-reset">Reset</button>' +
+        "</div>" +
+      "</div>";
+    }
+
+    var fieldsHtml = counts
+      ? '<div class="wp-fields">' +
+          wpField("wp-sets", "Sets", 1) +
+          wpField("wp-reps", UNIT_FIELD_LABELS[info.unit] || "Reps", 1) +
+          (info.loadable ? wpField("wp-load", "Load (" + getSettings().units + ")", 0.5) : "") +
+        "</div>"
+      : "";
+
+    var effortHtml = counts
+      ? '<div class="wp-effort-label">How did this feel?</div>' + effortButtonsHtml(effort)
+      : "";
+
     el("wp-exercise-screen").innerHTML =
       '<div class="wp-exercise-icon" aria-hidden="true">' + renderExerciseIcon(ex) + "</div>" +
       '<h2 class="wp-exercise-name">' + escapeHtml(ex.name) + estimateBits + "</h2>" +
       '<div class="wp-exercise-prescription">' + escapeHtml(ex.prescription) + "</div>" +
-      equipmentBlockHtml(ex, false) +
-      '<div class="exercise-card-actions">' +
-        '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
-        '<button type="button" class="btn secondary exercise-photo-btn" data-ex-id="' + ex.id + '">' + wpPhotoBtnLabel + "</button>" +
-        wpRemovePhotoBtn +
-      "</div>" +
-      '<div class="wp-fields">' +
-        '<input type="number" id="wp-sets" placeholder="Sets" min="0" step="1">' +
-        '<input type="number" id="wp-reps" placeholder="Reps" min="0" step="1">' +
-        '<input type="number" id="wp-load" placeholder="Load" min="0" step="0.5">' +
-      "</div>";
+      targetLine + lastLine +
+      equipmentBlockHtml(ex) +
+      trackerHtml + intervalHtml + fieldsHtml + effortHtml +
+      '<details class="card-more wp-more"><summary>More</summary>' +
+        '<div class="card-more-body">' +
+          '<a class="exercise-video-link" href="' + escapeHtml(youtubeSearchUrl(ex.name)) + '" target="_blank" rel="noopener noreferrer">&#9654; Search demo videos</a>' +
+          '<button type="button" class="btn secondary exercise-photo-btn" data-ex-id="' + ex.id + '">' + wpPhotoBtnLabel + "</button>" +
+          wpRemovePhotoBtn +
+        "</div>" +
+      "</details>";
 
-    var existingEntry = state.entries[state.index];
-    if (existingEntry) {
-      el("wp-sets").value = existingEntry.sets != null ? existingEntry.sets : "";
-      el("wp-reps").value = existingEntry.reps != null ? existingEntry.reps : "";
-      el("wp-load").value = existingEntry.load != null ? existingEntry.load : "";
+    if (counts) {
+      el("wp-sets").value = sets != null ? sets : "";
+      el("wp-reps").value = amount != null ? amount : "";
+      if (el("wp-load")) el("wp-load").value = load != null ? load : "";
+    }
+    if (info.interval) {
+      el("wp-int-work").value = info.interval.work;
+      el("wp-int-rest").value = info.interval.rest;
+      el("wp-int-rounds").value = info.interval.rounds;
     }
 
     el("wp-back-btn").style.visibility = state.index === 0 ? "hidden" : "visible";
     el("wp-next-btn").textContent = state.index === state.items.length - 1 ? "Finish" : "Done · Next";
   }
 
+  // --- countdown timers (rest between sets, timed holds, intervals) ------
+  function ensureWpAudio() {
+    try {
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if (Ctx && !wpAudioCtx) wpAudioCtx = new Ctx();
+      if (wpAudioCtx && wpAudioCtx.state === "suspended") wpAudioCtx.resume();
+    } catch (e) { /* no audio: vibration and the screen still work */ }
+  }
+
+  function wpBeep(long) {
+    try { if (navigator.vibrate) navigator.vibrate(long ? [200, 100, 200] : 200); } catch (e) { /* not supported */ }
+    try {
+      if (!wpAudioCtx) return;
+      var osc = wpAudioCtx.createOscillator();
+      var gain = wpAudioCtx.createGain();
+      osc.frequency.value = long ? 660 : 880;
+      gain.gain.value = 0.15;
+      osc.connect(gain);
+      gain.connect(wpAudioCtx.destination);
+      osc.start();
+      osc.stop(wpAudioCtx.currentTime + (long ? 0.6 : 0.25));
+    } catch (e) { /* audio unavailable */ }
+  }
+
+  function stopWpTimer() {
+    clearInterval(wpTimerInterval);
+    wpTimerInterval = null;
+    wpTimer = null;
+    var box = el("wp-timer-box");
+    if (box) { box.classList.add("hidden"); box.innerHTML = ""; }
+  }
+
+  function showTimerBox(label, buttonsHtml) {
+    var box = el("wp-timer-box");
+    if (!box) return;
+    box.innerHTML = '<span class="wp-timer-label">' + escapeHtml(label) + "</span>" +
+      '<span class="wp-timer-big" id="wp-countdown">00:00</span>' +
+      '<div class="wp-timer-actions">' + buttonsHtml + "</div>";
+    box.classList.remove("hidden");
+  }
+
+  function startCountdown(mode, seconds, onDone) {
+    clearInterval(wpTimerInterval);
+    wpTimer = { mode: mode, endsAt: Date.now() + seconds * 1000, onDone: onDone };
+    if (mode === "rest") {
+      showTimerBox("Rest", '<button type="button" class="btn secondary" data-wp-timer="add">+15 s</button>' +
+        '<button type="button" class="btn secondary" data-wp-timer="skip">Skip rest</button>');
+    } else {
+      showTimerBox("Hold", '<button type="button" class="btn secondary" data-wp-timer="stop">Stop</button>');
+    }
+    wpTimerInterval = setInterval(tickCountdown, 250);
+    tickCountdown();
+  }
+
+  function tickCountdown() {
+    if (!wpTimer || wpTimer.mode === "interval") return;
+    var left = Math.ceil((wpTimer.endsAt - Date.now()) / 1000);
+    var out = el("wp-countdown");
+    if (out) out.textContent = formatClock(left);
+    if (left <= 0) {
+      var done = wpTimer.onDone;
+      var mode = wpTimer.mode;
+      stopWpTimer();
+      wpBeep(mode === "rest");
+      if (done) done();
+    }
+  }
+
+  function wpMarkSetDone() {
+    var state = workoutPlayerState;
+    var info = wpItemInfo(state.index);
+    state.setTaps[state.index] += 1;
+    var taps = state.setTaps[state.index];
+    el("wp-sets").value = taps;
+    var planned = info.target && info.target.sets != null ? info.target.sets : null;
+    el("wp-set-count").textContent = setCountText(taps, planned);
+    if (planned && taps >= planned) {
+      stopWpTimer();
+      showTimerBox("All sets done", "");
+      el("wp-countdown").textContent = "✓";
+      return;
+    }
+    startCountdown("rest", REST_SECONDS_BY_CATEGORY[info.item.category] || 60, function () {
+      showTimerBox("Rest over: next set", "");
+      el("wp-countdown").textContent = "▶";
+    });
+  }
+
+  // Interval timer for cardio blocks: work → rest → work …, beeps at each
+  // change, counts completed rounds for the log.
+  function startIntervals() {
+    var work = Math.max(1, numOrNull(el("wp-int-work").value) || 30);
+    var rest = Math.max(0, numOrNull(el("wp-int-rest").value) || 0);
+    var rounds = Math.max(1, numOrNull(el("wp-int-rounds").value) || 1);
+    clearInterval(wpTimerInterval);
+    workoutPlayerState.roundsDone[workoutPlayerState.index] = 0;
+    wpTimer = { mode: "interval", phase: "work", round: 1, work: work, rest: rest, rounds: rounds, endsAt: Date.now() + work * 1000, pausedLeft: null };
+    el("wp-int-start").textContent = "Pause";
+    wpTimerInterval = setInterval(tickIntervals, 250);
+    tickIntervals();
+  }
+
+  function tickIntervals() {
+    var t = wpTimer;
+    if (!t || t.mode !== "interval" || t.pausedLeft != null) return;
+    var left = Math.ceil((t.endsAt - Date.now()) / 1000);
+    if (left <= 0) {
+      if (t.phase === "work") {
+        workoutPlayerState.roundsDone[workoutPlayerState.index] = t.round;
+        if (t.round >= t.rounds) {
+          clearInterval(wpTimerInterval);
+          wpTimer = null;
+          wpBeep(true);
+          el("wp-int-phase").textContent = "Done";
+          el("wp-int-time").textContent = "✓";
+          el("wp-int-round").textContent = t.rounds + " of " + t.rounds + " rounds";
+          el("wp-int-start").textContent = "▶ Start again";
+          return;
+        }
+        wpBeep(true);
+        t.phase = t.rest > 0 ? "rest" : "work";
+        if (t.phase === "work") t.round += 1;
+        t.endsAt = Date.now() + (t.phase === "rest" ? t.rest : t.work) * 1000;
+      } else {
+        wpBeep(false);
+        t.phase = "work";
+        t.round += 1;
+        t.endsAt = Date.now() + t.work * 1000;
+      }
+      left = Math.ceil((t.endsAt - Date.now()) / 1000);
+    }
+    el("wp-int-phase").textContent = t.phase === "work" ? "WORK" : "Rest";
+    el("wp-int-phase").classList.toggle("wp-int-work", t.phase === "work");
+    el("wp-int-time").textContent = formatClock(left);
+    el("wp-int-round").textContent = "Round " + t.round + " of " + t.rounds;
+  }
+
+  function toggleIntervals() {
+    var t = wpTimer;
+    if (!t || t.mode !== "interval") { startIntervals(); return; }
+    if (t.pausedLeft == null) {
+      t.pausedLeft = t.endsAt - Date.now();
+      el("wp-int-start").textContent = "▶ Resume";
+    } else {
+      t.endsAt = Date.now() + t.pausedLeft;
+      t.pausedLeft = null;
+      el("wp-int-start").textContent = "Pause";
+    }
+  }
+
+  el("wp-exercise-screen").addEventListener("click", function (e) {
+    var state = workoutPlayerState;
+    if (!state) return;
+    var target = e.target;
+    if (target.closest("#wp-set-done-btn")) {
+      ensureWpAudio();
+      wpMarkSetDone();
+      return;
+    }
+    if (target.closest("#wp-hold-btn")) {
+      ensureWpAudio();
+      var secs = numOrNull(el("wp-reps").value) || 30;
+      startCountdown("hold", secs, wpMarkSetDone);
+      return;
+    }
+    var timerBtn = target.closest("[data-wp-timer]");
+    if (timerBtn && wpTimer) {
+      var action = timerBtn.getAttribute("data-wp-timer");
+      if (action === "add") wpTimer.endsAt += 15000;
+      if (action === "skip" || action === "stop") stopWpTimer();
+      return;
+    }
+    if (target.closest("#wp-int-start")) { ensureWpAudio(); toggleIntervals(); return; }
+    if (target.closest("#wp-int-reset")) {
+      stopWpTimer();
+      state.roundsDone[state.index] = 0;
+      renderWorkoutPlayerExercise();
+      return;
+    }
+    var effortBtn = target.closest(".effort-btn");
+    if (effortBtn) {
+      var value = effortBtn.getAttribute("data-effort");
+      state.efforts[state.index] = state.efforts[state.index] === value ? null : value;
+      effortBtn.parentNode.querySelectorAll(".effort-btn").forEach(function (b) {
+        var on = b.getAttribute("data-effort") === state.efforts[state.index];
+        b.classList.toggle("active", on);
+        b.setAttribute("aria-pressed", String(on));
+      });
+      return;
+    }
+    handleExercisePhotoButtonClick(e);
+  });
+
   function workoutPlayerAdvance(skip) {
     var state = workoutPlayerState;
-    state.entries[state.index] = skip ? null : {
-      sets: numOrNull(el("wp-sets").value),
-      reps: numOrNull(el("wp-reps").value),
-      load: numOrNull(el("wp-load").value)
-    };
+    var info = wpItemInfo(state.index);
+    if (skip) {
+      state.entries[state.index] = null;
+    } else if (info.unit === "none") {
+      state.entries[state.index] = { sets: null, reps: null, load: null, rounds: state.roundsDone[state.index] || null };
+    } else {
+      state.entries[state.index] = {
+        sets: numOrNull(el("wp-sets").value),
+        reps: numOrNull(el("wp-reps").value),
+        load: el("wp-load") ? numOrNull(el("wp-load").value) : null,
+        effort: state.efforts[state.index] || null,
+        target: info.target ? { sets: info.target.sets, amount: info.target.amount, unit: info.target.unit, week: info.target.week } : null
+      };
+    }
+    stopWpTimer();
     if (state.index === state.items.length - 1) {
       showWorkoutPlayerFinishScreen();
     } else {
@@ -5668,6 +6541,7 @@
 
   function workoutPlayerBack() {
     if (workoutPlayerState.index === 0) return;
+    stopWpTimer();
     workoutPlayerState.index -= 1;
     renderWorkoutPlayerExercise();
   }
@@ -5688,8 +6562,8 @@
       '<p class="field-note">' + completedCount + " of " + state.items.length + " exercises logged.</p>" +
       '<label for="wp-duration">Session duration (minutes)</label>' +
       '<input type="number" id="wp-duration" min="0" max="300" step="5" value="' + elapsedMinutes + '">' +
-      '<label for="wp-rpe">RPE (1–10)</label>' +
-      '<input type="number" id="wp-rpe" min="1" max="10" step="1" placeholder="e.g. 6">' +
+      "<label>How hard was the whole session? (RPE)</label>" +
+      rpeScaleHtml("wp-rpe") +
       '<label for="wp-notes">Notes</label>' +
       '<textarea id="wp-notes" placeholder="Optional notes about this session"></textarea>' +
       '<button type="button" class="btn" id="wp-save-btn" style="width: 100%; margin-top: 14px;">Save workout</button>';
@@ -5703,7 +6577,11 @@
     state.items.forEach(function (item, i) {
       var entry = state.entries[i];
       if (entry) {
-        exercises.push({ id: item.ex.id, name: item.ex.name, category: item.category, sets: entry.sets, reps: entry.reps, load: entry.load });
+        var logged = { id: item.ex.id, name: item.ex.name, category: item.category, sets: entry.sets, reps: entry.reps, load: entry.load };
+        if (entry.effort) logged.effort = entry.effort;
+        if (entry.target) logged.target = entry.target;
+        if (entry.rounds) logged.rounds = entry.rounds;
+        exercises.push(logged);
       }
     });
 
@@ -5739,16 +6617,17 @@
       '<p class="field-note">' + escapeHtml(summaryBits.join(" · ")) + " · Phase " + session.phase + ".</p>" +
       (hasTips
         ? '<p class="field-note">' + pendingSuggestions.length + " progression tip" + (pendingSuggestions.length === 1 ? "" : "s") +
-          " ready, based on how this went — you'll find them on the Log tab.</p>"
+          " ready, based on how this went; you'll find them on the Log tab.</p>"
         : "") +
       '<button type="button" class="btn" id="wp-done-btn" style="width: 100%; margin-top: 14px;">Done</button>' +
       (hasTips
         ? '<button type="button" class="btn secondary" id="wp-review-btn" style="width: 100%; margin-top: 8px;">Review tips now</button>'
         : "");
 
+    var returnView = state.returnView;
     el("wp-done-btn").addEventListener("click", function () {
       closeWorkoutPlayer();
-      showView("program");
+      showView(returnView);
     });
     var reviewBtn = el("wp-review-btn");
     if (reviewBtn) {
@@ -5761,15 +6640,15 @@
 
   function closeWorkoutPlayer() {
     clearInterval(workoutPlayerTimerInterval);
+    stopWpTimer();
     workoutPlayerState = null;
     el("workout-player-overlay").classList.add("hidden");
   }
 
-  el("program-start-workout-btn").addEventListener("click", startWorkoutPlayer);
+  el("program-start-workout-btn").addEventListener("click", function () { startWorkoutPlayer("program"); });
   el("wp-next-btn").addEventListener("click", function () { workoutPlayerAdvance(false); });
   el("wp-skip-btn").addEventListener("click", function () { workoutPlayerAdvance(true); });
   el("wp-back-btn").addEventListener("click", workoutPlayerBack);
-  el("wp-exercise-screen").addEventListener("click", handleExercisePhotoButtonClick);
 
   el("wp-close-btn").addEventListener("click", function () {
     var hasProgress = workoutPlayerState && workoutPlayerState.entries.some(function (e) { return e !== null; });
@@ -5790,7 +6669,7 @@
   });
 
   // ---------------------------------------------------------------------
-  // Launch splash — a brief personal welcome shown every time the app
+  // Launch splash: a brief personal welcome shown every time the app
   // starts, sitting above onboarding/app underneath. Purely a startup
   // greeting; has no bearing on the user's own editable profile photo.
   // ---------------------------------------------------------------------
@@ -5819,7 +6698,7 @@
   setupPwaManifestAndIcons();
   initLaunchSplash();
 
-  // Anonymous page-view counter, web/PWA builds only — never in the
+  // Anonymous page-view counter, web/PWA builds only: never in the
   // installed Android app, which keeps its "nothing leaves the device"
   // promise untouched. Disclosed openly in Settings, right next to the
   // badge itself, rather than firing silently.
@@ -5832,7 +6711,7 @@
   try { onboardingAlreadyComplete = localStorage.getItem(STORAGE_KEYS.onboardingComplete) === "true"; } catch (e) { /* storage unavailable */ }
 
   // Onboarding is a first-install experience only (Task 3): once complete,
-  // it never re-triggers — even if the profile itself is later cleared or
+  // it never re-triggers, even if the profile itself is later cleared or
   // edited from Settings. Only a full data reset clears this flag.
   if (onboardingAlreadyComplete) {
     ensureProgramState();
