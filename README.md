@@ -1,6 +1,6 @@
 # AmpFootballFit
 
-A free, offline-first return-to-play conditioning app for amputee football (crutch-based, single-leg-support sport). Built for one athlete's own comeback, shared here so any amputee footballer or club can use it, adapt it, or build on it.
+A free, offline-first strength and conditioning app for amputee football (crutch-based, single-leg-support sport). Built by an amputee footballer, shared here so any amputee footballer or club can use it, adapt it, or build on it.
 
 **Use it now, no install:** [acraens.github.io/AmpFootballFit](https://acraens.github.io/AmpFootballFit/)
 
@@ -10,7 +10,7 @@ Works on any phone or computer, Android or iPhone. Open the link, then use your 
 
 ## What it is
 
-- A 12-week, 3-phase strength & conditioning program (Base, Load Progression, Sport Transfer), with exercises that adapt tier by tier based on how sessions actually go.
+- A strength & conditioning program in 3 phases of 4 weeks, 12 weeks in total (Base, Load Progression, Sport Transfer; after week 12 you keep training with the Phase 3 program), with exercises that adapt tier by tier based on how sessions actually go.
 - A daily readiness check-in, periodic objective benchmarks/retests, session logging, and a guided "Start Workout" mode.
 - A place to add your own exercises (from a physio or coach) alongside the built-in ones.
 - A "Share progress" button that hands a plain-text summary to your phone's share sheet, e.g. to send to a coach or physio.
