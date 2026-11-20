@@ -2,12 +2,9 @@
 
 ## 1. Purpose
 
-A free, offline-capable, single-file web app to support return-to-play physical
-conditioning for amputee football (crutch-based, single-leg-support sport),
-built for a 64-year-old K4-active left transtibial amputee returning to the
-sport after a layoff, with a design broad enough to be reused by any amputee
-footballer or club (e.g. distributed to OH Leuven Amputee Football Team
-players via the community staff contact).
+A free, offline-capable, single-file web app for strength and conditioning
+for amputee football (crutch-based, single-leg-support sport), built to be
+used by any amputee footballer or club.
 
 **Sport context the app must respect:**
 - Amputee football outfield players compete on forearm crutches, sound leg
@@ -17,7 +14,7 @@ players via the community staff contact).
   stability, and repeated-sprint cardiovascular capacity.
 - This app is NOT a general lower-limb-amputee fitness app (that project —
   AmputeeActive — already exists and covers daily/prosthetic-based training).
-  This app is sport-specific to amputee football return-to-play.
+  This app is sport-specific to strength and conditioning for amputee football.
 
 ## 2. Honesty constraint (must be respected in all copy and content)
 

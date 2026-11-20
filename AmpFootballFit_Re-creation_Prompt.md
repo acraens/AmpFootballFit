@@ -4,7 +4,7 @@ Use this as a single build brief for an AI coding assistant (or a human develope
 
 ## 1. What this app is
 
-AmpFootballFit is a return-to-play conditioning app for amputee football players. It is:
+AmpFootballFit is a strength and conditioning app for amputee football players. It is:
 
 - **Single-user, offline-first, no accounts.** Everything lives in the browser's/WebView's `localStorage`, on-device only. No server, no login, no sync.
 - **A framework, not a coaching authority.** The 12-week strength/conditioning program is built on general strength & conditioning principles. Sport-specific skills (ball control, crutch agility, match tactics) are explicitly left blank for the athlete to fill in from a real coach or physio. The app must never invent sport-technique instruction it isn't qualified to give.
