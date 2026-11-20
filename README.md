@@ -6,7 +6,7 @@ A free, offline-first return-to-play conditioning app for amputee football (crut
 
 Works on any phone or computer, Android or iPhone. Open the link, then use your browser's "Add to Home Screen" to keep it like an app. This is the maintained version: you are always on the latest release, with nothing to download or update.
 
-**Android app (optional, can lag behind the browser version):** [download the APK from Releases](https://github.com/acraens/AmpFootballFit/releases/latest). It is not signed for the Play Store, so Android will warn about an unrecognized app, and you need to allow "install from unknown sources" for your browser or file manager. The camera-based profile photo feature only works in this native version. To hear about new APK versions, choose Watch > Custom > Releases on this repository.
+**Android app (optional, can lag behind the browser version; the APK on Releases is version 4.2, the browser version is 4.3):** [download the APK from Releases](https://github.com/acraens/AmpFootballFit/releases/latest). It is not signed for the Play Store, so Android will warn about an unrecognized app, and you need to allow "install from unknown sources" for your browser or file manager. The camera-based profile photo feature only works in this native version. To hear about new APK versions, choose Watch > Custom > Releases on this repository.
 
 ## What it is
 
@@ -46,6 +46,8 @@ Two disclosed exceptions:
 - The installed Android app can check whether a newer version is available (the APK isn't distributed through a store with automatic updates). This never happens on its own: it only runs when you tap "Check for updates" in Settings, and it asks for permission before every single check &mdash; there's no "remember my choice" and no background checking. On a yes, it reads one small file ([`version.json`](version.json)) from this repo over `raw.githubusercontent.com` and compares the version number. No data is sent, only a version number is read back. The button isn't shown in the browser/PWA version, which is always served fresh from GitHub Pages.
 
 ## Contributing
+
+**Physios and coaches:** the [review sheet](https://acraens.github.io/AmpFootballFit/review-sheet.html) lists every exercise. Reply with your feedback to ampfootballfit@tutanota.com; you can review only the groups in your own field.
 
 Issues and pull requests are welcome, especially from anyone actually playing or coaching amputee football. If you fork this for your own club or region, keeping the license notice intact is all that's asked.
 
