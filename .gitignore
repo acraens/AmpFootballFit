@@ -25,3 +25,10 @@ android-app.zip
 
 # APK signature side-files from apksigner (not needed for install)
 *.idsig
+
+# Private working material: never commit (project rule, 2026-11-20)
+/Communication/
+/Claude outputs/
+/tools/
+/exercise-images/sketch-originals/
+*.docx
