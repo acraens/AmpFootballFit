@@ -1,5 +1,5 @@
 {
-  "version": "4.2",
-  "releaseNotes": "Backup and restore. Settings > Export all data now works in the Android app (it opens the share menu, so you can save the backup to Google Drive, email or WhatsApp), and the new Settings > Restore from backup brings all your data back. The backup now also includes your exercise photos and equipment notes. Coming from v4.1 or older: this version has a new signing key, so uninstall the old app first. That deletes the data in the old app; if you want to keep your training logs, contact A. Craens before uninstalling.",
+  "version": "4.3",
+  "releaseNotes": "Colour theme choice (dark, light, or follow your phone), show or hide the Skills tab, Progress tab, readiness check-in and Milestones, and a search box in Settings. Install over your current app: it uses the same signing key as 4.2, so your data is kept. Do not uninstall first.",
   "downloadUrl": "https://github.com/acraens/AmpFootballFit/releases/latest"
 }

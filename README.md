@@ -8,7 +8,7 @@ The address is case-sensitive: type it exactly as `AmpFootballFit` (capital A, F
 
 Works on any phone or computer, Android or iPhone. Open the link, then use your browser's "Add to Home Screen" to keep it like an app. This is the maintained version: you are always on the latest release, with nothing to download or update.
 
-**Android app (optional, can lag behind the browser version; the APK on Releases is version 4.2, the browser version is 4.3):** [download the APK from Releases](https://github.com/acraens/AmpFootballFit/releases/latest). It is not signed for the Play Store, so Android will warn about an unrecognized app, and you need to allow "install from unknown sources" for your browser or file manager. The camera-based profile photo feature only works in this native version. To hear about new APK versions, choose Watch > Custom > Releases on this repository.
+**Android app (optional, can lag behind the browser version; the APK on Releases and the browser version are both 4.3):** [download the APK from Releases](https://github.com/acraens/AmpFootballFit/releases/latest). It is not signed for the Play Store, so Android will warn about an unrecognized app, and you need to allow "install from unknown sources" for your browser or file manager. The camera-based profile photo feature only works in this native version. To hear about new APK versions, choose Watch > Custom > Releases on this repository.
 
 ## What it is
 
@@ -39,7 +39,7 @@ The entire app is one self-contained file: **`ampfootballfit.html`** (also publi
 
   You'll need a JDK (21+) and the Android SDK command-line tools on your `PATH` (`JAVA_HOME`, `ANDROID_HOME`). Sign every release with the same keystore and keep a copy of it (and its password) somewhere safe: Android only installs an update signed with the same key as the installed app.
 
-  **Upgrading from v4.1 or earlier on Android:** v4.2 is signed with a new key, so Android will not install it over an older version. Uninstall the old app first. Uninstalling deletes the app's data on that phone, and the Export button did not work in the old Android app, so data logged in v4.1 or earlier cannot be carried over. From v4.2 on, use Settings > Export all data to keep a backup, and Restore from backup to bring it back.
+  **Upgrading from v4.1 or earlier on Android:** v4.2 is signed with a new key, so Android will not install it over an older version. Uninstall the old app first. Uninstalling deletes the app's data on that phone, and the Export button did not work in the old Android app, so data logged in v4.1 or earlier cannot be carried over. From v4.2 on, use Settings > Export all data to keep a backup, and Restore from backup to bring it back. **Upgrading from v4.2:** install the new APK over the old one. It uses the same signing key, so your data is kept. Do not uninstall first.
 
 All data (sessions, benchmarks, readiness logs, milestones, profile) stays in local storage on the device. There is no server and nothing leaves the device except through the explicit Share/export buttons.
 
