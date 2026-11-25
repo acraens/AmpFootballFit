@@ -1,5 +1,5 @@
 {
   "version": "4.3",
-  "releaseNotes": "Colour theme choice (dark, light, or follow your phone), show or hide the Skills tab, Progress tab, readiness check-in and Milestones, and a search box in Settings. Install over your current app: it uses the same signing key as 4.2, so your data is kept. Do not uninstall first.",
+  "releaseNotes": "Colour theme choice (dark, light, or follow your phone), show or hide the Skills tab, Progress tab, readiness check-in and Milestones, and a search box in Settings. If you are on 4.2: install over your current app, it uses the same signing key, so your data is kept; do not uninstall first. If you are on 4.1 or older: read the release notes first.",
   "downloadUrl": "https://github.com/acraens/AmpFootballFit/releases/latest"
 }
