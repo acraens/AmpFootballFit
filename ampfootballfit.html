@@ -9,7 +9,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <title>AmpFootballFit</title>
-<meta name="theme-color" content="#0f1115">
+<meta name="theme-color" content="#0f1115" id="meta-theme-color">
+<script>
+  // Apply the saved theme before first paint so there is no dark flash in light mode.
+  (function () {
+    try {
+      var raw = localStorage.getItem("ampfootballfit_settings");
+      var pref = raw ? (JSON.parse(raw) || {}).theme : "dark";
+      var light = pref === "light" || (pref === "system" && window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
+      document.documentElement.setAttribute("data-theme", light ? "light" : "dark");
+      if (light) document.getElementById("meta-theme-color").setAttribute("content", "#f4f6f9");
+    } catch (e) { /* storage unavailable: stay dark */ }
+  })();
+</script>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -30,9 +42,46 @@
     --good: #4caf7d;
     --warn: #e0a94c;
     --danger: #e05c5c;
+    --on-accent: #04121c;
+    --on-good: #04160d;
+    --on-warn: #241a00;
+    --on-danger: #200;
     --tab-height: 60px;
     --radius: 10px;
+    color-scheme: dark;
   }
+
+  /* Light theme (Settings > Appearance). Only the variables change. */
+  :root[data-theme="light"] {
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --surface-alt: #eaeef3;
+    --border: #c9d0da;
+    --text: #14181f;
+    --text-dim: #566070;
+    --accent: #0b64c0;
+    --accent-dim: #8fb8e3;
+    --good: #1c7a4a;
+    --warn: #9a5b00;
+    --danger: #c0282d;
+    --on-accent: #ffffff;
+    --on-good: #ffffff;
+    --on-warn: #ffffff;
+    --on-danger: #ffffff;
+    color-scheme: light;
+  }
+
+  .feature-off { display: none !important; }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0 0;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+  .toggle-row input[type="checkbox"] { width: auto; margin: 0; flex: none; }
 
   * { box-sizing: border-box; }
 
@@ -168,7 +217,7 @@
   .btn {
     display: inline-block;
     background: var(--accent);
-    color: #04121c;
+    color: var(--on-accent);
     border: none;
     border-radius: 8px;
     padding: 10px 16px;
@@ -187,7 +236,7 @@
 
   .btn.danger {
     background: var(--danger);
-    color: #200;
+    color: var(--on-danger);
   }
 
   label {
@@ -618,7 +667,7 @@
   .estimate-badge {
     display: inline-block;
     background: var(--warn);
-    color: #241a00;
+    color: var(--on-warn);
     font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -1036,7 +1085,7 @@
 
   .milestone-quick-btn.milestone-quick-btn-logged {
     background: var(--good);
-    color: #04160d;
+    color: var(--on-good);
     border-color: var(--good);
   }
 
@@ -1171,7 +1220,7 @@
   .wp-more .card-more-body { justify-content: center; }
   .effort-buttons { display: flex; gap: 6px; }
   .effort-buttons .effort-btn { flex: 1; padding: 10px 4px; font-size: 0.85rem; }
-  .effort-btn.active { background: var(--accent); color: #04121c; border-color: var(--accent); }
+  .effort-btn.active { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
   .wp-effort-label { font-size: 0.85rem; color: var(--text-dim); margin: 14px 0 6px; text-align: center; }
   .wp-tracker { text-align: center; margin: 12px 0; }
   .wp-set-count { font-weight: 600; margin-bottom: 8px; }
@@ -1193,7 +1242,7 @@
     background: var(--surface-alt); color: var(--text); border: 1px solid var(--border); border-radius: 6px;
     padding: 10px 0; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; min-width: 0;
   }
-  .rpe-btn.active, .readiness-btn.active { background: var(--accent); color: #04121c; border-color: var(--accent); }
+  .rpe-btn.active, .readiness-btn.active { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
   .rpe-caption { font-size: 0.8rem; color: var(--text-dim); margin-top: 6px; }
   .today-card h3 { margin-top: 0; }
   .today-meta { font-weight: 600; margin-bottom: 4px; }
@@ -1475,7 +1524,7 @@
         <button type="button" class="btn" id="today-start-btn" style="width: 100%; margin-top: 10px;">&#9654; Start workout</button>
       </div>
 
-      <div class="card">
+      <div class="card" id="readiness-card">
         <div class="readiness-card-header">
           <div class="exercise-icon" id="readiness-header-icon" aria-hidden="true"></div>
           <h3>Today's readiness check-in</h3>
@@ -1489,7 +1538,7 @@
         <div id="readiness-summary-wrap" class="hidden"></div>
       </div>
 
-      <div class="card">
+      <div class="card" id="milestone-log-card">
         <h3>Log a milestone</h3>
         <div class="milestone-quick-grid" id="milestone-quick-grid">
           <button type="button" class="btn secondary milestone-quick-btn" data-label="First full-intensity single-leg hop">First full-intensity single-leg hop</button>
@@ -1505,7 +1554,7 @@
         <button type="button" class="btn" id="milestone-log-custom-btn" style="width: 100%; margin-top: 10px;">Log milestone</button>
       </div>
 
-      <h3 class="section-subheading">Recent milestones</h3>
+      <h3 class="section-subheading" id="milestones-heading">Recent milestones</h3>
       <div id="dashboard-milestone-list"></div>
     </section>
 
@@ -1833,6 +1882,27 @@
       </div>
 
       <div class="card">
+        <h3>Appearance</h3>
+        <label for="settings-theme">Colour theme</label>
+        <select id="settings-theme">
+          <option value="dark">Dark (default)</option>
+          <option value="light">Light</option>
+          <option value="system">Follow my phone's setting</option>
+        </select>
+        <p class="field-note">Light is easier to read outdoors in bright sun.</p>
+      </div>
+
+      <div class="card">
+        <h3>Show or hide parts of the app</h3>
+        <p class="field-note">Hiding something only removes it from view. Nothing is deleted, and you can turn it back on here at any time.</p>
+        <label class="toggle-row"><input type="checkbox" id="feature-skills"> Skills tab</label>
+        <label class="toggle-row"><input type="checkbox" id="feature-progress"> Progress tab</label>
+        <label class="toggle-row"><input type="checkbox" id="feature-readiness"> Daily readiness check-in</label>
+        <p class="field-note" id="feature-readiness-note">Without check-ins, the app cannot show its low-readiness warnings.</p>
+        <label class="toggle-row"><input type="checkbox" id="feature-milestones"> Milestones</label>
+      </div>
+
+      <div class="card">
         <h3>Language</h3>
         <label for="settings-language">App language</label>
         <select id="settings-language">
@@ -2041,6 +2111,8 @@
   // Tab navigation
   // ---------------------------------------------------------------------
   function showView(name) {
+    // A hidden tab can still be the saved last view: fall back to the dashboard.
+    if ((name === "skills" || name === "progress") && typeof isFeatureHidden === "function" && isFeatureHidden(name)) name = "dashboard";
     document.querySelectorAll(".view").forEach(function (el) {
       el.classList.toggle("active", el.id === "view-" + name);
     });
@@ -5600,22 +5672,69 @@
   // ---------------------------------------------------------------------
   // Settings tab (Section 9): language, units, data export/reset
   // ---------------------------------------------------------------------
-  var SETTINGS_DEFAULTS = { language: "en", units: "kg" };
+  var SETTINGS_DEFAULTS = { language: "en", units: "kg", theme: "dark" };
+  var HIDEABLE_FEATURES = ["skills", "progress", "readiness", "milestones"];
 
   function getSettings() {
+    var out = {
+      language: SETTINGS_DEFAULTS.language,
+      units: SETTINGS_DEFAULTS.units,
+      theme: SETTINGS_DEFAULTS.theme,
+      hiddenFeatures: {}
+    };
     try {
       var raw = localStorage.getItem(STORAGE_KEYS.settings);
       var parsed = raw ? JSON.parse(raw) : null;
       if (parsed && typeof parsed === "object") {
-        return {
-          language: parsed.language || SETTINGS_DEFAULTS.language,
-          units: parsed.units || SETTINGS_DEFAULTS.units
-        };
+        out.language = parsed.language || out.language;
+        out.units = parsed.units || out.units;
+        if (parsed.theme === "light" || parsed.theme === "dark" || parsed.theme === "system") out.theme = parsed.theme;
+        if (parsed.hiddenFeatures && typeof parsed.hiddenFeatures === "object") {
+          HIDEABLE_FEATURES.forEach(function (f) {
+            if (parsed.hiddenFeatures[f] === true) out.hiddenFeatures[f] = true;
+          });
+        }
       }
-      return { language: SETTINGS_DEFAULTS.language, units: SETTINGS_DEFAULTS.units };
-    } catch (e) {
-      return { language: SETTINGS_DEFAULTS.language, units: SETTINGS_DEFAULTS.units };
+    } catch (e) { /* malformed settings: use defaults */ }
+    return out;
+  }
+
+  function isFeatureHidden(name) {
+    return getSettings().hiddenFeatures[name] === true;
+  }
+
+  // Theme: "dark" (default, unchanged look), "light", or "system".
+  function resolveTheme(pref) {
+    if (pref === "light") return "light";
+    if (pref === "system" && window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+    return "dark";
+  }
+
+  function applyTheme() {
+    var theme = resolveTheme(getSettings().theme);
+    document.documentElement.setAttribute("data-theme", theme);
+    var meta = document.getElementById("meta-theme-color");
+    if (meta) meta.setAttribute("content", theme === "light" ? "#f4f6f9" : "#0f1115");
+  }
+
+  if (window.matchMedia) {
+    var themeQuery = window.matchMedia("(prefers-color-scheme: light)");
+    var onSystemThemeChange = function () { if (getSettings().theme === "system") applyTheme(); };
+    if (themeQuery.addEventListener) themeQuery.addEventListener("change", onSystemThemeChange);
+    else if (themeQuery.addListener) themeQuery.addListener(onSystemThemeChange);
+  }
+
+  // Show or hide parts of the app. Hiding only adds a CSS class; the
+  // elements, their data and their code stay in place.
+  function applyFeatureVisibility() {
+    var hidden = getSettings().hiddenFeatures;
+    function setOff(selector, off) {
+      document.querySelectorAll(selector).forEach(function (node) { node.classList.toggle("feature-off", off); });
     }
+    setOff('.tab-btn[data-view="skills"]', !!hidden.skills);
+    setOff('.tab-btn[data-view="progress"]', !!hidden.progress);
+    setOff("#readiness-card", !!hidden.readiness);
+    setOff("#milestone-log-card, #milestones-heading, #dashboard-milestone-list", !!hidden.milestones);
   }
 
   function saveSettings(settings) {
@@ -5629,6 +5748,11 @@
     var settings = getSettings();
     el("settings-language").value = settings.language;
     el("settings-units").value = settings.units;
+    el("settings-theme").value = settings.theme;
+    HIDEABLE_FEATURES.forEach(function (f) { el("feature-" + f).checked = !settings.hiddenFeatures[f]; });
+    el("feature-readiness-note").classList.toggle("hidden", !settings.hiddenFeatures.readiness);
+    applyTheme();
+    applyFeatureVisibility();
     el("settings-figure-style").value = getFigureStyle();
     el("settings-reset-warning").classList.add("hidden");
     // Update check is for the installed app only: the web/PWA build is
@@ -5800,6 +5924,24 @@
     var settings = getSettings();
     settings.units = this.value;
     saveSettings(settings);
+  });
+
+  el("settings-theme").addEventListener("change", function () {
+    var settings = getSettings();
+    settings.theme = this.value;
+    saveSettings(settings);
+    applyTheme();
+  });
+
+  HIDEABLE_FEATURES.forEach(function (f) {
+    el("feature-" + f).addEventListener("change", function () {
+      var settings = getSettings();
+      if (this.checked) delete settings.hiddenFeatures[f];
+      else settings.hiddenFeatures[f] = true;
+      saveSettings(settings);
+      applyFeatureVisibility();
+      el("feature-readiness-note").classList.toggle("hidden", !settings.hiddenFeatures.readiness);
+    });
   });
 
   // Saves a text file. Browser: a normal download. Android app: the WebView
