@@ -72,6 +72,11 @@
   }
 
   .feature-off { display: none !important; }
+  .search-off { display: none !important; }
+
+  .settings-search-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .settings-search-row input { flex: 1; min-width: 0; margin: 0; }
+  .settings-search-row .btn { flex: none; }
 
   .toggle-row {
     display: flex;
@@ -1753,7 +1758,13 @@
     <section class="view" id="view-settings" data-i18n-title="tab.settings">
       <h2 data-i18n="tab.settings">Settings</h2>
 
-      <div class="card" id="settings-photo-card">
+      <div class="settings-search-row">
+        <input type="search" id="settings-search" placeholder="Search settings" aria-label="Search settings" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <button type="button" class="btn secondary hidden" id="settings-search-clear">Clear</button>
+      </div>
+      <p id="settings-search-status" class="field-note hidden" role="status"></p>
+
+      <div class="card" data-search="picture avatar camera selfie image" id="settings-photo-card">
         <h3>Profile photo</h3>
         <div class="profile-photo-row">
           <div class="profile-photo-circle" id="settings-photo-preview">
@@ -1767,7 +1778,7 @@
         <p class="field-note" id="settings-photo-note">Optional, skip anytime. Photo capture is only available in the installed Android app, not the browser version.</p>
       </div>
 
-      <div class="card">
+      <div class="card" data-search="personal information update profile body level fitness">
         <h3>Profile details</h3>
         <p class="field-note">Update these anytime your situation changes, e.g. activity level moving from K4 to K3, a new amputation date, or a change in prosthetic use.</p>
 
@@ -1876,12 +1887,12 @@
         <p class="field-note hidden" id="settings-profile-saved-note">Saved.</p>
       </div>
 
-      <div class="card">
+      <div class="card" data-search="tips guidance help information prosthesis socket">
         <h3>About your amputation &amp; supplementary techniques</h3>
         <div id="settings-supp-disclaimer"></div>
       </div>
 
-      <div class="card">
+      <div class="card" data-search="dark light theme night mode colour color display screen">
         <h3>Appearance</h3>
         <label for="settings-theme">Colour theme</label>
         <select id="settings-theme">
@@ -1892,7 +1903,7 @@
         <p class="field-note">Light is easier to read outdoors in bright sun.</p>
       </div>
 
-      <div class="card">
+      <div class="card" data-search="hide show tabs features toggle declutter simplify skills progress readiness milestones">
         <h3>Show or hide parts of the app</h3>
         <p class="field-note">Hiding something only removes it from view. Nothing is deleted, and you can turn it back on here at any time.</p>
         <label class="toggle-row"><input type="checkbox" id="feature-skills"> Skills tab</label>
@@ -1902,7 +1913,7 @@
         <label class="toggle-row"><input type="checkbox" id="feature-milestones"> Milestones</label>
       </div>
 
-      <div class="card">
+      <div class="card" data-search="dutch french english nederlands francais taal langue translation">
         <h3>Language</h3>
         <label for="settings-language">App language</label>
         <select id="settings-language">
@@ -1913,7 +1924,7 @@
         <p class="field-note">Dutch and French are structurally supported; full translations are a later pass. Untranslated text falls back to English.</p>
       </div>
 
-      <div class="card">
+      <div class="card" data-search="drawings figures exercise images leg illustration">
         <h3>Pictures</h3>
         <label for="settings-figure-style">Exercise pictures show</label>
         <select id="settings-figure-style">
@@ -1923,7 +1934,7 @@
         <p class="field-note">Only changes the drawings, not the exercises.</p>
       </div>
 
-      <div class="card">
+      <div class="card" data-search="kg lb pounds kilograms weight load metric imperial">
         <h3>Units</h3>
         <label for="settings-units">Load units</label>
         <select id="settings-units">
@@ -1932,7 +1943,7 @@
         </select>
       </div>
 
-      <div class="card">
+      <div class="card" data-search="backup export restore import reset delete json wipe save">
         <h3>Data</h3>
         <button type="button" class="btn secondary" id="settings-export-json-btn" style="width: 100%; margin-bottom: 10px;">Export all data (JSON backup)</button>
         <button type="button" class="btn secondary" id="settings-import-json-btn" style="width: 100%; margin-bottom: 10px;">Restore from backup</button>
@@ -1959,14 +1970,14 @@
         </div>
       </div>
 
-      <div class="card" id="settings-iuse-card">
+      <div class="card" data-search="email contact feedback tell" id="settings-iuse-card">
         <h3>Tell me you use this app (optional)</h3>
         <p class="field-note">Knowing who uses AmpFootballFit helps me decide what to build next. This is voluntary and the app works the same if you skip it.</p>
         <a class="btn secondary" id="settings-iuse-btn" href="#" style="display: block; text-align: center; box-sizing: border-box; width: 100%;">I use this app: send a short email</a>
         <p class="field-note" style="margin-top: 8px;">The button opens a draft in your email app. Nothing is sent until you press send there, and no training data is added to the draft. I receive your email address and whatever you type, use it to reply and to count users, and delete it when you ask. If no email app opens, write to <span id="settings-iuse-addr"></span>.</p>
       </div>
 
-      <div class="card" id="settings-update-card">
+      <div class="card" data-search="version upgrade apk check new release" id="settings-update-card">
         <h3>App version</h3>
         <p class="field-note">You're on v<span id="settings-update-current">4.3</span>. This app never checks for updates on its own &mdash; it only checks when you ask it to, and asks first every time.</p>
         <button type="button" class="btn secondary" id="settings-update-check-btn" style="width: 100%;">Check for updates</button>
@@ -5737,6 +5748,44 @@
     setOff("#milestone-log-card, #milestones-heading, #dashboard-milestone-list", !!hidden.milestones);
   }
 
+  // Settings search: lower-case and strip accents so "francais" finds
+  // "Français". Every word typed must appear somewhere in the card.
+  function normalizeSearch(str) {
+    return String(str || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function applySettingsSearch() {
+    var raw = el("settings-search").value;
+    var terms = normalizeSearch(raw).split(/\s+/).filter(Boolean);
+    var searching = terms.length > 0;
+    var total = 0;
+    var shown = 0;
+    document.querySelectorAll("#view-settings > .card").forEach(function (card) {
+      if (card.classList.contains("hidden")) return; // not available here (e.g. update check in a browser)
+      total++;
+      var hay = normalizeSearch((card.getAttribute("data-search") || "") + " " + card.textContent);
+      var match = terms.every(function (term) { return hay.indexOf(term) !== -1; });
+      card.classList.toggle("search-off", searching && !match);
+      if (!searching || match) shown++;
+    });
+    document.querySelectorAll("#view-settings > p.field-note").forEach(function (note) {
+      note.classList.toggle("search-off", searching && note.id !== "settings-search-status");
+    });
+    var status = el("settings-search-status");
+    status.classList.toggle("hidden", !searching);
+    if (searching) {
+      status.textContent = shown === 0
+        ? 'No settings match "' + raw.trim() + '". Try one shorter word.'
+        : shown + (shown === 1 ? " section matches." : " sections match.");
+    }
+    el("settings-search-clear").classList.toggle("hidden", !raw.length);
+  }
+
+  function clearSettingsSearch() {
+    el("settings-search").value = "";
+    applySettingsSearch();
+  }
+
   function saveSettings(settings) {
     try {
       localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(settings));
@@ -5753,6 +5802,7 @@
     el("feature-readiness-note").classList.toggle("hidden", !settings.hiddenFeatures.readiness);
     applyTheme();
     applyFeatureVisibility();
+    clearSettingsSearch();
     el("settings-figure-style").value = getFigureStyle();
     el("settings-reset-warning").classList.add("hidden");
     // Update check is for the installed app only: the web/PWA build is
@@ -5924,6 +5974,15 @@
     var settings = getSettings();
     settings.units = this.value;
     saveSettings(settings);
+  });
+
+  el("settings-search").addEventListener("input", applySettingsSearch);
+  el("settings-search").addEventListener("keydown", function (e) {
+    if (e.key === "Escape") clearSettingsSearch();
+  });
+  el("settings-search-clear").addEventListener("click", function () {
+    clearSettingsSearch();
+    el("settings-search").focus();
   });
 
   el("settings-theme").addEventListener("change", function () {
