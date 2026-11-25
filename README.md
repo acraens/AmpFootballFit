@@ -4,6 +4,8 @@ A free, offline-first strength and conditioning app for amputee football (crutch
 
 **Use it now, no install:** [acraens.github.io/AmpFootballFit](https://acraens.github.io/AmpFootballFit/)
 
+The address is case-sensitive: type it exactly as `AmpFootballFit` (capital A, F and F), because a lowercase version shows a GitHub 404 page.
+
 Works on any phone or computer, Android or iPhone. Open the link, then use your browser's "Add to Home Screen" to keep it like an app. This is the maintained version: you are always on the latest release, with nothing to download or update.
 
 **Android app (optional, can lag behind the browser version; the APK on Releases is version 4.2, the browser version is 4.3):** [download the APK from Releases](https://github.com/acraens/AmpFootballFit/releases/latest). It is not signed for the Play Store, so Android will warn about an unrecognized app, and you need to allow "install from unknown sources" for your browser or file manager. The camera-based profile photo feature only works in this native version. To hear about new APK versions, choose Watch > Custom > Releases on this repository.
